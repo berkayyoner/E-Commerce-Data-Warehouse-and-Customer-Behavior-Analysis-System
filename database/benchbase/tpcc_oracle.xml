@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!-- BenchBase TPC-C settings for the shop database. Values in @...@ are filled in by scripts/load-oltp.ps1. -->
+<parameters>
+
+    <type>ORACLE</type>
+    <driver>oracle.jdbc.OracleDriver</driver>
+    <url>jdbc:oracle:thin:@//@DB_HOST@:@DB_PORT@/FREEPDB1</url>
+    <username>dwh_oltp</username>
+    <password>@OLTP_PASSWORD@</password>
+    <reconnectOnConnectionFailure>true</reconnectOnConnectionFailure>
+    <isolation>TRANSACTION_READ_COMMITTED</isolation>
+    <batchsize>1024</batchsize>
+    <loaderThreads>4</loaderThreads>
+
+    <!-- Scale factor is the number of warehouses (shops). Each warehouse holds 30,000 customers' worth of
+         orders and roughly 300,000 order lines. -->
+    <scalefactor>@SCALE_FACTOR@</scalefactor>
+
+    <terminals>@TERMINALS@</terminals>
+    <works>
+        <work>
+            <time>@WORKLOAD_SECONDS@</time>
+            <rate>unlimited</rate>
+            <weights>45,43,4,4,4</weights>
+        </work>
+    </works>
+
+    <transactiontypes>
+        <transactiontype>
+            <name>NewOrder</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Payment</name>
+        </transactiontype>
+        <transactiontype>
+            <name>OrderStatus</name>
+        </transactiontype>
+        <transactiontype>
+            <name>Delivery</name>
+        </transactiontype>
+        <transactiontype>
+            <name>StockLevel</name>
+        </transactiontype>
+    </transactiontypes>
+</parameters>
