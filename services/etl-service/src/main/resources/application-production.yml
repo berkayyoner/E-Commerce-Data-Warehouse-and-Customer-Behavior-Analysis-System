@@ -1,0 +1,13 @@
+# Production profile: every value comes from the environment, nothing has a fallback.
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST}:${DB_PORT}/${DB_SERVICE}
+    username: ${OLAP_USERNAME}
+    password: ${OLAP_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+
+logging:
+  level:
+    edu.yildiz.ecommerce: WARN
+    root: WARN

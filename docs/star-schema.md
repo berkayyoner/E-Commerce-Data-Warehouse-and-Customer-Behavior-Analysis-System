@@ -35,7 +35,7 @@ degenerate dimension.
 
 | Table | Source | History handling |
 |---|---|---|
-| `dim_date` | Generated (2024-01-01 to 2026-12-31) | None |
+| `dim_date` | Generated (2024-01-01 to 2027-12-31) | None |
 | `dim_customer` | `customer` | Type 2: `valid_from`, `valid_to`, `is_current` |
 | `dim_product` | `item` | Type 1: overwritten |
 | `dim_warehouse` | `warehouse` | Type 1: overwritten |

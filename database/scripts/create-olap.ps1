@@ -12,8 +12,13 @@ Get-Content (Join-Path $projectRoot '.env') | Where-Object { $_ -match '^\s*[^#]
 }
 $connection = "dwh_olap/$($settings.OLAP_PASSWORD)@//localhost/FREEPDB1"
 
+# The script text is copied into the container as a file, because piping text from Windows PowerShell
+# puts a byte order mark in front of it and sqlplus does not accept that.
 function Invoke-Sql([string]$script) {
-    $script | docker exec -i dwh-oracle-db sqlplus -s $connection
+    $local = Join-Path $env:TEMP 'dwh-olap-step.sql'
+    [System.IO.File]::WriteAllText($local, $script, (New-Object System.Text.UTF8Encoding $false))
+    docker cp $local dwh-oracle-db:/tmp/dwh-olap-step.sql
+    docker exec dwh-oracle-db sqlplus -s $connection '@/tmp/dwh-olap-step.sql'
     if ($LASTEXITCODE -ne 0) { throw 'A SQL script failed.' }
 }
 

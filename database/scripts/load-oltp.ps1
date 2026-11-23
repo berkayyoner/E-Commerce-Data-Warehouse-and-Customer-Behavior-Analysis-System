@@ -63,8 +63,10 @@ if ($WorkloadSeconds -gt 0) {
 }
 
 Write-Host 'Enriching the data for e-commerce analysis...'
-Get-Content (Join-Path $projectRoot 'database\enrichment\01_enrich_oltp.sql') -Raw |
-    docker exec -i dwh-oracle-db sqlplus -s "dwh_oltp/$($settings.OLTP_PASSWORD)@//localhost/FREEPDB1"
+# The script is copied into the container as a file because piped text from Windows PowerShell starts with a
+# byte order mark that sqlplus rejects.
+docker cp (Join-Path $projectRoot 'database\enrichment\01_enrich_oltp.sql') dwh-oracle-db:/tmp/01_enrich_oltp.sql
+docker exec dwh-oracle-db sqlplus -s "dwh_oltp/$($settings.OLTP_PASSWORD)@//localhost/FREEPDB1" '@/tmp/01_enrich_oltp.sql'
 if ($LASTEXITCODE -ne 0) { throw 'The enrichment script failed.' }
 
 Write-Host 'OLTP data is ready.'

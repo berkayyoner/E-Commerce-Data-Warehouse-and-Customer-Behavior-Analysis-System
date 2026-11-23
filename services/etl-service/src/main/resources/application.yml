@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: etl-service
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:FREEPDB1}
+    username: ${OLAP_USERNAME:dwh_olap}
+    password: ${OLAP_PASSWORD}
+    hikari:
+      maximum-pool-size: 4
+      minimum-idle: 1
+      # Set based loads can run for minutes, so a statement is not cut off by the pool.
+      connection-timeout: 30000
+
+server:
+  port: 8081
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+etl:
+  oltp-schema: ${OLTP_SCHEMA:DWH_OLTP}

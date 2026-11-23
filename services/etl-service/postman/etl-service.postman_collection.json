@@ -1,0 +1,145 @@
+{
+  "info": {
+    "name": "ETL Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081" },
+    { "key": "runId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Start full run",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Run is accepted', function () { pm.response.to.have.status(202); });",
+              "pm.test('Run is registered', function () {",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.status).to.eql('RUNNING');",
+              "  pm.collectionVariables.set('runId', body.id);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"FULL\"\n}" },
+        "url": "{{baseUrl}}/api/etl/runs"
+      }
+    },
+    {
+      "name": "Start second run while the first is active",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Second run is refused', function () { pm.response.to.have.status(409); });"]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"INCREMENTAL\"\n}" },
+        "url": "{{baseUrl}}/api/etl/runs"
+      }
+    },
+    {
+      "name": "Start run with an unknown type",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Unknown type is rejected', function () { pm.response.to.have.status(400); });"]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"PARTIAL\"\n}" },
+        "url": "{{baseUrl}}/api/etl/runs"
+      }
+    },
+    {
+      "name": "List runs",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Runs are listed', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().content).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/etl/runs?page=0&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "etl", "runs"],
+          "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "20" }]
+        }
+      }
+    },
+    {
+      "name": "Get run details",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Run details contain steps and quality checks', function () {",
+              "  pm.response.to.have.status(200);",
+              "  const body = pm.response.json();",
+              "  pm.expect(body.steps).to.be.an('array');",
+              "  pm.expect(body.qualityChecks).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/etl/runs/{{runId}}"
+      }
+    },
+    {
+      "name": "Get unknown run",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Unknown run is not found', function () { pm.response.to.have.status(404); });"]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/etl/runs/999999"
+      }
+    },
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/actuator/health"
+      }
+    }
+  ]
+}
