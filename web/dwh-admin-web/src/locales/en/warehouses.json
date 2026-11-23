@@ -1,0 +1,27 @@
+{
+  "title": "Warehouses",
+  "subtitle": "The shop warehouses with their tax rate and year-to-date sales.",
+  "createLabel": "Create warehouse",
+  "createTitle": "New warehouse",
+  "editTitle": "Edit warehouse",
+  "search": {
+    "placeholder": "Search by name, city or region"
+  },
+  "columns": {
+    "id": "ID",
+    "name": "Name",
+    "city": "City",
+    "region": "Region",
+    "tax": "Tax",
+    "ytd": "Year to date"
+  },
+  "rowActions": {
+    "edit": "Edit warehouse",
+    "delete": "Delete warehouse"
+  },
+  "form": {
+    "name": "Name",
+    "city": "City",
+    "region": "Region"
+  }
+}

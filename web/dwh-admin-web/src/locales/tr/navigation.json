@@ -1,7 +1,12 @@
 {
   "items": {
     "dashboard": "Gösterge Paneli",
+    "customers": "Müşteriler",
+    "products": "Ürünler",
+    "warehouses": "Depolar",
+    "orders": "Siparişler",
     "etlRuns": "ETL Çalıştırmaları",
+    "segments": "Segmentler",
     "users": "Kullanıcılar"
   }
 }

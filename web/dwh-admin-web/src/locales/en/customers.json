@@ -1,0 +1,38 @@
+{
+  "title": "Customers",
+  "subtitle": "Customers of the shop, by warehouse and district.",
+  "createLabel": "Create customer",
+  "createTitle": "New customer",
+  "editTitle": "Edit customer",
+  "search": {
+    "placeholder": "Search by name, e-mail, city or region"
+  },
+  "columns": {
+    "id": "Customer ID",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "E-mail",
+    "city": "City",
+    "region": "Region",
+    "since": "Member since",
+    "balance": "Balance"
+  },
+  "rowActions": {
+    "edit": "Edit customer"
+  },
+  "form": {
+    "warehouse": "Warehouse",
+    "chooseWarehouse": "Choose a warehouse",
+    "district": "District (1 to 10)",
+    "districtHint": "The district number inside the warehouse.",
+    "keyNote": "The warehouse and the district identify the customer and cannot be changed.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "E-mail",
+    "city": "City",
+    "region": "Region"
+  },
+  "errors": {
+    "district": "Use a district number from 1 to 10."
+  }
+}

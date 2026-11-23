@@ -1,0 +1,42 @@
+{
+  "title": "Siparişler",
+  "subtitle": "Mağazaya verilen siparişler. Yalnızca görüntüleme; bir siparişin kalemlerini görmek için satıra tıklayın.",
+  "search": {
+    "placeholder": "Müşteri adına göre ara"
+  },
+  "filters": {
+    "from": "Şu tarihten sonra",
+    "to": "Şu tarihe kadar",
+    "rangeError": "Bitiş tarihi başlangıç tarihinden önce olamaz."
+  },
+  "columns": {
+    "id": "Sipariş no",
+    "customerName": "Müşteri",
+    "orderDate": "Sipariş tarihi",
+    "paymentMethod": "Ödeme",
+    "lineCount": "Kalem",
+    "totalAmount": "Toplam",
+    "delivered": "Durum"
+  },
+  "status": {
+    "delivered": "Teslim edildi",
+    "pending": "Teslim edilmedi"
+  },
+  "detail": {
+    "title": "Sipariş {id}",
+    "summary": "Sipariş özeti",
+    "customer": "Müşteri",
+    "orderDate": "Sipariş tarihi",
+    "paymentMethod": "Ödeme",
+    "total": "Toplam",
+    "status": "Durum",
+    "lines": "Sipariş kalemleri",
+    "lineNumber": "Kalem",
+    "product": "Ürün",
+    "quantity": "Adet",
+    "amount": "Tutar",
+    "deliveryDate": "Teslim tarihi",
+    "noLines": "Bu siparişin kalemi yok.",
+    "loadFailed": "Sipariş yüklenemedi."
+  }
+}

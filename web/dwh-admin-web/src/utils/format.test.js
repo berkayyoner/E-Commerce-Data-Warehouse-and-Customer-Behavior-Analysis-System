@@ -1,4 +1,13 @@
-import { formatCurrency, formatDuration, formatMonth, formatNumber, formatPercent } from './format'
+import {
+  formatCurrency,
+  formatDate,
+  formatDecimal,
+  formatDuration,
+  formatMonth,
+  formatNumber,
+  formatPercent,
+  formatScore,
+} from './format'
 
 test('durations are shown as minutes and seconds, and minutes keep counting past an hour', () => {
   expect(formatDuration(0)).toBe('00:00')
@@ -28,4 +37,16 @@ test('numbers follow the separator conventions of the language', () => {
 test('a month key such as 2026-10 is shown as a month name', () => {
   expect(formatMonth('2026-10', 'en')).toBe('Oct 2026')
   expect(formatMonth('Q1', 'en')).toBe('Q1')
+})
+
+test('a calendar day is shown as the day written, whatever the time zone', () => {
+  expect(formatDate('2026-10-01', 'en')).toBe('Oct 1, 2026')
+  expect(formatDate('2026-10-01T00:00:00', 'en')).toBe('Oct 1, 2026')
+  expect(formatDate(null, 'en')).toBe('-')
+})
+
+test('averages keep one decimal and scores keep two', () => {
+  expect(formatDecimal(12.345, 'en')).toBe('12.3')
+  expect(formatScore(7.4312, 'en')).toBe('7.43')
+  expect(formatScore(null, 'en')).toBe('0')
 })

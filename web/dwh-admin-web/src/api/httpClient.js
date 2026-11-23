@@ -13,6 +13,13 @@ export function setLanguageProvider(provider) {
 /** Plain client for the OAuth token endpoint. It has no interceptors, so a refresh can never recurse. */
 export const tokenClient = axios.create({ timeout: 30000 })
 
+let reauthenticate = null
+
+/** Registers what to do when the access token is gone and cannot be refreshed. */
+export function setReauthenticationHandler(handler) {
+  reauthenticate = handler
+}
+
 let refreshing = null
 
 /** Exchanges the stored refresh token for a new pair. Concurrent callers share one request. */
@@ -45,6 +52,19 @@ export function refreshSession() {
   return refreshing
 }
 
+/**
+ * Without a usable refresh token a signed in person is sent through a silent sign in (the page is left, so the
+ * returned promise never settles); anybody else is signed out.
+ */
+function signInAgain(error) {
+  if (reauthenticate && tokenStore.wasSignedIn()) {
+    reauthenticate()
+    return new Promise(() => {})
+  }
+  tokenStore.endSession()
+  return Promise.reject(error)
+}
+
 /** Retries a request once after a refresh. A second 401, or a failed refresh, ends the session. */
 async function recoverFromUnauthorised(client, error) {
   const original = error.config
@@ -53,15 +73,13 @@ async function recoverFromUnauthorised(client, error) {
     return Promise.reject(error)
   }
   if (original.retried || !tokenStore.getRefreshToken()) {
-    tokenStore.endSession()
-    return Promise.reject(error)
+    return signInAgain(error)
   }
   original.retried = true
   try {
     await refreshSession()
   } catch {
-    tokenStore.endSession()
-    return Promise.reject(error)
+    return signInAgain(error)
   }
   return client(original)
 }
@@ -92,5 +110,6 @@ export const apiClients = Object.freeze({
   auth: createApiClient(config.services.auth),
   etl: createApiClient(config.services.etl),
   analytics: createApiClient(config.services.analytics),
+  shop: createApiClient(config.services.shop),
   segmentation: createApiClient(config.services.segmentation),
 })

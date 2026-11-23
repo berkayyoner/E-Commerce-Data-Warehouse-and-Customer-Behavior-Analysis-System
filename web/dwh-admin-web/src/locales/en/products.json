@@ -1,0 +1,81 @@
+{
+  "title": "Products",
+  "subtitle": "The product catalog and the smart search over it.",
+  "views": {
+    "label": "Product views",
+    "catalog": "Catalog",
+    "search": "Smart search"
+  },
+  "createLabel": "Create product",
+  "createTitle": "New product",
+  "editTitle": "Edit product",
+  "search": {
+    "placeholder": "Search by name, category or brand"
+  },
+  "columns": {
+    "id": "ID",
+    "name": "Name",
+    "category": "Category",
+    "brand": "Brand",
+    "price": "Price"
+  },
+  "rowActions": {
+    "edit": "Edit product",
+    "delete": "Delete product"
+  },
+  "form": {
+    "name": "Name",
+    "price": "Price",
+    "priceHint": "From 0.01 to 999.99, with at most two decimals.",
+    "category": "Category",
+    "brand": "Brand"
+  },
+  "errors": {
+    "price": "Enter a price from 0.01 to 999.99 with at most two decimals.",
+    "priceRange": "The lowest price cannot be higher than the highest price."
+  },
+  "smart": {
+    "placeholder": "Search products, categories or brands",
+    "submit": "Search",
+    "suggestions": "Suggestions",
+    "suggestionTypes": {
+      "PRODUCT": "Product",
+      "CATEGORY": "Category",
+      "BRAND": "Brand"
+    },
+    "facets": {
+      "title": "Refine results",
+      "categories": "Category",
+      "brands": "Brand",
+      "brandHint": "Only one brand can be chosen at a time.",
+      "price": "Price range",
+      "minPrice": "Lowest price",
+      "maxPrice": "Highest price",
+      "clear": "Clear filters"
+    },
+    "sort": {
+      "label": "Sort by",
+      "relevance": "Relevance",
+      "priceAsc": "Price, low to high",
+      "priceDesc": "Price, high to low",
+      "nameAsc": "Name, A to Z"
+    },
+    "results": {
+      "summary": "{total} products found",
+      "empty": "No products match these filters.",
+      "columns": {
+        "name": "Name",
+        "category": "Category",
+        "brand": "Brand",
+        "price": "Price",
+        "score": "Relevance score"
+      }
+    },
+    "reindex": {
+      "button": "Rebuild search index",
+      "running": "Indexed {indexed} of {total} products.",
+      "success": "The search index was rebuilt with {indexed} products.",
+      "failed": "The search index could not be rebuilt."
+    }
+  }
+}

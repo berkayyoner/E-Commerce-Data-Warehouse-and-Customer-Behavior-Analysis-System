@@ -1,0 +1,38 @@
+{
+  "title": "Müşteriler",
+  "subtitle": "Mağazanın müşterileri, depo ve ilçe bilgisiyle.",
+  "createLabel": "Müşteri oluştur",
+  "createTitle": "Yeni müşteri",
+  "editTitle": "Müşteriyi düzenle",
+  "search": {
+    "placeholder": "Ad, e-posta, şehir veya bölgeye göre ara"
+  },
+  "columns": {
+    "id": "Müşteri kimliği",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "email": "E-posta",
+    "city": "Şehir",
+    "region": "Bölge",
+    "since": "Üyelik tarihi",
+    "balance": "Bakiye"
+  },
+  "rowActions": {
+    "edit": "Müşteriyi düzenle"
+  },
+  "form": {
+    "warehouse": "Depo",
+    "chooseWarehouse": "Bir depo seçin",
+    "district": "İlçe (1 ile 10 arası)",
+    "districtHint": "Deponun içindeki ilçe numarası.",
+    "keyNote": "Depo ve ilçe müşteriyi tanımlar, bu alanlar değiştirilemez.",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "email": "E-posta",
+    "city": "Şehir",
+    "region": "Bölge"
+  },
+  "errors": {
+    "district": "1 ile 10 arasında bir ilçe numarası girin."
+  }
+}

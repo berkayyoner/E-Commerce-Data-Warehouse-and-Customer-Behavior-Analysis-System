@@ -8,10 +8,15 @@ import AppLayout from './components/layout/AppLayout'
 import Splash from './components/ui/Splash'
 import useT from './hooks/useT'
 import CallbackPage from './pages/CallbackPage'
+import CustomersPage from './pages/customers/CustomersPage'
 import DashboardPage from './pages/dashboard/DashboardPage'
 import EtlRunsPage from './pages/etl/EtlRunsPage'
+import OrdersPage from './pages/orders/OrdersPage'
+import ProductsPage from './pages/products/ProductsPage'
+import SegmentsPage from './pages/segments/SegmentsPage'
 import SignInPage from './pages/SignInPage'
 import UsersPage from './pages/users/UsersPage'
+import WarehousesPage from './pages/warehouses/WarehousesPage'
 import { restoreSession } from './store/authSlice'
 
 /** "/" shows the sign-in card to a visitor and the dashboard to a person who is signed in. */
@@ -57,10 +62,50 @@ export default function App() {
             }
           />
           <Route
+            path="/customers"
+            element={
+              <RequireRole path="/customers">
+                <CustomersPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <RequireRole path="/products">
+                <ProductsPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/warehouses"
+            element={
+              <RequireRole path="/warehouses">
+                <WarehousesPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <RequireRole path="/orders">
+                <OrdersPage />
+              </RequireRole>
+            }
+          />
+          <Route
             path="/etl"
             element={
               <RequireRole path="/etl">
                 <EtlRunsPage />
+              </RequireRole>
+            }
+          />
+          <Route
+            path="/segments"
+            element={
+              <RequireRole path="/segments">
+                <SegmentsPage />
               </RequireRole>
             }
           />

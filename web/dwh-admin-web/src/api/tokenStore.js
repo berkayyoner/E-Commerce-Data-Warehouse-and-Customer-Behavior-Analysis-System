@@ -1,4 +1,5 @@
 const REFRESH_KEY = 'dwh.admin.refreshToken'
+const SIGNED_IN_KEY = 'dwh.admin.signedIn'
 
 let accessToken = null
 const listeners = new Set()
@@ -8,6 +9,26 @@ function readRefresh() {
     return window.sessionStorage.getItem(REFRESH_KEY)
   } catch {
     return null
+  }
+}
+
+function readFlag() {
+  try {
+    return window.sessionStorage.getItem(SIGNED_IN_KEY) === '1'
+  } catch {
+    return false
+  }
+}
+
+function writeFlag(on) {
+  try {
+    if (on) {
+      window.sessionStorage.setItem(SIGNED_IN_KEY, '1')
+    } else {
+      window.sessionStorage.removeItem(SIGNED_IN_KEY)
+    }
+  } catch {
+    // Without storage the visitor simply signs in again after a reload.
   }
 }
 
@@ -36,8 +57,18 @@ const tokenStore = {
     return readRefresh()
   },
 
+  /**
+   * True while this browser tab holds a session. The authorization server issues no refresh tokens to public
+   * clients, so after a reload or an expired access token the application signs in again silently: the server
+   * still knows the person and answers the redirect at once.
+   */
+  wasSignedIn() {
+    return readFlag()
+  },
+
   set({ accessToken: nextAccessToken, refreshToken }) {
     accessToken = nextAccessToken
+    writeFlag(true)
     if (refreshToken) {
       writeRefresh(refreshToken)
     }
@@ -46,6 +77,7 @@ const tokenStore = {
   clear() {
     accessToken = null
     writeRefresh(null)
+    writeFlag(false)
   },
 
   /** Registers a callback for a session that ended. Returns the function that removes it again. */

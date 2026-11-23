@@ -1,0 +1,79 @@
+{
+  "title": "Müşteri segmentleri",
+  "subtitle": "Müşterilerin RFM segmentleri ve K-Means kümeleri.",
+  "run": {
+    "button": "Segmentasyonu çalıştır",
+    "started": "Segmentasyon çalıştırması {id} başlatıldı.",
+    "running": "Segmentasyon çalıştırması {id} sürüyor. Bittiğinde sonuçlar yenilenecek.",
+    "finished": "Segmentasyon çalıştırması {id} tamamlandı. {count} müşteri puanlandı.",
+    "failed": "Segmentasyon çalıştırması {id} başarısız oldu: {message}"
+  },
+  "summary": {
+    "title": "Segment özeti",
+    "empty": "Henüz hiçbir segment hesaplanmadı.",
+    "columns": {
+      "segment": "Segment",
+      "customers": "Müşteri",
+      "share": "Oran",
+      "recency": "Ort. son alışveriş (gün)",
+      "frequency": "Ort. sıklık",
+      "monetary": "Ort. parasal değer",
+      "revenue": "Toplam ciro"
+    },
+    "chartTitle": "Segmentlere göre ciro",
+    "chartSummary": "{count} segmentin toplam cirosu: {total}",
+    "showTable": "Tablo olarak göster",
+    "showChart": "Grafik olarak göster"
+  },
+  "grid": {
+    "title": "RFM ısı haritası",
+    "subtitle": "Satırlar son alışveriş puanını, sütunlar sıklık puanını gösterir. Her hücrede müşteri sayısı yazar.",
+    "caption": "Son alışveriş ve sıklık puanına göre müşteri sayısı",
+    "recency": "Son alışveriş puanı",
+    "frequency": "Sıklık puanı",
+    "empty": "Henüz puanlanmış müşteri yok.",
+    "cell": "Son alışveriş {recency}, sıklık {frequency}: {count} müşteri"
+  },
+  "clusters": {
+    "title": "K-Means kümeleri",
+    "chosenK": "Seçilen k: {k}",
+    "chosenBadge": "seçildi",
+    "empty": "Henüz hiçbir küme hesaplanmadı.",
+    "columns": {
+      "label": "Küme",
+      "customers": "Müşteri",
+      "share": "Oran",
+      "recency": "Ort. son alışveriş (gün)",
+      "frequency": "Ort. sıklık",
+      "monetary": "Ort. parasal değer"
+    },
+    "elbow": {
+      "title": "Dirsek yöntemi",
+      "summary": "k değerleri {min} ile {max} arasında eylemsizlik değerleri. Seçilen k {k}.",
+      "axisK": "k",
+      "axisInertia": "Eylemsizlik",
+      "table": "k değerine göre eylemsizlik",
+      "showTable": "Tablo olarak göster",
+      "showChart": "Grafik olarak göster"
+    }
+  },
+  "customers": {
+    "title": "Müşteriler",
+    "search": "Ada veya soyada göre ara",
+    "segment": "Segment",
+    "cluster": "Küme",
+    "allSegments": "Tüm segmentler",
+    "allClusters": "Tüm kümeler",
+    "columns": {
+      "customerId": "Müşteri kimliği",
+      "name": "Ad soyad",
+      "region": "Bölge",
+      "recency": "Son alışveriş (gün)",
+      "frequency": "Sıklık",
+      "monetary": "Parasal değer",
+      "scores": "R / F / M",
+      "segment": "Segment",
+      "cluster": "Küme"
+    }
+  }
+}

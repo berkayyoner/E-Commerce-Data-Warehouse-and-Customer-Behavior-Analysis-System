@@ -1,0 +1,9 @@
+{
+  "allWarehouses": "Tüm depolar",
+  "warehouseFilter": "Depo",
+  "conflict": {
+    "productInOrders": "Bu ürün siparişlerde yer alıyor, bu nedenle silinemez.",
+    "warehouseInUse": "Bu depoda hâlâ müşteri veya sipariş var, bu nedenle silinemez.",
+    "alreadyRunning": "Zaten devam eden bir segmentasyon çalıştırması var."
+  }
+}

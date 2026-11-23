@@ -1,0 +1,9 @@
+{
+  "allWarehouses": "All warehouses",
+  "warehouseFilter": "Warehouse",
+  "conflict": {
+    "productInOrders": "This product appears in orders, so it cannot be deleted.",
+    "warehouseInUse": "This warehouse still has customers or orders, so it cannot be deleted.",
+    "alreadyRunning": "A segmentation run is already in progress."
+  }
+}

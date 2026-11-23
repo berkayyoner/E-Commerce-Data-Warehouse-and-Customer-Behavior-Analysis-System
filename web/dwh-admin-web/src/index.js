@@ -9,6 +9,7 @@ import './index.css'
 import './styles/layout.css'
 import './styles/ui.css'
 import './styles/pages.css'
+import './styles/shop.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

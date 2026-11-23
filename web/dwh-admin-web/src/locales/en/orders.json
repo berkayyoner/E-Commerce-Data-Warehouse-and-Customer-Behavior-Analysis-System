@@ -1,0 +1,42 @@
+{
+  "title": "Orders",
+  "subtitle": "Orders placed in the shop. Read only: select an order to see its lines.",
+  "search": {
+    "placeholder": "Search by customer name"
+  },
+  "filters": {
+    "from": "Ordered from",
+    "to": "Ordered to",
+    "rangeError": "The end date cannot be before the start date."
+  },
+  "columns": {
+    "id": "Order ID",
+    "customerName": "Customer",
+    "orderDate": "Ordered",
+    "paymentMethod": "Payment",
+    "lineCount": "Lines",
+    "totalAmount": "Total",
+    "delivered": "Status"
+  },
+  "status": {
+    "delivered": "Delivered",
+    "pending": "Not delivered"
+  },
+  "detail": {
+    "title": "Order {id}",
+    "summary": "Order summary",
+    "customer": "Customer",
+    "orderDate": "Ordered",
+    "paymentMethod": "Payment",
+    "total": "Total",
+    "status": "Status",
+    "lines": "Order lines",
+    "lineNumber": "Line",
+    "product": "Product",
+    "quantity": "Quantity",
+    "amount": "Amount",
+    "deliveryDate": "Delivery date",
+    "noLines": "This order has no lines.",
+    "loadFailed": "The order could not be loaded."
+  }
+}

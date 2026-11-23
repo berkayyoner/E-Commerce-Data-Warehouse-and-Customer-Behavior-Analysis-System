@@ -1,0 +1,81 @@
+{
+  "title": "Ürünler",
+  "subtitle": "Ürün kataloğu ve bu katalog üzerinde akıllı arama.",
+  "views": {
+    "label": "Ürün görünümleri",
+    "catalog": "Katalog",
+    "search": "Akıllı arama"
+  },
+  "createLabel": "Ürün oluştur",
+  "createTitle": "Yeni ürün",
+  "editTitle": "Ürünü düzenle",
+  "search": {
+    "placeholder": "Ada, kategoriye veya markaya göre ara"
+  },
+  "columns": {
+    "id": "No",
+    "name": "Ad",
+    "category": "Kategori",
+    "brand": "Marka",
+    "price": "Fiyat"
+  },
+  "rowActions": {
+    "edit": "Ürünü düzenle",
+    "delete": "Ürünü sil"
+  },
+  "form": {
+    "name": "Ad",
+    "price": "Fiyat",
+    "priceHint": "0.01 ile 999.99 arasında, en fazla iki ondalık basamakla.",
+    "category": "Kategori",
+    "brand": "Marka"
+  },
+  "errors": {
+    "price": "0.01 ile 999.99 arasında, en fazla iki ondalık basamaklı bir fiyat girin.",
+    "priceRange": "En düşük fiyat en yüksek fiyattan büyük olamaz."
+  },
+  "smart": {
+    "placeholder": "Ürün, kategori veya marka ara",
+    "submit": "Ara",
+    "suggestions": "Öneriler",
+    "suggestionTypes": {
+      "PRODUCT": "Ürün",
+      "CATEGORY": "Kategori",
+      "BRAND": "Marka"
+    },
+    "facets": {
+      "title": "Sonuçları daralt",
+      "categories": "Kategori",
+      "brands": "Marka",
+      "brandHint": "Aynı anda yalnızca bir marka seçilebilir.",
+      "price": "Fiyat aralığı",
+      "minPrice": "En düşük fiyat",
+      "maxPrice": "En yüksek fiyat",
+      "clear": "Filtreleri temizle"
+    },
+    "sort": {
+      "label": "Sırala",
+      "relevance": "İlgililik",
+      "priceAsc": "Fiyat, artan",
+      "priceDesc": "Fiyat, azalan",
+      "nameAsc": "Ad, A'dan Z'ye"
+    },
+    "results": {
+      "summary": "{total} ürün bulundu",
+      "empty": "Bu filtrelerle eşleşen ürün yok.",
+      "columns": {
+        "name": "Ad",
+        "category": "Kategori",
+        "brand": "Marka",
+        "price": "Fiyat",
+        "score": "İlgililik puanı"
+      }
+    },
+    "reindex": {
+      "button": "Arama dizinini yeniden oluştur",
+      "running": "{total} ürünün {indexed} tanesi dizinlendi.",
+      "success": "Arama dizini {indexed} ürünle yeniden oluşturuldu.",
+      "failed": "Arama dizini yeniden oluşturulamadı."
+    }
+  }
+}

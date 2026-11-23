@@ -4,6 +4,7 @@ import { Link, Navigate } from 'react-router-dom'
 
 import PageTitle from '../components/layout/PageTitle'
 import Splash from '../components/ui/Splash'
+import { peekReturnTo } from '../auth/oauth'
 import useT from '../hooks/useT'
 import { finishSignIn } from '../store/authSlice'
 
@@ -26,7 +27,7 @@ export default function CallbackPage() {
   }, [dispatch])
 
   if (user) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to={peekReturnTo() || '/dashboard'} replace />
   }
   if (error) {
     const code = KNOWN_ERRORS.includes(error) ? error : 'failed'

@@ -21,10 +21,18 @@ test('the personnel accounts page is for administrators only', () => {
 })
 
 test('an unknown path allows nobody', () => {
-  expect(allowedRolesFor('/products')).toEqual([])
+  expect(allowedRolesFor('/reports')).toEqual([])
 })
 
-test('an analyst sees the dashboard and the ETL runs, but not the users page', () => {
+test('an analyst sees every page except the personnel accounts', () => {
   const visible = NAV_ITEMS.filter((item) => hasAnyRole(['ANALYST'], item.roles)).map((item) => item.path)
-  expect(visible).toEqual(['/dashboard', '/etl'])
+  expect(visible).toEqual([
+    '/dashboard',
+    '/customers',
+    '/products',
+    '/warehouses',
+    '/orders',
+    '/etl',
+    '/segments',
+  ])
 })

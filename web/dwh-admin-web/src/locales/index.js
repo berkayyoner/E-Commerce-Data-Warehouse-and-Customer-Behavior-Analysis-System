@@ -1,16 +1,28 @@
 import enAuth from './en/auth.json'
 import enCommon from './en/common.json'
+import enCustomers from './en/customers.json'
 import enDashboard from './en/dashboard.json'
 import enEtl from './en/etl.json'
 import enNavigation from './en/navigation.json'
+import enOrders from './en/orders.json'
+import enProducts from './en/products.json'
+import enSegments from './en/segments.json'
+import enShop from './en/shop.json'
 import enUsers from './en/users.json'
+import enWarehouses from './en/warehouses.json'
 
 import trAuth from './tr/auth.json'
 import trCommon from './tr/common.json'
+import trCustomers from './tr/customers.json'
 import trDashboard from './tr/dashboard.json'
 import trEtl from './tr/etl.json'
 import trNavigation from './tr/navigation.json'
+import trOrders from './tr/orders.json'
+import trProducts from './tr/products.json'
+import trSegments from './tr/segments.json'
+import trShop from './tr/shop.json'
 import trUsers from './tr/users.json'
+import trWarehouses from './tr/warehouses.json'
 
 /**
  * One entry per language, with the same namespaces in each. English is the default and the fallback for
@@ -24,6 +36,12 @@ const locales = {
     dashboard: enDashboard,
     users: enUsers,
     etl: enEtl,
+    shop: enShop,
+    customers: enCustomers,
+    warehouses: enWarehouses,
+    products: enProducts,
+    orders: enOrders,
+    segments: enSegments,
   },
   tr: {
     common: trCommon,
@@ -32,6 +50,12 @@ const locales = {
     dashboard: trDashboard,
     users: trUsers,
     etl: trEtl,
+    shop: trShop,
+    customers: trCustomers,
+    warehouses: trWarehouses,
+    products: trProducts,
+    orders: trOrders,
+    segments: trSegments,
   },
 }
 

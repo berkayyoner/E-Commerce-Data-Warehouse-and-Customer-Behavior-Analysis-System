@@ -38,6 +38,63 @@ export const analyticsApi = {
   categories: () => apiClients.analytics.get('/api/analytics/categories').then(body),
 }
 
+/**
+ * listParams plus the resource specific filters that have a value. Empty filters are left out, so the query
+ * string only carries what the person chose.
+ */
+function withFilters(query, names) {
+  const params = listParams(query)
+  names.forEach((name) => {
+    const value = query[name]
+    if (value !== undefined && value !== null && value !== '') {
+      params[name] = value
+    }
+  })
+  return params
+}
+
+export const shopApi = {
+  customers: {
+    list: (query) => apiClients.shop.get('/api/shop/customers', { params: withFilters(query, ['warehouseId']) }).then(body),
+    create: (payload) => apiClients.shop.post('/api/shop/customers', payload).then(body),
+    update: ({ warehouseId, districtId, customerId }, payload) =>
+      apiClients.shop.put(`/api/shop/customers/${warehouseId}/${districtId}/${customerId}`, payload).then(body),
+  },
+  warehouses: {
+    list: (query) => apiClients.shop.get('/api/shop/warehouses', { params: listParams(query) }).then(body),
+    create: (payload) => apiClients.shop.post('/api/shop/warehouses', payload).then(body),
+    update: (id, payload) => apiClients.shop.put(`/api/shop/warehouses/${id}`, payload).then(body),
+    remove: (id) => apiClients.shop.delete(`/api/shop/warehouses/${id}`).then(body),
+  },
+  products: {
+    list: (query) => apiClients.shop.get('/api/shop/products', { params: listParams(query) }).then(body),
+    create: (payload) => apiClients.shop.post('/api/shop/products', payload).then(body),
+    update: (id, payload) => apiClients.shop.put(`/api/shop/products/${id}`, payload).then(body),
+    remove: (id) => apiClients.shop.delete(`/api/shop/products/${id}`).then(body),
+  },
+  orders: {
+    list: (query) =>
+      apiClients.shop.get('/api/shop/orders', { params: withFilters(query, ['warehouseId', 'from', 'to']) }).then(body),
+    get: ({ warehouseId, districtId, orderId }) =>
+      apiClients.shop.get(`/api/shop/orders/${warehouseId}/${districtId}/${orderId}`).then(body),
+  },
+}
+
+export const searchApi = {
+  products: (params) => apiClients.shop.get('/api/shop/search/products', { params }).then(body),
+  suggest: (params) => apiClients.shop.get('/api/shop/search/suggest', { params }).then(body),
+  startReindex: () => apiClients.shop.post('/api/shop/search/reindex').then(body),
+  reindexStatus: () => apiClients.shop.get('/api/shop/search/reindex').then(body),
+}
+
 export const segmentationApi = {
   segments: () => apiClients.segmentation.get('/api/segmentation/segments').then(body),
+  rfmGrid: () => apiClients.segmentation.get('/api/segmentation/rfm-grid').then(body),
+  clusters: () => apiClients.segmentation.get('/api/segmentation/clusters').then(body),
+  customers: (query) =>
+    apiClients.segmentation
+      .get('/api/segmentation/customers', { params: withFilters(query, ['segment', 'cluster']) })
+      .then(body),
+  startRun: () => apiClients.segmentation.post('/api/segmentation/runs').then(body),
+  getRun: (id) => apiClients.segmentation.get(`/api/segmentation/runs/${id}`).then(body),
 }

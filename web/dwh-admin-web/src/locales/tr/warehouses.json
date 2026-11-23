@@ -1,0 +1,27 @@
+{
+  "title": "Depolar",
+  "subtitle": "Mağaza depoları, vergi oranları ve yıl başından bugüne satışlar.",
+  "createLabel": "Depo oluştur",
+  "createTitle": "Yeni depo",
+  "editTitle": "Depoyu düzenle",
+  "search": {
+    "placeholder": "Ad, şehir veya bölgeye göre ara"
+  },
+  "columns": {
+    "id": "No",
+    "name": "Ad",
+    "city": "Şehir",
+    "region": "Bölge",
+    "tax": "Vergi",
+    "ytd": "Yıl başından bugüne"
+  },
+  "rowActions": {
+    "edit": "Depoyu düzenle",
+    "delete": "Depoyu sil"
+  },
+  "form": {
+    "name": "Ad",
+    "city": "Şehir",
+    "region": "Bölge"
+  }
+}

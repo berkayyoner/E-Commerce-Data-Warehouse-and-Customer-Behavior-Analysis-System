@@ -1,10 +1,12 @@
-import { tokenClient } from '../api/httpClient'
+import { setReauthenticationHandler, tokenClient } from '../api/httpClient'
 import tokenStore from '../api/tokenStore'
 import config from '../config/env'
 import { buildAuthorizeUrl, challengeFor, randomState, randomVerifier } from './pkce'
 
 /** Session storage key for the verifier and state while the browser is away at the authorization server. */
 const PENDING_KEY = 'dwh.admin.pkce'
+/** Where to return after the redirect, so a reload or an expired token does not lose the open page. */
+const RETURN_KEY = 'dwh.admin.returnTo'
 
 export function redirectUri() {
   return `${window.location.origin}/callback`
@@ -23,8 +25,31 @@ function takePending() {
   return raw ? JSON.parse(raw) : null
 }
 
+/** The page to open after sign in: only paths of this application are accepted. */
+export function peekReturnTo() {
+  try {
+    const value = window.sessionStorage.getItem(RETURN_KEY)
+    return value && value.startsWith('/') && !value.startsWith('//') && !value.startsWith('/callback') ? value : null
+  } catch {
+    return null
+  }
+}
+
+function rememberReturnTo(path) {
+  try {
+    if (path) {
+      window.sessionStorage.setItem(RETURN_KEY, path)
+    } else {
+      window.sessionStorage.removeItem(RETURN_KEY)
+    }
+  } catch {
+    // The visitor then lands on the start page after sign in.
+  }
+}
+
 /** Sends the browser to the authorization server with a PKCE challenge and a state value. */
-export async function startSignIn() {
+export async function startSignIn(returnTo = null) {
+  rememberReturnTo(returnTo)
   const verifier = randomVerifier()
   const state = randomState()
   const challenge = await challengeFor(verifier)
@@ -72,3 +97,10 @@ export async function completeSignIn(search) {
   })
   return response.data
 }
+
+function currentPath() {
+  return `${window.location.pathname}${window.location.search}`
+}
+
+// An expired access token is replaced by a new sign in that the authorization server answers without a prompt.
+setReauthenticationHandler(() => startSignIn(currentPath()))

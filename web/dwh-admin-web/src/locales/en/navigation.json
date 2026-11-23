@@ -1,7 +1,12 @@
 {
   "items": {
     "dashboard": "Dashboard",
+    "customers": "Customers",
+    "products": "Products",
+    "warehouses": "Warehouses",
+    "orders": "Orders",
     "etlRuns": "ETL Runs",
+    "segments": "Segments",
     "users": "Users"
   }
 }

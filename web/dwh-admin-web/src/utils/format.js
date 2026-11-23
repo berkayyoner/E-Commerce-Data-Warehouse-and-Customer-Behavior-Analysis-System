@@ -31,6 +31,26 @@ export function formatDateTime(value, language) {
   return new Intl.DateTimeFormat(localeFor(language), { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value))
 }
 
+/** A calendar day such as "2026-10-01" (no time of day). The day is shown as written, whatever the time zone. */
+export function formatDate(value, language) {
+  if (!value) {
+    return '-'
+  }
+  return new Intl.DateTimeFormat(localeFor(language), { dateStyle: 'medium', timeZone: 'UTC' }).format(
+    new Date(`${String(value).slice(0, 10)}T00:00:00Z`),
+  )
+}
+
+/** A number with at most one decimal, for averages such as 12.3 days. */
+export function formatDecimal(value, language) {
+  return new Intl.NumberFormat(localeFor(language), { maximumFractionDigits: 1 }).format(Number(value) || 0)
+}
+
+/** A score with at most two decimals, for example a relevance score of 7.4312 shown as 7.43. */
+export function formatScore(value, language) {
+  return new Intl.NumberFormat(localeFor(language), { maximumFractionDigits: 2 }).format(Number(value) || 0)
+}
+
 /** "2026-10" becomes "Oct 2026" (or the Turkish equivalent). Other values are returned unchanged. */
 export function formatMonth(period, language) {
   const match = /^(\d{4})-(\d{2})$/.exec(String(period))

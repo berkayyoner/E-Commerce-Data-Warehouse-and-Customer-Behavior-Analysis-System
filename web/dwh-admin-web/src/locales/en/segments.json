@@ -1,0 +1,79 @@
+{
+  "title": "Customer segments",
+  "subtitle": "RFM segments and K-Means clusters of the customers.",
+  "run": {
+    "button": "Run segmentation",
+    "started": "Segmentation run {id} started.",
+    "running": "Segmentation run {id} is running. The results refresh when it finishes.",
+    "finished": "Segmentation run {id} finished. {count} customers were scored.",
+    "failed": "Segmentation run {id} failed: {message}"
+  },
+  "summary": {
+    "title": "Segment summary",
+    "empty": "No segments have been calculated yet.",
+    "columns": {
+      "segment": "Segment",
+      "customers": "Customers",
+      "share": "Share",
+      "recency": "Avg. recency (days)",
+      "frequency": "Avg. frequency",
+      "monetary": "Avg. monetary",
+      "revenue": "Total revenue"
+    },
+    "chartTitle": "Revenue per segment",
+    "chartSummary": "Total revenue of {count} segments: {total}",
+    "showTable": "Show as table",
+    "showChart": "Show as chart"
+  },
+  "grid": {
+    "title": "RFM heat grid",
+    "subtitle": "Rows are recency scores and columns are frequency scores. Each cell shows its number of customers.",
+    "caption": "Customers by recency score and frequency score",
+    "recency": "Recency score",
+    "frequency": "Frequency score",
+    "empty": "No scored customers yet.",
+    "cell": "Recency {recency}, frequency {frequency}: {count} customers"
+  },
+  "clusters": {
+    "title": "K-Means clusters",
+    "chosenK": "Chosen k: {k}",
+    "chosenBadge": "chosen",
+    "empty": "No clusters have been calculated yet.",
+    "columns": {
+      "label": "Cluster",
+      "customers": "Customers",
+      "share": "Share",
+      "recency": "Avg. recency (days)",
+      "frequency": "Avg. frequency",
+      "monetary": "Avg. monetary"
+    },
+    "elbow": {
+      "title": "Elbow method",
+      "summary": "Inertia for k from {min} to {max}. The chosen k is {k}.",
+      "axisK": "k",
+      "axisInertia": "Inertia",
+      "table": "Inertia by k",
+      "showTable": "Show as table",
+      "showChart": "Show as chart"
+    }
+  },
+  "customers": {
+    "title": "Customers",
+    "search": "Search by first or last name",
+    "segment": "Segment",
+    "cluster": "Cluster",
+    "allSegments": "All segments",
+    "allClusters": "All clusters",
+    "columns": {
+      "customerId": "Customer ID",
+      "name": "Name",
+      "region": "Region",
+      "recency": "Recency (days)",
+      "frequency": "Frequency",
+      "monetary": "Monetary",
+      "scores": "R / F / M",
+      "segment": "Segment",
+      "cluster": "Cluster"
+    }
+  }
+}
