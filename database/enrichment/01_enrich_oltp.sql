@@ -155,4 +155,22 @@ BEGIN
 END;
 /
 
+-- Sequences for the ids that the shop service creates itself (TPC-C has none) -------------------
+DECLARE
+    PROCEDURE create_sequence(p_name VARCHAR2, p_table VARCHAR2, p_column VARCHAR2) IS
+        v_count NUMBER;
+        v_start NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO v_count FROM user_sequences WHERE sequence_name = p_name;
+        IF v_count = 0 THEN
+            EXECUTE IMMEDIATE 'SELECT NVL(MAX(' || p_column || '), 0) + 1 FROM ' || p_table INTO v_start;
+            EXECUTE IMMEDIATE 'CREATE SEQUENCE ' || p_name || ' START WITH ' || v_start || ' NOCACHE';
+        END IF;
+    END;
+BEGIN
+    create_sequence('SEQ_ITEM_ID', 'ITEM', 'I_ID');
+    create_sequence('SEQ_WAREHOUSE_ID', 'WAREHOUSE', 'W_ID');
+END;
+/
+
 EXIT;

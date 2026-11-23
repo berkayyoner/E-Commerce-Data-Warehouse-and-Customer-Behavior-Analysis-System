@@ -11,3 +11,7 @@ logging:
   level:
     edu.yildiz.ecommerce: WARN
     root: WARN
+
+security:
+  issuer: ${AUTH_ISSUER}
+  allowed-origins: ${ETL_ALLOWED_ORIGINS}

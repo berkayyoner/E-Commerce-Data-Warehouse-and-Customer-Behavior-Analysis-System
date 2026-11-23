@@ -33,3 +33,7 @@ management:
 
 etl:
   oltp-schema: ${OLTP_SCHEMA:DWH_OLTP}
+
+security:
+  issuer: ${AUTH_ISSUER:http://localhost:9000}
+  allowed-origins: ${ETL_ALLOWED_ORIGINS:http://localhost:3001}
