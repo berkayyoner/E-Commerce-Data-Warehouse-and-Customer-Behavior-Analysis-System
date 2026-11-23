@@ -106,14 +106,14 @@ docker build -f services/analytics-service/Dockerfile -t analytics-service .
 ## Measured on the 10 warehouse data set
 
 The `/api/analytics/benchmark` endpoint runs the same question (revenue per month and category, 280 rows) on three
-sources. Average of three runs on a developer laptop:
+sources. Average of three runs on a developer laptop; the figures vary from run to run, the ranges are what was seen:
 
 | Source | Time |
 |---|---|
-| OLTP tables (`order_line` join `oorder` join `item`) | about 1.6 s |
-| Star schema (`fact_sales` join `dim_date` join `dim_product`) | about 1.9 s |
-| Materialized view `mv_sales_monthly` | about 4 ms |
+| OLTP tables (`order_line` join `oorder` join `item`) | 0.9 to 1.6 s |
+| Star schema (`fact_sales` join `dim_date` join `dim_product`) | 0.8 to 1.9 s |
+| Materialized view `mv_sales_monthly` | 2 to 5 ms |
 
-Both full scans read 3 million rows, so the star schema alone is not faster than the OLTP tables at this size. The
-gain comes from pre-aggregation: the view answers the question about 360 times faster, and Redis then answers a
+Both full scans read 3 million rows, so the star schema alone brings no clear gain over the OLTP tables at this size. The
+gain comes from pre-aggregation: the view answers the question 260 to 430 times faster, and Redis then answers a
 repeated report in about 20 ms.

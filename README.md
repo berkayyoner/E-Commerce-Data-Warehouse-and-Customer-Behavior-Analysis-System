@@ -20,10 +20,36 @@ This project is being developed as a term project for the Information Technologi
 * **Back-end Test Tools:** Unit Test, Postman
 * **Authentication:** OAuth 2.0
 
+## What the system does
+Shop orders are generated as an OLTP database (TPC-C through BenchBase) and turned into e-commerce data. An ETL process
+loads them into a star schema, reports and customer segments (RFM and K-Means) are served by microservices, and two React
+applications show the results: a public analytics portal and a personnel console.
+
+## Project structure
+| Folder | Content |
+|---|---|
+| `services/` | Spring Boot services: `auth-service` (OAuth 2.0), `etl-service`, `shop-service`, `analytics-service`, `segmentation-service` |
+| `web/` | React applications: `dwh-admin-web` (personnel console), `analytics-portal-web` (public portal) |
+| `database/` | Oracle accounts, BenchBase configuration, data enrichment, Flyway migrations, reconciliation test |
+| `deploy/` | API gateway configuration, Kubernetes manifests, deployment notes |
+| `e2e-tests/` | Selenium browser tests |
+| `postman/` | Postman environments (the collections are in each service) |
+| `docs/` | Report, star schema, database operations, testing, demo script |
+| `scripts/` | Start and stop the whole system on a developer machine |
+
+## Quick start (Windows, Docker Desktop, Java 21, Node 22)
+> PowerShell: `Copy-Item .env.example .env` (then choose the passwords) <br />
+> PowerShell: `docker compose up -d oracle-db redis elasticsearch` <br />
+> PowerShell: `.\database\scripts\migrate-database.ps1 -Schema olap` and `-Schema app` (first start of a new database) <br />
+> PowerShell: `.\scripts\start-local.ps1 -Build` (services and both web apps) <br />
+> Open http://localhost:3000 (portal) or http://localhost:3001 (console) <br />
+
+The data is generated and loaded as described in `database/README.md`; the full report is in `docs/report.md`.
+
 ## How to get the project up
-For createing all of the containers in your Docker application at once:
+For creating all of the containers in your Docker application at once (database, cache, search and every service):
 > CMD: `cd [project directory]` <br />
-> CMD: `docker-compose up --build` <br />
+> CMD: `docker compose --profile apps up -d --build` <br />
 
 ## How to get project builds
 > CMD: `cd [project directory]` <br />
