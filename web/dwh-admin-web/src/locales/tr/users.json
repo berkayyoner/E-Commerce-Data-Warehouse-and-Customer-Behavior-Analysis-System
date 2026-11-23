@@ -1,0 +1,35 @@
+{
+  "title": "Personel hesapları",
+  "createLabel": "Kullanıcı oluştur",
+  "columns": {
+    "username": "Kullanıcı adı",
+    "displayName": "Görünen ad",
+    "email": "E-posta",
+    "role": "Rol",
+    "status": "Durum",
+    "createdAt": "Oluşturulma"
+  },
+  "createTitle": "Yeni personel hesabı",
+  "editTitle": "Personel hesabını düzenle",
+  "form": {
+    "username": "Kullanıcı adı",
+    "usernameHint": "3 ile 60 karakter: harf, rakam, nokta, tire veya alt çizgi.",
+    "displayName": "Görünen ad",
+    "email": "E-posta (isteğe bağlı)",
+    "role": "Rol",
+    "password": "Şifre",
+    "passwordHint": "8 ile 72 karakter.",
+    "newPasswordHint": "Mevcut şifreyi korumak için boş bırakın. Aksi halde 8 ile 72 karakter.",
+    "enabled": "Hesap etkin"
+  },
+  "errors": {
+    "usernamePattern": "Yalnızca harf, rakam, nokta, tire ve alt çizgi kullanın.",
+    "usernameLength": "3 ile 60 karakter arasında olmalıdır.",
+    "displayNameLength": "En fazla 120 karakter kullanın.",
+    "passwordLength": "8 ile 72 karakter arasında olmalıdır."
+  },
+  "rowActions": {
+    "edit": "Hesabı düzenle",
+    "delete": "Hesabı sil"
+  }
+}

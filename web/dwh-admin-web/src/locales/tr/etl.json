@@ -1,0 +1,70 @@
+{
+  "title": "ETL Çalıştırmaları",
+  "pollingNote": "Bir çalıştırma sürerken her 5 saniyede bir yenilenir.",
+  "search": {
+    "placeholder": "Tür veya duruma göre ara"
+  },
+  "columns": {
+    "id": "No",
+    "runType": "Tür",
+    "status": "Durum",
+    "startedAt": "Başlangıç",
+    "duration": "Süre",
+    "rowsLoaded": "Yüklenen satır",
+    "rowsRejected": "Reddedilen satır"
+  },
+  "runTypes": {
+    "FULL": "Tam",
+    "INCREMENTAL": "Artımlı"
+  },
+  "statuses": {
+    "RUNNING": "Çalışıyor",
+    "SUCCESS": "Başarılı",
+    "FAILED": "Başarısız"
+  },
+  "startRun": "Çalıştırmayı başlat",
+  "start": {
+    "title": "ETL çalıştırması başlat",
+    "runTypeLegend": "Çalıştırma türü",
+    "options": {
+      "FULL": {
+        "label": "Tam",
+        "description": "Kaynak sistemdeki tüm tabloları yeniden yükler. Daha yavaştır; şema değişikliklerinden sonra veya ambar verisi hatalı göründüğünde kullanın."
+      },
+      "INCREMENTAL": {
+        "label": "Artımlı",
+        "description": "Son başarılı çalıştırmadan beri değişen satırları yükler. Daha hızlıdır; günlük yüklemeler için kullanın."
+      }
+    },
+    "submit": "Çalıştırmayı başlat",
+    "started": "ETL çalıştırması başlatıldı."
+  },
+  "detail": {
+    "title": "ETL çalıştırması {id}",
+    "summary": "Özet",
+    "startedAt": "Başlangıç",
+    "finishedAt": "Bitiş",
+    "duration": "Süre",
+    "rowsRead": "Okunan satır",
+    "rowsLoaded": "Yüklenen satır",
+    "rowsRejected": "Reddedilen satır",
+    "errorMessage": "Hata",
+    "steps": "Adımlar",
+    "stepName": "Adım",
+    "stepRowsRead": "Okunan satır",
+    "stepRowsLoaded": "Yüklenen satır",
+    "stepDuration": "Süre",
+    "noSteps": "Kayıtlı adım yok.",
+    "quality": "Kalite kontrolleri",
+    "checkName": "Kontrol",
+    "result": "Sonuç",
+    "checkDetail": "Ayrıntı",
+    "noChecks": "Kayıtlı kalite kontrolü yok.",
+    "loadFailed": "Çalıştırma ayrıntıları yüklenemedi.",
+    "notFinished": "Çalıştırma hâlâ sürüyor."
+  },
+  "checks": {
+    "passed": "Geçti",
+    "failed": "Kaldı"
+  }
+}

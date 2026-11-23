@@ -1,0 +1,7 @@
+{
+  "items": {
+    "dashboard": "Dashboard",
+    "etlRuns": "ETL Runs",
+    "users": "Users"
+  }
+}

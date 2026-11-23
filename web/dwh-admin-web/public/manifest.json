@@ -1,0 +1,15 @@
+{
+  "short_name": "DWH Personnel",
+  "name": "Shop Data Warehouse - Personnel Console",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1E40AF",
+  "background_color": "#F8FAFC"
+}

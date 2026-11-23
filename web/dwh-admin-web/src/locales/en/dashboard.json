@@ -1,0 +1,43 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Sales, customers and ETL status at a glance.",
+  "kpi": {
+    "title": "Key figures",
+    "revenue": "Revenue",
+    "orders": "Orders",
+    "units": "Units sold",
+    "customers": "Customers",
+    "averageOrderValue": "Average order value",
+    "deliveredShare": "Delivered share"
+  },
+  "revenue": {
+    "title": "Monthly revenue",
+    "period": "Month",
+    "revenue": "Revenue",
+    "orders": "Orders",
+    "units": "Units",
+    "summary": "Monthly revenue for {count} months, {total} in total",
+    "empty": "No sales data yet.",
+    "showTable": "Show as table",
+    "showChart": "Show as chart"
+  },
+  "categories": {
+    "title": "Revenue by category",
+    "empty": "No category data yet.",
+    "share": "{share} of revenue"
+  },
+  "segments": {
+    "title": "Customer segments",
+    "empty": "No segments yet.",
+    "customers": "{count} customers",
+    "share": "{share} of customers"
+  },
+  "lastRun": {
+    "title": "Latest ETL run",
+    "empty": "No ETL run has been started yet.",
+    "started": "Started",
+    "duration": "Duration",
+    "rowsLoaded": "Rows loaded",
+    "viewAll": "View all ETL runs"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "title": "Gösterge Paneli",
+  "subtitle": "Satışlar, müşteriler ve ETL durumu tek bakışta.",
+  "kpi": {
+    "title": "Temel göstergeler",
+    "revenue": "Ciro",
+    "orders": "Siparişler",
+    "units": "Satılan adet",
+    "customers": "Müşteriler",
+    "averageOrderValue": "Ortalama sipariş tutarı",
+    "deliveredShare": "Teslim edilen oran"
+  },
+  "revenue": {
+    "title": "Aylık ciro",
+    "period": "Ay",
+    "revenue": "Ciro",
+    "orders": "Siparişler",
+    "units": "Adet",
+    "summary": "{count} aylık ciro, toplam {total}",
+    "empty": "Henüz satış verisi yok.",
+    "showTable": "Tablo olarak göster",
+    "showChart": "Grafik olarak göster"
+  },
+  "categories": {
+    "title": "Kategoriye göre ciro",
+    "empty": "Henüz kategori verisi yok.",
+    "share": "Cironun {share} kadarı"
+  },
+  "segments": {
+    "title": "Müşteri segmentleri",
+    "empty": "Henüz segment yok.",
+    "customers": "{count} müşteri",
+    "share": "Müşterilerin {share} kadarı"
+  },
+  "lastRun": {
+    "title": "Son ETL çalıştırması",
+    "empty": "Henüz bir ETL çalıştırması başlatılmadı.",
+    "started": "Başlangıç",
+    "duration": "Süre",
+    "rowsLoaded": "Yüklenen satır",
+    "viewAll": "Tüm ETL çalıştırmalarını gör"
+  }
+}

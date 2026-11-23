@@ -1,0 +1,244 @@
+/* ---------- dashboard ---------- */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.widget {
+  min-width: 0;
+}
+
+.widget-wide {
+  grid-column: 1 / -1;
+}
+
+.widget-title {
+  margin-bottom: var(--space-3);
+  font-size: 1.05rem;
+  color: var(--color-primary);
+}
+
+.widget-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--space-3);
+}
+
+.widget-footer {
+  margin: var(--space-3) 0 0;
+}
+
+.kpi-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-3);
+}
+
+.kpi-card {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.kpi-icon {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: var(--color-info-soft);
+  color: var(--color-primary);
+}
+
+.kpi-label {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.kpi-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-chart {
+  margin: 0;
+}
+
+.bar-chart svg {
+  width: 100%;
+  height: auto;
+}
+
+.chart-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  fill: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.bar-primary {
+  fill: var(--color-bar);
+}
+
+.bar-secondary {
+  fill: var(--color-bar-secondary);
+}
+
+.share-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.share-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.share-name {
+  font-weight: 600;
+}
+
+.share-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-surface-muted);
+  overflow: hidden;
+}
+
+.share-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-bar);
+}
+
+.segment-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+.segment-card {
+  display: grid;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.segment-card strong {
+  color: var(--color-primary);
+}
+
+.segment-share {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.detail-list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.detail-list > div {
+  display: grid;
+  grid-template-columns: minmax(120px, 40%) 1fr;
+  gap: var(--space-3);
+  align-items: baseline;
+}
+
+.detail-list dt {
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+.detail-list dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.detail-list.two-columns {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-3) var(--space-5);
+}
+
+.detail-list.two-columns > div {
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.detail-list .full-row {
+  grid-column: 1 / -1;
+}
+
+.error-text {
+  color: var(--color-danger);
+  font-weight: 400;
+}
+
+.detail-section + .detail-section {
+  margin-top: var(--space-5);
+}
+
+.detail-section h3 {
+  margin-bottom: var(--space-3);
+  font-size: 1rem;
+  color: var(--color-primary);
+}
+
+.check-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.check-result.is-passed {
+  color: var(--color-success);
+}
+
+.check-result.is-failed {
+  color: var(--color-danger);
+}
+
+@media (max-width: 599px) {
+  .detail-list > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* ---------- reduced motion for the skeleton ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line {
+    animation: none;
+  }
+}

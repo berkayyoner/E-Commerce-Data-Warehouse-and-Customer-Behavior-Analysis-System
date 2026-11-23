@@ -1,0 +1,70 @@
+{
+  "title": "ETL Runs",
+  "pollingNote": "Refreshes every 5 seconds while a run is active.",
+  "search": {
+    "placeholder": "Search by type or status"
+  },
+  "columns": {
+    "id": "ID",
+    "runType": "Type",
+    "status": "Status",
+    "startedAt": "Started",
+    "duration": "Duration",
+    "rowsLoaded": "Rows loaded",
+    "rowsRejected": "Rows rejected"
+  },
+  "runTypes": {
+    "FULL": "Full",
+    "INCREMENTAL": "Incremental"
+  },
+  "statuses": {
+    "RUNNING": "Running",
+    "SUCCESS": "Succeeded",
+    "FAILED": "Failed"
+  },
+  "startRun": "Start run",
+  "start": {
+    "title": "Start an ETL run",
+    "runTypeLegend": "Run type",
+    "options": {
+      "FULL": {
+        "label": "Full",
+        "description": "Reloads every table from the source system. Slower; use after schema changes or when the warehouse data looks wrong."
+      },
+      "INCREMENTAL": {
+        "label": "Incremental",
+        "description": "Loads only the rows that changed since the last successful run. Faster; use for routine loads."
+      }
+    },
+    "submit": "Start run",
+    "started": "ETL run started."
+  },
+  "detail": {
+    "title": "ETL run {id}",
+    "summary": "Summary",
+    "startedAt": "Started",
+    "finishedAt": "Finished",
+    "duration": "Duration",
+    "rowsRead": "Rows read",
+    "rowsLoaded": "Rows loaded",
+    "rowsRejected": "Rows rejected",
+    "errorMessage": "Error",
+    "steps": "Steps",
+    "stepName": "Step",
+    "stepRowsRead": "Rows read",
+    "stepRowsLoaded": "Rows loaded",
+    "stepDuration": "Duration",
+    "noSteps": "No steps were recorded.",
+    "quality": "Quality checks",
+    "checkName": "Check",
+    "result": "Result",
+    "checkDetail": "Detail",
+    "noChecks": "No quality checks were recorded.",
+    "loadFailed": "The run details could not be loaded.",
+    "notFinished": "The run is still in progress."
+  },
+  "checks": {
+    "passed": "Passed",
+    "failed": "Failed"
+  }
+}
