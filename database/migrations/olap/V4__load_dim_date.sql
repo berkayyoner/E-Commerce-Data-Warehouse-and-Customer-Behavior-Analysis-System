@@ -1,5 +1,4 @@
 -- Fills dim_date for 2024-2027 (order and delivery dates fall inside this range). Run as DWH_OLAP.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 INSERT INTO dim_date (date_key, full_date, day_of_month, day_of_week, day_name, week_of_year,
                       month_number, month_name, quarter_number, year_number, year_month, is_weekend)

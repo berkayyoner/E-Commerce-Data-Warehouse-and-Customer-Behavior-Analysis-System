@@ -69,8 +69,9 @@ Every report except the benchmark is cached in Redis for six hours.
 
 | Variable | Default (local profile) | Meaning |
 |---|---|---|
-| `OLAP_USERNAME` | `dwh_olap` | Database account that owns the star schema |
-| `OLAP_PASSWORD` | none | Password of the database account |
+| `ANALYTICS_DB_USERNAME` | `dwh_reader` | Read-only database account (select on the star schema and the OLTP tables) |
+| `ANALYTICS_DB_PASSWORD` | none | Password of the database account |
+| `ANALYTICS_DB_SCHEMA` | `DWH_OLAP` | Schema that holds the star schema; every connection switches to it |
 | `DB_HOST`, `DB_PORT`, `DB_SERVICE` | `localhost`, `1521`, `FREEPDB1` | Oracle connection |
 | `OLTP_SCHEMA` | `DWH_OLTP` | Schema of the OLTP tables used by the benchmark |
 | `REDIS_HOST`, `REDIS_PORT` | `localhost`, `6379` | Redis connection |

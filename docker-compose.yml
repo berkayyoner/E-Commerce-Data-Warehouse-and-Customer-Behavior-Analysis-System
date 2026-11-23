@@ -18,6 +18,7 @@ services:
       APP_USER_PASSWORD: ${OLTP_PASSWORD:?set OLTP_PASSWORD in .env}
       OLAP_PASSWORD: ${OLAP_PASSWORD:?set OLAP_PASSWORD in .env}
       APP_DB_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
+      READER_PASSWORD: ${READER_PASSWORD:?set READER_PASSWORD in .env}
     ports:
       - "${DB_PORT:-1521}:1521"
     volumes:
@@ -65,6 +66,42 @@ services:
       timeout: 10s
       retries: 10
     restart: unless-stopped
+
+  # Versioned database scripts: `docker compose --profile migrate run --rm flyway-olap` (or flyway-app).
+  # Another Flyway command can be appended, for example `flyway-olap info`.
+  flyway-olap:
+    image: flyway/flyway:11
+    container_name: dwh-flyway-olap
+    profiles: ["migrate"]
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      FLYWAY_URL: jdbc:oracle:thin:@//oracle-db:1521/FREEPDB1
+      FLYWAY_USER: dwh_olap
+      FLYWAY_PASSWORD: ${OLAP_PASSWORD:?set OLAP_PASSWORD in .env}
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_CONNECT_RETRIES: "10"
+    command: migrate
+    volumes:
+      - ./database/migrations/olap:/flyway/sql:ro
+
+  flyway-app:
+    image: flyway/flyway:11
+    container_name: dwh-flyway-app
+    profiles: ["migrate"]
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      FLYWAY_URL: jdbc:oracle:thin:@//oracle-db:1521/FREEPDB1
+      FLYWAY_USER: dwh_app
+      FLYWAY_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_CONNECT_RETRIES: "10"
+    command: migrate
+    volumes:
+      - ./database/migrations/app:/flyway/sql:ro
 
   # Started with `docker compose --profile apps up -d gateway` once the services run in containers.
   gateway:

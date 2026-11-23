@@ -181,4 +181,17 @@ BEGIN
 END;
 /
 
+-- The report API reads the OLTP tables for its benchmark with the read-only account ---------------
+DECLARE
+    v_count NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_count FROM all_users WHERE username = 'DWH_READER';
+    IF v_count > 0 THEN
+        FOR t IN (SELECT table_name FROM user_tables) LOOP
+            EXECUTE IMMEDIATE 'GRANT SELECT ON "' || t.table_name || '" TO dwh_reader';
+        END LOOP;
+    END IF;
+END;
+/
+
 EXIT;

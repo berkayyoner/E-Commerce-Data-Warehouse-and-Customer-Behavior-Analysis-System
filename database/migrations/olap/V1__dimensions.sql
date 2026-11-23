@@ -1,5 +1,4 @@
 -- Dimension tables of the star schema. Run as DWH_OLAP.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 -- Date dimension: one row per day, filled by 04_load_dim_date.sql.
 CREATE TABLE dim_date (

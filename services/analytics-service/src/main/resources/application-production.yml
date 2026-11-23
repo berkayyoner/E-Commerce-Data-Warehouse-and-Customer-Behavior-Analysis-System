@@ -2,10 +2,11 @@
 spring:
   datasource:
     url: jdbc:oracle:thin:@//${DB_HOST}:${DB_PORT}/${DB_SERVICE}
-    username: ${OLAP_USERNAME}
-    password: ${OLAP_PASSWORD}
+    username: ${ANALYTICS_DB_USERNAME}
+    password: ${ANALYTICS_DB_PASSWORD}
     hikari:
       maximum-pool-size: 8
+      connection-init-sql: ALTER SESSION SET CURRENT_SCHEMA = ${ANALYTICS_DB_SCHEMA}
   data:
     redis:
       host: ${REDIS_HOST}

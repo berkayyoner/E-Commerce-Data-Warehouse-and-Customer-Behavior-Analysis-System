@@ -1,5 +1,4 @@
 -- Application tables (users and roles). Run as DWH_APP.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 CREATE TABLE app_user (
     user_id         NUMBER        GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

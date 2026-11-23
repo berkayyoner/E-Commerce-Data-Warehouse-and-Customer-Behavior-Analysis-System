@@ -1,6 +1,5 @@
 -- Pre-aggregated sales per month, category and warehouse. The report API reads it for the monthly
 -- views, the ETL service refreshes it after every load. Run as DWH_OLAP after the facts exist.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 CREATE MATERIALIZED VIEW mv_sales_monthly
     BUILD IMMEDIATE

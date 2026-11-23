@@ -5,12 +5,14 @@ spring:
     default: local
   datasource:
     url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:FREEPDB1}
-    username: ${OLAP_USERNAME:dwh_olap}
-    password: ${OLAP_PASSWORD}
+    username: ${ANALYTICS_DB_USERNAME:dwh_reader}
+    password: ${ANALYTICS_DB_PASSWORD}
     hikari:
       maximum-pool-size: 6
       minimum-idle: 1
       connection-timeout: 30000
+      # The read-only account owns no tables, so every connection starts inside the warehouse schema.
+      connection-init-sql: ALTER SESSION SET CURRENT_SCHEMA = ${ANALYTICS_DB_SCHEMA:DWH_OLAP}
   data:
     redis:
       host: ${REDIS_HOST:localhost}

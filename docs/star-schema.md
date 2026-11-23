@@ -1,7 +1,7 @@
 # Star Schema
 
-The warehouse lives in the `dwh_olap` Oracle schema. The DDL is in `database/olap/` and is applied with
-`database/scripts/create-olap.ps1`.
+The warehouse lives in the `dwh_olap` Oracle schema. The DDL is kept as versioned Flyway migrations in `database/migrations/olap/` and is applied with
+`database/scripts/migrate-database.ps1 -Schema olap`.
 
 ```mermaid
 erDiagram

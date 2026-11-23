@@ -1,5 +1,4 @@
 -- Fact tables of the star schema. The sales and order facts are range partitioned by order date.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 -- Grain: one row per order line.
 CREATE TABLE fact_sales (

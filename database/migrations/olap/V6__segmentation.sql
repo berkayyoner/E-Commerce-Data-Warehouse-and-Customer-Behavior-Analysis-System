@@ -1,6 +1,5 @@
 -- Customer segmentation results (RFM scores, RFM segments and K-Means clusters). Run as DWH_OLAP.
 -- The segmentation service writes these tables; the report API and the personnel portal read them.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 -- One row per segmentation run. etl_run_id is the newest successful ETL run the scores are based on.
 CREATE TABLE segmentation_run (

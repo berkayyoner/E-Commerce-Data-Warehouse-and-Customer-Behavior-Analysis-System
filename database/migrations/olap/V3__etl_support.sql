@@ -1,5 +1,4 @@
 -- Bookkeeping tables used by the ETL service.
-WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 
 CREATE TABLE etl_run (
     run_id          NUMBER        GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
