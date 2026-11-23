@@ -2,6 +2,7 @@ package edu.yildiz.ecommerce.shop.web;
 
 import java.util.stream.Collectors;
 
+import edu.yildiz.ecommerce.shop.search.SearchUnavailableException;
 import edu.yildiz.ecommerce.shop.service.ConflictException;
 import edu.yildiz.ecommerce.shop.service.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -41,5 +43,17 @@ public class ApiExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail unreadableBody() {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "The request body could not be read");
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ProblemDetail invalidParameter(MethodArgumentTypeMismatchException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                "Invalid value for parameter " + e.getName());
+    }
+
+    @ExceptionHandler(SearchUnavailableException.class)
+    public ProblemDetail searchUnavailable() {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.SERVICE_UNAVAILABLE,
+                "The search service is unavailable");
     }
 }

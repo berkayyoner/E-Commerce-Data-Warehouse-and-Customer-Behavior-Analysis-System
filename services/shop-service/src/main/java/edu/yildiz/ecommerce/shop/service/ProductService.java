@@ -9,7 +9,9 @@ import edu.yildiz.ecommerce.shop.dto.ProductDtos.ProductView;
 import edu.yildiz.ecommerce.shop.model.PageResult;
 import edu.yildiz.ecommerce.shop.repository.OrderLineRepository;
 import edu.yildiz.ecommerce.shop.repository.ProductRepository;
+import edu.yildiz.ecommerce.shop.search.ProductIndexEvent;
 import edu.yildiz.ecommerce.shop.support.Paging;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -30,10 +32,13 @@ public class ProductService {
 
     private final ProductRepository products;
     private final OrderLineRepository orderLines;
+    private final ApplicationEventPublisher events;
 
-    public ProductService(ProductRepository products, OrderLineRepository orderLines) {
+    public ProductService(ProductRepository products, OrderLineRepository orderLines,
+                          ApplicationEventPublisher events) {
         this.products = products;
         this.orderLines = orderLines;
+        this.events = events;
     }
 
     @Transactional(readOnly = true)
@@ -58,6 +63,7 @@ public class ProductService {
         long id = products.nextId().longValue();
         Product created = products.save(
                 new Product(id, request.name(), request.price(), request.category(), request.brand()));
+        events.publishEvent(ProductIndexEvent.upserted(created));
         return ProductView.of(created);
     }
 
@@ -65,6 +71,7 @@ public class ProductService {
     public ProductView update(long id, ProductRequest request) {
         Product existing = find(id);
         existing.change(request.name(), request.price(), request.category(), request.brand());
+        events.publishEvent(ProductIndexEvent.upserted(existing));
         return ProductView.of(existing);
     }
 
@@ -76,6 +83,7 @@ public class ProductService {
             throw new ConflictException("Product " + id + " appears in order lines and cannot be deleted");
         }
         products.delete(existing);
+        events.publishEvent(ProductIndexEvent.removed(id));
     }
 
     private Product find(long id) {

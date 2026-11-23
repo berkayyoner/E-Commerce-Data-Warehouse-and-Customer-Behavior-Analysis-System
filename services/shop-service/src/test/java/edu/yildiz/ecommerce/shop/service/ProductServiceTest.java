@@ -19,8 +19,10 @@ import edu.yildiz.ecommerce.shop.dto.ProductDtos.ProductView;
 import edu.yildiz.ecommerce.shop.model.PageResult;
 import edu.yildiz.ecommerce.shop.repository.OrderLineRepository;
 import edu.yildiz.ecommerce.shop.repository.ProductRepository;
+import edu.yildiz.ecommerce.shop.search.ProductIndexEvent;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,7 +31,8 @@ class ProductServiceTest {
 
     private final ProductRepository products = mock(ProductRepository.class);
     private final OrderLineRepository orderLines = mock(OrderLineRepository.class);
-    private final ProductService service = new ProductService(products, orderLines);
+    private final ApplicationEventPublisher events = mock(ApplicationEventPublisher.class);
+    private final ProductService service = new ProductService(products, orderLines, events);
 
     private static Product product(long id, String name) {
         return new Product(id, name, new BigDecimal("12.50"), "Home", "Lumen");
@@ -88,6 +91,53 @@ class ProductServiceTest {
         service.delete(8L);
 
         verify(products).delete(lamp);
+    }
+
+    @Test
+    void createPublishesAnIndexEventForTheNewProduct() {
+        when(products.nextId()).thenReturn(5002L);
+        when(products.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.create(new ProductRequest("Desk Lamp", new BigDecimal("24.50"), "Home", "Lumen"));
+
+        ArgumentCaptor<ProductIndexEvent> event = ArgumentCaptor.forClass(ProductIndexEvent.class);
+        verify(events).publishEvent(event.capture());
+        assertThat(event.getValue().change()).isEqualTo(ProductIndexEvent.Change.UPSERTED);
+        assertThat(event.getValue().productId()).isEqualTo(5002L);
+    }
+
+    @Test
+    void updatePublishesAnIndexEventWithTheChangedProduct() {
+        Product existing = product(7, "Old Name");
+        when(products.findById(7L)).thenReturn(Optional.of(existing));
+
+        service.update(7L, new ProductRequest("New Name", new BigDecimal("30.00"), "Garden", "Terra"));
+
+        ArgumentCaptor<ProductIndexEvent> event = ArgumentCaptor.forClass(ProductIndexEvent.class);
+        verify(events).publishEvent(event.capture());
+        assertThat(event.getValue().product().getName()).isEqualTo("New Name");
+    }
+
+    @Test
+    void deletePublishesARemovalEvent() {
+        when(products.findById(8L)).thenReturn(Optional.of(product(8, "Lamp")));
+        when(orderLines.existsByItemId(8L)).thenReturn(false);
+
+        service.delete(8L);
+
+        ArgumentCaptor<ProductIndexEvent> event = ArgumentCaptor.forClass(ProductIndexEvent.class);
+        verify(events).publishEvent(event.capture());
+        assertThat(event.getValue().change()).isEqualTo(ProductIndexEvent.Change.REMOVED);
+        assertThat(event.getValue().productId()).isEqualTo(8L);
+    }
+
+    @Test
+    void aRefusedDeletePublishesNothing() {
+        when(products.findById(7L)).thenReturn(Optional.of(product(7, "Lamp")));
+        when(orderLines.existsByItemId(7L)).thenReturn(true);
+
+        assertThatThrownBy(() -> service.delete(7L)).isInstanceOf(ConflictException.class);
+        verify(events, never()).publishEvent(any());
     }
 
     @Test

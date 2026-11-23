@@ -316,6 +316,150 @@
       ]
     },
     {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search products in English",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Search answers a page with facets', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  var body = pm.response.json();",
+                  "  pm.expect(body.content).to.be.an('array');",
+                  "  pm.expect(body.facets.categories).to.be.an('array');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/products?q=lamp&lang=en&sort=relevance&size=10"
+          }
+        },
+        {
+          "name": "Search products in Turkish",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Turkish category labels are returned', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.response.json().content.forEach(function (hit) { pm.expect(hit.categoryLabel).to.be.a('string'); });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/products?q=oyuncak&lang=tr&category=Toys and Games&size=10"
+          }
+        },
+        {
+          "name": "Search products by price range",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Prices stay inside the range', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.response.json().content.forEach(function (hit) { pm.expect(hit.price).to.be.within(10, 50); });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/products?minPrice=10&maxPrice=50&sort=priceAsc&size=10"
+          }
+        },
+        {
+          "name": "Search with an unknown sort",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Unknown sort is rejected', function () { pm.response.to.have.status(400); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/products?sort=password"
+          }
+        },
+        {
+          "name": "Suggest while typing",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Suggestions are typed', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.response.json().forEach(function (s) { pm.expect(['PRODUCT', 'CATEGORY', 'BRAND']).to.include(s.type); });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/suggest?q=la&lang=en&size=8"
+          }
+        },
+        {
+          "name": "Start a full reindex",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": ["pm.test('Reindex is accepted', function () { pm.response.to.have.status(202); });"]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/shop/search/reindex"
+          }
+        },
+        {
+          "name": "Reindex status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status names the state', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  pm.expect(['IDLE', 'RUNNING', 'SUCCESS', 'FAILED']).to.include(pm.response.json().state);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shop/search/reindex"
+          }
+        }
+      ]
+    },
+    {
       "name": "Access control",
       "item": [
         {

@@ -26,12 +26,17 @@ public class SecurityConfig {
 
     private static final String ROLES_CLAIM = "roles";
     private static final String API = "/api/shop/**";
+    private static final String SEARCH_REINDEX = "/api/shop/search/reindex";
+    private static final String SEARCH = "/api/shop/search/**";
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
         http.authorizeHttpRequests(requests -> requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
+                        .requestMatchers(HttpMethod.POST, SEARCH_REINDEX).hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, SEARCH_REINDEX).hasAnyRole("ADMIN", "ANALYST")
+                        .requestMatchers(HttpMethod.GET, SEARCH).hasAnyRole("ADMIN", "ANALYST", "VIEWER")
                         .requestMatchers(HttpMethod.GET, API).hasAnyRole("ADMIN", "ANALYST", "VIEWER")
                         .requestMatchers(HttpMethod.POST, API).hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, API).hasRole("ADMIN")
