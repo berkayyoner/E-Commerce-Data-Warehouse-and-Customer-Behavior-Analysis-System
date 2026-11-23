@@ -1,0 +1,261 @@
+{
+  "info": {
+    "name": "Segmentation Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8084" },
+    { "key": "token", "value": "" },
+    { "key": "runId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Start a segmentation run",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/runs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "runs"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('A run is accepted and registered as running or failed', function () {",
+              "  pm.response.to.have.status(202);",
+              "  pm.expect(pm.response.json().status).to.be.oneOf(['RUNNING', 'FAILED']);",
+              "  pm.collectionVariables.set('runId', pm.response.json().id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Start a second run while one is active",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/runs",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "runs"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('A second run is refused while one is active', function () {", "  pm.expect(pm.response.code).to.be.oneOf([202, 409]);", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List runs",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/runs?page=0&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "runs"],
+          "query": [
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "20" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Runs come as a page, newest first', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().content).to.be.an('array');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get a run with its elbow and clusters",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/runs/{{runId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "runs", "{{runId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('The run has an elbow list and clusters', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().elbow).to.be.an('array');", "  pm.expect(pm.response.json().clusters).to.be.an('array');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get an unknown run",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/runs/999999999",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "runs", "999999999"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Unknown run is not found', function () {", "  pm.response.to.have.status(404);", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Segments",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/segments",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "segments"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Segments are a list ordered by revenue', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.be.an('array');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "RFM grid",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/rfm-grid",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "rfm-grid"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('The grid lists score cells', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.be.an('array');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clusters of the latest run",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/clusters",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "clusters"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Clusters come with the elbow and the chosen k', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.have.property('clusters');", "  pm.expect(pm.response.json()).to.have.property('elbow');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers sorted by monetary value",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/customers?sort=monetary&direction=desc&page=0&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "customers"],
+          "query": [
+            { "key": "sort", "value": "monetary" },
+            { "key": "direction", "value": "desc" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "20" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Customers come as a page', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().content).to.be.an('array');", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers filtered by segment, cluster and name",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/customers?segment=Champions&cluster=0&search=smith&sort=name&direction=asc",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "customers"],
+          "query": [
+            { "key": "segment", "value": "Champions" },
+            { "key": "cluster", "value": "0" },
+            { "key": "search", "value": "smith" },
+            { "key": "sort", "value": "name" },
+            { "key": "direction", "value": "asc" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Filtered customers answer 200', function () {", "  pm.response.to.have.status(200);", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers with an unknown sort column",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/segmentation/customers?sort=password",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "segmentation", "customers"],
+          "query": [{ "key": "sort", "value": "password" }]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Unknown sort column is rejected', function () {", "  pm.response.to.have.status(400);", "});"]
+          }
+        }
+      ]
+    }
+  ]
+}

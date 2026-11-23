@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: segmentation-service
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:FREEPDB1}
+    username: ${OLAP_USERNAME:dwh_olap}
+    password: ${OLAP_PASSWORD}
+    hikari:
+      maximum-pool-size: 6
+      minimum-idle: 1
+      # Scoring and clustering statements run for minutes, so a connection is not cut off by the pool.
+      connection-timeout: 30000
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER:http://localhost:9000}
+
+server:
+  port: 8084
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+security:
+  allowed-origins: ${SEGMENTATION_ALLOWED_ORIGINS:http://localhost:3001}
