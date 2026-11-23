@@ -82,6 +82,10 @@
     {
       "key": "orderId",
       "value": "1"
+    },
+    {
+      "key": "createdWarehouseId",
+      "value": ""
     }
   ],
   "item": [
@@ -294,7 +298,10 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Warehouse is created', function () { pm.response.to.have.status(201); });"
+                  "pm.test('Warehouse is created', function () {",
+                  "  pm.response.to.have.status(201);",
+                  "  pm.collectionVariables.set('createdWarehouseId', pm.response.json().id);",
+                  "});"
                 ]
               }
             }
@@ -312,6 +319,24 @@
               "raw": "{\n  \"name\": \"North\",\n  \"city\": \"Ankara\",\n  \"region\": \"Central\"\n}"
             },
             "url": "{{shopUrl}}/api/shop/warehouses"
+          }
+        },
+        {
+          "name": "Delete the created warehouse",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Warehouse is deleted again', function () { pm.response.to.have.status(204); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "url": "{{shopUrl}}/api/shop/warehouses/{{createdWarehouseId}}"
           }
         }
       ]
@@ -362,14 +387,14 @@
           }
         },
         {
-          "name": "Create customer",
+          "name": "Create customer in an unknown district is rejected",
           "event": [
             {
               "listen": "test",
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test('Customer is created', function () { pm.response.to.have.status(201); });"
+                  "pm.test('The district must be between 1 and 10', function () { pm.response.to.have.status(400); });"
                 ]
               }
             }
@@ -384,7 +409,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"warehouseId\": {{warehouseId}},\n  \"districtId\": {{districtId}},\n  \"firstName\": \"Ayse\",\n  \"lastName\": \"Demir\",\n  \"email\": \"ayse.demir@example.com\",\n  \"city\": \"Ankara\",\n  \"region\": \"Central\"\n}"
+              "raw": "{\n  \"warehouseId\": {{warehouseId}},\n  \"districtId\": 99,\n  \"firstName\": \"Ayse\",\n  \"lastName\": \"Demir\",\n  \"email\": \"ayse.demir@example.com\",\n  \"city\": \"Ankara\",\n  \"region\": \"Central\"\n}"
             },
             "url": "{{shopUrl}}/api/shop/customers"
           }
