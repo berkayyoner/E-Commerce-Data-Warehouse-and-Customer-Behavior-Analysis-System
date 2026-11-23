@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: maven
+      - run: mvn -B verify
+
+  web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [dwh-admin-web, analytics-portal-web]
+    defaults:
+      run:
+        working-directory: web/${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm test -- --watchAll=false
+        env:
+          CI: "true"
+      - run: npm run build
+        env:
+          CI: "true"
+
+  images:
+    needs: [backend, web]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - { name: auth-service, context: ., file: services/auth-service/Dockerfile }
+          - { name: etl-service, context: ., file: services/etl-service/Dockerfile }
+          - { name: shop-service, context: ., file: services/shop-service/Dockerfile }
+          - { name: analytics-service, context: ., file: services/analytics-service/Dockerfile }
+          - { name: segmentation-service, context: ., file: services/segmentation-service/Dockerfile }
+          - { name: dwh-admin-web, context: web/dwh-admin-web, file: web/dwh-admin-web/Dockerfile }
+          - { name: analytics-portal-web, context: web/analytics-portal-web, file: web/analytics-portal-web/Dockerfile }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/dwh/${{ matrix.name }}:${{ github.sha }}
+
+  deploy:
+    needs: images
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: [development, production]
+    # Protect the production environment with required reviewers in the repository settings.
+    environment: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Migrate the database
+        run: |
+          for schema in olap:dwh_olap:OLAP_PASSWORD app:dwh_app:APP_DB_PASSWORD; do
+            IFS=: read -r folder user variable <<< "$schema"
+            docker run --rm -v "$PWD/database/migrations/$folder:/flyway/sql:ro" flyway/flyway:11 \
+              -url="jdbc:oracle:thin:@//${{ secrets.DB_HOST }}:${{ secrets.DB_PORT }}/${{ secrets.DB_SERVICE }}" \
+              -user="$user" -password="${!variable}" -connectRetries=5 migrate
+          done
+        env:
+          OLAP_PASSWORD: ${{ secrets.OLAP_PASSWORD }}
+          APP_DB_PASSWORD: ${{ secrets.APP_DB_PASSWORD }}
+      - name: Apply the manifests
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > "$RUNNER_TEMP/kubeconfig"
+          export KUBECONFIG="$RUNNER_TEMP/kubeconfig"
+          kubectl kustomize deploy/k8s/overlays/${{ matrix.environment }} \
+            | sed "s#ghcr.io/your-github-user/dwh/\([a-z-]*\):[a-z]*#ghcr.io/${{ github.repository_owner }}/dwh/\1:${{ github.sha }}#" \
+            | kubectl apply -f -
+          for name in auth-service etl-service shop-service analytics-service segmentation-service dwh-admin-web analytics-portal-web; do
+            kubectl -n "dwh-${{ matrix.environment }}" rollout status deployment/$name --timeout=300s
+          done

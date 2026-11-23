@@ -15,7 +15,7 @@ This project is being developed as a term project for the Information Technologi
 * **ORM:** Hybernate with Spring JPA
 * **Database:** Oracle
 * **Server Management:** Kubernates
-* **Deployment:** GitLab
+* **Deployment:** GitHub Actions
 * **Front-end Test Tools:** Selenium
 * **Back-end Test Tools:** Unit Test, Postman
 * **Authentication:** OAuth 2.0
@@ -30,30 +30,35 @@ applications show the results: a public analytics portal and a personnel console
 |---|---|
 | `services/` | Spring Boot services: `auth-service` (OAuth 2.0), `etl-service`, `shop-service`, `analytics-service`, `segmentation-service` |
 | `web/` | React applications: `dwh-admin-web` (personnel console), `analytics-portal-web` (public portal) |
-| `database/` | Oracle accounts, BenchBase configuration, data enrichment, Flyway migrations, reconciliation test |
-| `deploy/` | API gateway configuration, Kubernetes manifests, deployment notes |
+| `database/` | Oracle accounts, BenchBase load, data enrichment, Flyway migrations, reconciliation test |
+| `deploy/` | API gateway configuration and Kubernetes manifests |
 | `e2e-tests/` | Selenium browser tests |
 | `postman/` | Postman environments (the collections are in each service) |
-| `docs/` | Report, star schema, database operations, testing, demo script |
-| `scripts/` | Start and stop the whole system on a developer machine |
+| `.github/workflows/` | CI: tests, images, deployment |
+| `Veri-Ambari-Sunum.pptx` | Project presentation |
 
-## Quick start (Windows, Docker Desktop, Java 21, Node 22)
-> PowerShell: `Copy-Item .env.example .env` (then choose the passwords) <br />
-> PowerShell: `docker compose up -d oracle-db redis elasticsearch` <br />
-> PowerShell: `.\database\scripts\migrate-database.ps1 -Schema olap` and `-Schema app` (first start of a new database) <br />
-> PowerShell: `.\scripts\start-local.ps1 -Build` (services and both web apps) <br />
-> Open http://localhost:3000 (portal) or http://localhost:3001 (console) <br />
+## Running the project
+Docker Desktop is the only requirement.
 
-The data is generated and loaded as described in `database/README.md`; the full report is in `docs/report.md`.
+```
+docker compose up --build
+```
 
-## How to get the project up
-For creating all of the containers in your Docker application at once (database, cache, search and every service):
-> CMD: `cd [project directory]` <br />
-> CMD: `docker compose --profile apps up -d --build` <br />
+The first start takes a while: the images are built, the TPC-C data is loaded and enriched, and the first ETL run and
+customer segmentation are started. The applications are usable meanwhile; the reports fill when the `bootstrap`
+container ends (follow it with `docker logs -f dwh-bootstrap`). Later starts take a minute or two.
 
-## How to get project builds
-> CMD: `cd [project directory]` <br />
-> CMD: `mvnv` <br />
+| Address | What |
+|---|---|
+| http://localhost:3000 | Analytics portal |
+| http://localhost:3001 | Personnel console |
+| http://localhost:9000 | Auth server |
+
+Sign in with `admin` / `Admin-Local-2026`. The default passwords are for local use only; copy `.env.example` to `.env`
+to choose others. `docker compose down -v` removes all data.
+
+Tests: `mvn verify` (services), `npm test` in each web app, `npm test` in `e2e-tests` (needs the running system),
+`newman` with the collections in `services/*/postman`.
 
 ## Oracle Container Backup & Migration (Docker -> Windows VDS)
 

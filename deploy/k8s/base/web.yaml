@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: dwh-admin-web
-          image: registry.example.com/dwh/dwh-admin-web:latest
+          image: ghcr.io/your-github-user/dwh/dwh-admin-web:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -77,7 +77,7 @@ spec:
     spec:
       containers:
         - name: analytics-portal-web
-          image: registry.example.com/dwh/analytics-portal-web:latest
+          image: ghcr.io/your-github-user/dwh/analytics-portal-web:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

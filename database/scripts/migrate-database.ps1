@@ -21,7 +21,7 @@ $ErrorActionPreference = 'Continue'
 $projectRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 Push-Location $projectRoot
 try {
-    docker compose --profile migrate run --rm "flyway-$Schema" $Command.Split(' ')
+    docker compose run --rm "flyway-$Schema" $Command.Split(' ')
     if ($LASTEXITCODE -ne 0) { throw "Flyway failed with exit code $LASTEXITCODE" }
 }
 finally {

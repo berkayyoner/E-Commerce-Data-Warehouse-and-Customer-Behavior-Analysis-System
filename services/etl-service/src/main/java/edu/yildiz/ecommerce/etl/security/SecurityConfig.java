@@ -18,7 +18,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Only administrators and the scheduler client may start a run; administrators and analysts may read the history.
+ * Only administrators and the scheduler client may start a run. Administrators and analysts may read the history;
+ * the scheduler client reads it too, so it can wait for the run it started.
  */
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/etl/runs").hasAnyAuthority("ROLE_ADMIN", "SCOPE_etl.run")
-                        .requestMatchers(HttpMethod.GET, "/api/etl/runs/**").hasAnyRole("ADMIN", "ANALYST")
+                        .requestMatchers(HttpMethod.GET, "/api/etl/runs/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_ANALYST", "SCOPE_etl.run")
                         .anyRequest().denyAll())
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())

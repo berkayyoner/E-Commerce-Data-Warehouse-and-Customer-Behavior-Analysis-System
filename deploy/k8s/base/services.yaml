@@ -23,7 +23,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: auth-service
-          image: registry.example.com/dwh/auth-service:latest
+          image: ghcr.io/your-github-user/dwh/auth-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -108,7 +108,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: etl-service
-          image: registry.example.com/dwh/etl-service:latest
+          image: ghcr.io/your-github-user/dwh/etl-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -193,7 +193,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: shop-service
-          image: registry.example.com/dwh/shop-service:latest
+          image: ghcr.io/your-github-user/dwh/shop-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -278,7 +278,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: analytics-service
-          image: registry.example.com/dwh/analytics-service:latest
+          image: ghcr.io/your-github-user/dwh/analytics-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -363,7 +363,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: segmentation-service
-          image: registry.example.com/dwh/segmentation-service:latest
+          image: ghcr.io/your-github-user/dwh/segmentation-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

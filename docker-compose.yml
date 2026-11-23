@@ -1,5 +1,5 @@
-# Local infrastructure: Oracle, Redis and Elasticsearch.
-# Copy .env.example to .env and set the passwords before running `docker compose up -d`.
+# The whole system with one command: `docker compose up --build`.
+# Passwords have local defaults; copy .env.example to .env to choose your own.
 
 x-logging: &default-logging
   driver: json-file
@@ -13,12 +13,12 @@ services:
     container_name: dwh-oracle-db
     logging: *default-logging
     environment:
-      ORACLE_PASSWORD: ${ORACLE_PASSWORD:?set ORACLE_PASSWORD in .env}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-OracleLocal2026}
       APP_USER: dwh_oltp
-      APP_USER_PASSWORD: ${OLTP_PASSWORD:?set OLTP_PASSWORD in .env}
-      OLAP_PASSWORD: ${OLAP_PASSWORD:?set OLAP_PASSWORD in .env}
-      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
-      READER_PASSWORD: ${READER_PASSWORD:?set READER_PASSWORD in .env}
+      APP_USER_PASSWORD: ${OLTP_PASSWORD:-OltpLocal2026}
+      OLAP_PASSWORD: ${OLAP_PASSWORD:-OlapLocal2026}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:-AppLocal2026}
+      READER_PASSWORD: ${READER_PASSWORD:-ReaderLocal2026}
     ports:
       - "${DB_PORT:-1521}:1521"
     volumes:
@@ -67,21 +67,21 @@ services:
       retries: 10
     restart: unless-stopped
 
-  # Versioned database scripts: `docker compose --profile migrate run --rm flyway-olap` (or flyway-app).
-  # Another Flyway command can be appended, for example `flyway-olap info`.
+  # Versioned database scripts. They run to completion on every start; applied versions are skipped.
+  # Another Flyway command can be run by hand, for example `docker compose run --rm flyway-olap info`.
   flyway-olap:
     image: flyway/flyway:11
     container_name: dwh-flyway-olap
-    profiles: ["migrate"]
     depends_on:
       oracle-db:
         condition: service_healthy
     environment:
       FLYWAY_URL: jdbc:oracle:thin:@//oracle-db:1521/FREEPDB1
       FLYWAY_USER: dwh_olap
-      FLYWAY_PASSWORD: ${OLAP_PASSWORD:?set OLAP_PASSWORD in .env}
+      FLYWAY_PASSWORD: ${OLAP_PASSWORD:-OlapLocal2026}
       FLYWAY_LOCATIONS: filesystem:/flyway/sql
       FLYWAY_CONNECT_RETRIES: "10"
+    restart: "no"
     command: migrate
     volumes:
       - ./database/migrations/olap:/flyway/sql:ro
@@ -89,19 +89,37 @@ services:
   flyway-app:
     image: flyway/flyway:11
     container_name: dwh-flyway-app
-    profiles: ["migrate"]
     depends_on:
       oracle-db:
         condition: service_healthy
     environment:
       FLYWAY_URL: jdbc:oracle:thin:@//oracle-db:1521/FREEPDB1
       FLYWAY_USER: dwh_app
-      FLYWAY_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
+      FLYWAY_PASSWORD: ${APP_DB_PASSWORD:-AppLocal2026}
       FLYWAY_LOCATIONS: filesystem:/flyway/sql
       FLYWAY_CONNECT_RETRIES: "10"
+    restart: "no"
     command: migrate
     volumes:
       - ./database/migrations/app:/flyway/sql:ro
+
+  # Fills the OLTP schema once (BenchBase TPC-C load, workload and enrichment). Later starts skip it.
+  oltp-seed:
+    build:
+      context: database
+      dockerfile: seed/Dockerfile
+    image: dwh/oltp-seed
+    container_name: dwh-oltp-seed
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      OLTP_PASSWORD: ${OLTP_PASSWORD:-OltpLocal2026}
+      SCALE_FACTOR: ${SCALE_FACTOR:-10}
+      WORKLOAD_SECONDS: ${WORKLOAD_SECONDS:-120}
+    restart: "no"
 
   # Optional single entry point (routes by path). Start with `docker compose --profile gateway up -d gateway`.
   gateway:
@@ -115,7 +133,7 @@ services:
       - ./deploy/gateway/default.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
 
-  # The whole system in containers: `docker compose --profile apps up -d --build`.
+  # The services and the React applications.
   # host.docker.internal is the address of the auth server for both the browser and the containers, so the token
   # issuer is the same everywhere. This is a local setup; real environments use their own host names.
   auth-service:
@@ -124,17 +142,20 @@ services:
       dockerfile: services/auth-service/Dockerfile
     image: dwh/auth-service
     container_name: dwh-auth-service
-    profiles: ["apps"]
     logging: *default-logging
     depends_on:
       oracle-db:
         condition: service_healthy
+      flyway-app:
+        condition: service_completed_successfully
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: oracle-db
-      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:-AppLocal2026}
       AUTH_ISSUER: http://host.docker.internal:9000
-      AUTH_ADMIN_PASSWORD: ${AUTH_ADMIN_PASSWORD:-}
-      AUTH_ETL_CLIENT_SECRET: ${AUTH_ETL_CLIENT_SECRET:-}
+      AUTH_ADMIN_PASSWORD: ${AUTH_ADMIN_PASSWORD:-Admin-Local-2026}
+      AUTH_ETL_CLIENT_SECRET: ${AUTH_ETL_CLIENT_SECRET:-etl-local-secret-2026}
     ports:
       - "9000:9000"
     restart: unless-stopped
@@ -145,14 +166,17 @@ services:
       dockerfile: services/etl-service/Dockerfile
     image: dwh/etl-service
     container_name: dwh-etl-service
-    profiles: ["apps"]
     logging: *default-logging
     depends_on:
       oracle-db:
         condition: service_healthy
+      flyway-olap:
+        condition: service_completed_successfully
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: oracle-db
-      OLAP_PASSWORD: ${OLAP_PASSWORD}
+      OLAP_PASSWORD: ${OLAP_PASSWORD:-OlapLocal2026}
       AUTH_ISSUER: http://host.docker.internal:9000
     ports:
       - "8081:8081"
@@ -164,16 +188,19 @@ services:
       dockerfile: services/shop-service/Dockerfile
     image: dwh/shop-service
     container_name: dwh-shop-service
-    profiles: ["apps"]
     logging: *default-logging
     depends_on:
       oracle-db:
         condition: service_healthy
       elasticsearch:
         condition: service_healthy
+      oltp-seed:
+        condition: service_completed_successfully
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: oracle-db
-      OLTP_DB_PASSWORD: ${OLTP_PASSWORD}
+      OLTP_DB_PASSWORD: ${OLTP_PASSWORD:-OltpLocal2026}
       ELASTICSEARCH_URIS: http://elasticsearch:9200
       AUTH_ISSUER: http://host.docker.internal:9000
     ports:
@@ -186,17 +213,20 @@ services:
       dockerfile: services/analytics-service/Dockerfile
     image: dwh/analytics-service
     container_name: dwh-analytics-service
-    profiles: ["apps"]
     logging: *default-logging
     depends_on:
       oracle-db:
         condition: service_healthy
       redis:
         condition: service_healthy
+      flyway-olap:
+        condition: service_completed_successfully
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: oracle-db
       REDIS_HOST: redis
-      ANALYTICS_DB_PASSWORD: ${READER_PASSWORD}
+      ANALYTICS_DB_PASSWORD: ${READER_PASSWORD:-ReaderLocal2026}
       AUTH_ISSUER: http://host.docker.internal:9000
     ports:
       - "8083:8083"
@@ -208,14 +238,17 @@ services:
       dockerfile: services/segmentation-service/Dockerfile
     image: dwh/segmentation-service
     container_name: dwh-segmentation-service
-    profiles: ["apps"]
     logging: *default-logging
     depends_on:
       oracle-db:
         condition: service_healthy
+      flyway-olap:
+        condition: service_completed_successfully
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DB_HOST: oracle-db
-      OLAP_PASSWORD: ${OLAP_PASSWORD}
+      OLAP_PASSWORD: ${OLAP_PASSWORD:-OlapLocal2026}
       AUTH_ISSUER: http://host.docker.internal:9000
     ports:
       - "8084:8084"
@@ -226,7 +259,6 @@ services:
       context: web/dwh-admin-web
     image: dwh/dwh-admin-web
     container_name: dwh-admin-web
-    profiles: ["apps"]
     logging: *default-logging
     ports:
       - "3001:80"
@@ -237,11 +269,31 @@ services:
       context: web/analytics-portal-web
     image: dwh/analytics-portal-web
     container_name: dwh-analytics-portal-web
-    profiles: ["apps"]
     logging: *default-logging
     ports:
       - "3000:80"
     restart: unless-stopped
+
+  # Builds the warehouse and the customer segments once the services are up. It ends when both are done;
+  # the applications are usable meanwhile, the reports fill when the ETL run has finished.
+  bootstrap:
+    build:
+      context: deploy/bootstrap
+    image: dwh/bootstrap
+    container_name: dwh-bootstrap
+    logging: *default-logging
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      etl-service:
+        condition: service_healthy
+      segmentation-service:
+        condition: service_healthy
+      oltp-seed:
+        condition: service_completed_successfully
+    environment:
+      AUTH_ETL_CLIENT_SECRET: ${AUTH_ETL_CLIENT_SECRET:-etl-local-secret-2026}
+    restart: "no"
 
 volumes:
   oracle-data:

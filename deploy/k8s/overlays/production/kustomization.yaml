@@ -7,19 +7,19 @@ resources:
   - ../../base
   - disruption-budget.yaml
 images:
-  - name: registry.example.com/dwh/auth-service
+  - name: ghcr.io/your-github-user/dwh/auth-service
     newTag: stable
-  - name: registry.example.com/dwh/etl-service
+  - name: ghcr.io/your-github-user/dwh/etl-service
     newTag: stable
-  - name: registry.example.com/dwh/shop-service
+  - name: ghcr.io/your-github-user/dwh/shop-service
     newTag: stable
-  - name: registry.example.com/dwh/analytics-service
+  - name: ghcr.io/your-github-user/dwh/analytics-service
     newTag: stable
-  - name: registry.example.com/dwh/segmentation-service
+  - name: ghcr.io/your-github-user/dwh/segmentation-service
     newTag: stable
-  - name: registry.example.com/dwh/dwh-admin-web
+  - name: ghcr.io/your-github-user/dwh/dwh-admin-web
     newTag: stable
-  - name: registry.example.com/dwh/analytics-portal-web
+  - name: ghcr.io/your-github-user/dwh/analytics-portal-web
     newTag: stable
 patches:
   - target:

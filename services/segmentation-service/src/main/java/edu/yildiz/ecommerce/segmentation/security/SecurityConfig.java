@@ -20,7 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Analysts and administrators read the segments. Starting a segmentation run is limited to administrators and
- * to the ETL client, which holds the {@code etl.run} scope.
+ * to the ETL client, which holds the {@code etl.run} scope and may also read the runs it started.
  */
 @Configuration
 @EnableWebSecurity
@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
                         .requestMatchers(HttpMethod.POST, RUNS).hasAnyAuthority("ROLE_ADMIN", "SCOPE_etl.run")
+                        .requestMatchers(HttpMethod.GET, RUNS, RUNS + "/**")
+                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_ANALYST", "SCOPE_etl.run")
                         .requestMatchers(HttpMethod.GET, API).hasAnyRole("ADMIN", "ANALYST")
                         .anyRequest().denyAll())
                 .cors(Customizer.withDefaults())

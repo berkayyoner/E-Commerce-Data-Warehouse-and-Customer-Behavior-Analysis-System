@@ -6,19 +6,19 @@ resources:
   - ../../base
   - ../../infrastructure
 images:
-  - name: registry.example.com/dwh/auth-service
+  - name: ghcr.io/your-github-user/dwh/auth-service
     newTag: development
-  - name: registry.example.com/dwh/etl-service
+  - name: ghcr.io/your-github-user/dwh/etl-service
     newTag: development
-  - name: registry.example.com/dwh/shop-service
+  - name: ghcr.io/your-github-user/dwh/shop-service
     newTag: development
-  - name: registry.example.com/dwh/analytics-service
+  - name: ghcr.io/your-github-user/dwh/analytics-service
     newTag: development
-  - name: registry.example.com/dwh/segmentation-service
+  - name: ghcr.io/your-github-user/dwh/segmentation-service
     newTag: development
-  - name: registry.example.com/dwh/dwh-admin-web
+  - name: ghcr.io/your-github-user/dwh/dwh-admin-web
     newTag: development
-  - name: registry.example.com/dwh/analytics-portal-web
+  - name: ghcr.io/your-github-user/dwh/analytics-portal-web
     newTag: development
 patches:
   - target:
