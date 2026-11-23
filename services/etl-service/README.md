@@ -28,7 +28,7 @@ With the 10 warehouse data set a full run loads 4.75 million rows in about 8 min
 | GET | `/api/etl/runs?page=0&size=20` | Runs, newest first |
 | GET | `/api/etl/runs/{id}` | One run with its steps and quality checks |
 
-A Postman collection is in `postman/`.
+A Postman collection is in `postman/`; choose an environment from `postman/environments` and read `postman/README.md` (both in the repository root) for the sign in.
 
 ## Configuration
 

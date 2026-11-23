@@ -21,6 +21,7 @@ final class RegisteredClients {
 
     static final String ANALYTICS_PORTAL = "analytics-portal";
     static final String ADMIN_PORTAL = "dwh-admin";
+    static final String API_TEST = "api-test";
     static final String ETL_SCHEDULER = "etl-scheduler";
 
     private RegisteredClients() {
@@ -30,6 +31,9 @@ final class RegisteredClients {
         List<RegisteredClient> clients = new ArrayList<>();
         clients.add(browserClient(ANALYTICS_PORTAL, properties.analyticsRedirectUris(), "dwh.read"));
         clients.add(browserClient(ADMIN_PORTAL, properties.adminRedirectUris(), "dwh.read", "dwh.write"));
+        if (!properties.apiTestRedirectUris().isEmpty()) {
+            clients.add(browserClient(API_TEST, properties.apiTestRedirectUris(), "dwh.read", "dwh.write"));
+        }
         if (properties.etlClientSecret() != null && !properties.etlClientSecret().isBlank()) {
             clients.add(serviceClient(properties.etlClientSecret(), passwordEncoder));
         }

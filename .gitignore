@@ -16,3 +16,6 @@ target/
 *.iml
 .DS_Store
 Thumbs.db
+
+# Local run output
+logs/

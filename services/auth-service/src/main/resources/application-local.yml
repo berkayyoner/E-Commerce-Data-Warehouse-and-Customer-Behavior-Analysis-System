@@ -1,4 +1,8 @@
 # Local profile: localhost addresses. A temporary signing key is generated when none is configured.
+# Postman signs in with its own client; the callback address is the one Postman provides.
+auth:
+  api-test-redirect-uris: https://oauth.pstmn.io/v1/callback
+
 logging:
   level:
     edu.yildiz.ecommerce: DEBUG

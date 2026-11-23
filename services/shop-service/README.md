@@ -101,7 +101,7 @@ the previous version only, so run a reindex again after heavy changes during a r
 Elasticsearch 9.x is expected at `ELASTICSEARCH_URIS`. The service uses the Java API client that Spring Boot configures
 from `spring.elasticsearch.*`.
 
-A Postman collection is in `postman/`. Set the `token` variable to an access token before running it.
+A Postman collection is in `postman/`; choose an environment from `postman/environments` and read `postman/README.md` (both in the repository root) for the sign in.
 
 ## Configuration
 

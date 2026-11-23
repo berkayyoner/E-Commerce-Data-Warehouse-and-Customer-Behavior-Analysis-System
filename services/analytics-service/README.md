@@ -93,7 +93,7 @@ mvn -f services/analytics-service/pom.xml -B test
 The tests need neither Oracle nor Redis. The SQL is checked for its structure (fixed fragments, bound parameters); it
 has not been executed against the warehouse by these tests.
 
-A Postman collection is in `postman/`. Set the `token` variable to an access token before running it.
+A Postman collection is in `postman/`; choose an environment from `postman/environments` and read `postman/README.md` (both in the repository root) for the sign in.
 
 ## Docker
 

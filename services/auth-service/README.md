@@ -6,11 +6,12 @@ OAuth 2.0 / OpenID Connect authorization server (Spring Authorization Server) an
 
 | Client id | Type | Grants | Scopes |
 |---|---|---|---|
-| `analytics-portal` | Public React app | Authorization code with PKCE, refresh token | `openid profile dwh.read` |
-| `dwh-admin` | Public React app (personnel) | Authorization code with PKCE, refresh token | `openid profile dwh.read dwh.write` |
+| `analytics-portal` | Public React app | Authorization code with PKCE | `openid profile dwh.read` |
+| `dwh-admin` | Public React app (personnel) | Authorization code with PKCE | `openid profile dwh.read dwh.write` |
+| `api-test` | Public client for Postman (registered only when `AUTH_API_TEST_REDIRECT_URIS` is set; the local profile sets it) | Authorization code with PKCE | `openid profile dwh.read dwh.write` |
 | `etl-scheduler` | Service (secret) | Client credentials | `etl.run` |
 
-Access tokens live 15 minutes, refresh tokens 8 hours. The access token carries a `roles` claim
+Access tokens live 15 minutes. Spring Authorization Server issues no refresh tokens to public clients, so the React apps sign in again silently when a token expires: the redirect to the server is answered at once while the server session is alive. The access token carries a `roles` claim
 (`ADMIN`, `ANALYST` or `VIEWER`) that the other services use for authorization.
 
 ## Endpoints
@@ -33,6 +34,7 @@ account.
 | `AUTH_ISSUER` | Public address of this server (default `http://localhost:9000`) |
 | `AUTH_ALLOWED_ORIGINS` | Browser origins of the React apps (CORS) |
 | `AUTH_ANALYTICS_REDIRECT_URIS`, `AUTH_ADMIN_REDIRECT_URIS` | Redirect addresses after sign in |
+| `AUTH_API_TEST_REDIRECT_URIS` | Callback address of the `api-test` client; leave empty in production |
 | `AUTH_ETL_CLIENT_SECRET` | Secret of the `etl-scheduler` client; the client is not registered when empty |
 | `AUTH_JWT_PRIVATE_KEY`, `AUTH_JWT_PUBLIC_KEY` | Base64 PKCS8 / X509 RSA key pair. A temporary key is generated when empty (local only) |
 | `AUTH_ADMIN_USERNAME`, `AUTH_ADMIN_PASSWORD` | First administrator, created when the user table is empty |

@@ -126,7 +126,7 @@ mvn -f services/segmentation-service/pom.xml -B test
 The tests need neither Oracle nor a running auth service. The K-Means, elbow, scaling, labelling and RFM rules are
 tested directly. The SQL is not executed by the tests; it has to be run against the warehouse to be verified.
 
-A Postman collection is in `postman/`. Set the `token` variable to an access token before running it.
+A Postman collection is in `postman/`; choose an environment from `postman/environments` and read `postman/README.md` (both in the repository root) for the sign in.
 
 ## Docker
 

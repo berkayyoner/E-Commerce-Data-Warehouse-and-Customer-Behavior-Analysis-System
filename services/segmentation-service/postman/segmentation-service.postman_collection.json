@@ -4,13 +4,69 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
-    "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "authorization_code_with_pkce",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{authUrl}}/oauth2/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{authUrl}}/oauth2/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{clientId}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "openid dwh.read dwh.write",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/callback",
+        "type": "string"
+      },
+      {
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "dwh-access-token",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8084" },
-    { "key": "token", "value": "" },
-    { "key": "runId", "value": "1" }
+    {
+      "key": "segmentationUrl",
+      "value": "http://localhost:8084"
+    },
+    {
+      "key": "runId",
+      "value": "1"
+    }
   ],
   "item": [
     {
@@ -18,9 +74,15 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/runs",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "runs"]
+          "raw": "{{segmentationUrl}}/api/segmentation/runs",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "runs"
+          ]
         }
       },
       "event": [
@@ -44,9 +106,15 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/runs",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "runs"]
+          "raw": "{{segmentationUrl}}/api/segmentation/runs",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "runs"
+          ]
         }
       },
       "event": [
@@ -54,7 +122,11 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('A second run is refused while one is active', function () {", "  pm.expect(pm.response.code).to.be.oneOf([202, 409]);", "});"]
+            "exec": [
+              "pm.test('A second run is refused while one is active', function () {",
+              "  pm.expect(pm.response.code).to.be.oneOf([202, 409]);",
+              "});"
+            ]
           }
         }
       ]
@@ -64,12 +136,24 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/runs?page=0&size=20",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "runs"],
+          "raw": "{{segmentationUrl}}/api/segmentation/runs?page=0&size=20",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "runs"
+          ],
           "query": [
-            { "key": "page", "value": "0" },
-            { "key": "size", "value": "20" }
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
           ]
         }
       },
@@ -78,7 +162,12 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Runs come as a page, newest first', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().content).to.be.an('array');", "});"]
+            "exec": [
+              "pm.test('Runs come as a page, newest first', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().content).to.be.an('array');",
+              "});"
+            ]
           }
         }
       ]
@@ -88,9 +177,16 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/runs/{{runId}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "runs", "{{runId}}"]
+          "raw": "{{segmentationUrl}}/api/segmentation/runs/{{runId}}",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "runs",
+            "{{runId}}"
+          ]
         }
       },
       "event": [
@@ -98,7 +194,13 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('The run has an elbow list and clusters', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().elbow).to.be.an('array');", "  pm.expect(pm.response.json().clusters).to.be.an('array');", "});"]
+            "exec": [
+              "pm.test('The run has an elbow list and clusters', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().elbow).to.be.an('array');",
+              "  pm.expect(pm.response.json().clusters).to.be.an('array');",
+              "});"
+            ]
           }
         }
       ]
@@ -108,9 +210,16 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/runs/999999999",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "runs", "999999999"]
+          "raw": "{{segmentationUrl}}/api/segmentation/runs/999999999",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "runs",
+            "999999999"
+          ]
         }
       },
       "event": [
@@ -118,7 +227,11 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Unknown run is not found', function () {", "  pm.response.to.have.status(404);", "});"]
+            "exec": [
+              "pm.test('Unknown run is not found', function () {",
+              "  pm.response.to.have.status(404);",
+              "});"
+            ]
           }
         }
       ]
@@ -128,9 +241,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/segments",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "segments"]
+          "raw": "{{segmentationUrl}}/api/segmentation/segments",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "segments"
+          ]
         }
       },
       "event": [
@@ -138,7 +257,12 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Segments are a list ordered by revenue', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.be.an('array');", "});"]
+            "exec": [
+              "pm.test('Segments are a list ordered by revenue', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
           }
         }
       ]
@@ -148,9 +272,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/rfm-grid",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "rfm-grid"]
+          "raw": "{{segmentationUrl}}/api/segmentation/rfm-grid",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "rfm-grid"
+          ]
         }
       },
       "event": [
@@ -158,7 +288,12 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('The grid lists score cells', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.be.an('array');", "});"]
+            "exec": [
+              "pm.test('The grid lists score cells', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
           }
         }
       ]
@@ -168,9 +303,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/clusters",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "clusters"]
+          "raw": "{{segmentationUrl}}/api/segmentation/clusters",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "clusters"
+          ]
         }
       },
       "event": [
@@ -178,7 +319,13 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Clusters come with the elbow and the chosen k', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json()).to.have.property('clusters');", "  pm.expect(pm.response.json()).to.have.property('elbow');", "});"]
+            "exec": [
+              "pm.test('Clusters come with the elbow and the chosen k', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json()).to.have.property('clusters');",
+              "  pm.expect(pm.response.json()).to.have.property('elbow');",
+              "});"
+            ]
           }
         }
       ]
@@ -188,14 +335,32 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/customers?sort=monetary&direction=desc&page=0&size=20",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "customers"],
+          "raw": "{{segmentationUrl}}/api/segmentation/customers?sort=monetary&direction=desc&page=0&size=20",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "customers"
+          ],
           "query": [
-            { "key": "sort", "value": "monetary" },
-            { "key": "direction", "value": "desc" },
-            { "key": "page", "value": "0" },
-            { "key": "size", "value": "20" }
+            {
+              "key": "sort",
+              "value": "monetary"
+            },
+            {
+              "key": "direction",
+              "value": "desc"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
           ]
         }
       },
@@ -204,7 +369,12 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Customers come as a page', function () {", "  pm.response.to.have.status(200);", "  pm.expect(pm.response.json().content).to.be.an('array');", "});"]
+            "exec": [
+              "pm.test('Customers come as a page', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().content).to.be.an('array');",
+              "});"
+            ]
           }
         }
       ]
@@ -214,15 +384,36 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/customers?segment=Champions&cluster=0&search=smith&sort=name&direction=asc",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "customers"],
+          "raw": "{{segmentationUrl}}/api/segmentation/customers?segment=Champions&cluster=0&search=smith&sort=name&direction=asc",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "customers"
+          ],
           "query": [
-            { "key": "segment", "value": "Champions" },
-            { "key": "cluster", "value": "0" },
-            { "key": "search", "value": "smith" },
-            { "key": "sort", "value": "name" },
-            { "key": "direction", "value": "asc" }
+            {
+              "key": "segment",
+              "value": "Champions"
+            },
+            {
+              "key": "cluster",
+              "value": "0"
+            },
+            {
+              "key": "search",
+              "value": "smith"
+            },
+            {
+              "key": "sort",
+              "value": "name"
+            },
+            {
+              "key": "direction",
+              "value": "asc"
+            }
           ]
         }
       },
@@ -231,7 +422,11 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Filtered customers answer 200', function () {", "  pm.response.to.have.status(200);", "});"]
+            "exec": [
+              "pm.test('Filtered customers answer 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});"
+            ]
           }
         }
       ]
@@ -241,10 +436,21 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/segmentation/customers?sort=password",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "segmentation", "customers"],
-          "query": [{ "key": "sort", "value": "password" }]
+          "raw": "{{segmentationUrl}}/api/segmentation/customers?sort=password",
+          "host": [
+            "{{segmentationUrl}}"
+          ],
+          "path": [
+            "api",
+            "segmentation",
+            "customers"
+          ],
+          "query": [
+            {
+              "key": "sort",
+              "value": "password"
+            }
+          ]
         }
       },
       "event": [
@@ -252,10 +458,35 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Unknown sort column is rejected', function () {", "  pm.response.to.have.status(400);", "});"]
+            "exec": [
+              "pm.test('Unknown sort column is rejected', function () {",
+              "  pm.response.to.have.status(400);",
+              "});"
+            ]
           }
         }
       ]
+    },
+    {
+      "name": "API without a token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('A token is required', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "url": "{{segmentationUrl}}/api/segmentation/segments"
+      }
     }
   ]
 }

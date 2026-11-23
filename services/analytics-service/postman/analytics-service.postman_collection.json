@@ -4,14 +4,73 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
-    "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "authorization_code_with_pkce",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{authUrl}}/oauth2/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{authUrl}}/oauth2/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{clientId}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "openid dwh.read dwh.write",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/callback",
+        "type": "string"
+      },
+      {
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "dwh-access-token",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8083" },
-    { "key": "token", "value": "" },
-    { "key": "from", "value": "2026-01-01" },
-    { "key": "to", "value": "2026-03-31" }
+    {
+      "key": "analyticsUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "from",
+      "value": "2026-01-01"
+    },
+    {
+      "key": "to",
+      "value": "2026-03-31"
+    }
   ],
   "item": [
     {
@@ -19,12 +78,24 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/overview?from={{from}}&to={{to}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "overview"],
+          "raw": "{{analyticsUrl}}/api/analytics/overview?from={{from}}&to={{to}}",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "overview"
+          ],
           "query": [
-            { "key": "from", "value": "{{from}}" },
-            { "key": "to", "value": "{{to}}" }
+            {
+              "key": "from",
+              "value": "{{from}}"
+            },
+            {
+              "key": "to",
+              "value": "{{to}}"
+            }
           ]
         }
       },
@@ -48,10 +119,22 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/sales/trend?granularity=month",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "sales", "trend"],
-          "query": [{ "key": "granularity", "value": "month" }]
+          "raw": "{{analyticsUrl}}/api/analytics/sales/trend?granularity=month",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "sales",
+            "trend"
+          ],
+          "query": [
+            {
+              "key": "granularity",
+              "value": "month"
+            }
+          ]
         }
       },
       "event": [
@@ -74,10 +157,22 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/sales/trend?granularity=hour",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "sales", "trend"],
-          "query": [{ "key": "granularity", "value": "hour" }]
+          "raw": "{{analyticsUrl}}/api/analytics/sales/trend?granularity=hour",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "sales",
+            "trend"
+          ],
+          "query": [
+            {
+              "key": "granularity",
+              "value": "hour"
+            }
+          ]
         }
       },
       "event": [
@@ -85,7 +180,11 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Unknown granularity is rejected', function () {", "  pm.response.to.have.status(400);", "});"]
+            "exec": [
+              "pm.test('Unknown granularity is rejected', function () {",
+              "  pm.response.to.have.status(400);",
+              "});"
+            ]
           }
         }
       ]
@@ -95,12 +194,25 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/products/top?by=units&limit=10",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "products", "top"],
+          "raw": "{{analyticsUrl}}/api/analytics/products/top?by=units&limit=10",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "products",
+            "top"
+          ],
           "query": [
-            { "key": "by", "value": "units" },
-            { "key": "limit", "value": "10" }
+            {
+              "key": "by",
+              "value": "units"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
           ]
         }
       }
@@ -110,9 +222,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/categories",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "categories"]
+          "raw": "{{analyticsUrl}}/api/analytics/categories",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "categories"
+          ]
         }
       }
     },
@@ -121,12 +239,24 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/regions?from={{from}}&to={{to}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "regions"],
+          "raw": "{{analyticsUrl}}/api/analytics/regions?from={{from}}&to={{to}}",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "regions"
+          ],
           "query": [
-            { "key": "from", "value": "{{from}}" },
-            { "key": "to", "value": "{{to}}" }
+            {
+              "key": "from",
+              "value": "{{from}}"
+            },
+            {
+              "key": "to",
+              "value": "{{to}}"
+            }
           ]
         }
       }
@@ -136,9 +266,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/payments",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "payments"]
+          "raw": "{{analyticsUrl}}/api/analytics/payments",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "payments"
+          ]
         }
       }
     },
@@ -147,12 +283,24 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/fulfillment?from={{from}}&to={{to}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "fulfillment"],
+          "raw": "{{analyticsUrl}}/api/analytics/fulfillment?from={{from}}&to={{to}}",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "fulfillment"
+          ],
           "query": [
-            { "key": "from", "value": "{{from}}" },
-            { "key": "to", "value": "{{to}}" }
+            {
+              "key": "from",
+              "value": "{{from}}"
+            },
+            {
+              "key": "to",
+              "value": "{{to}}"
+            }
           ]
         }
       }
@@ -162,10 +310,22 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/customers/top?limit=20",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "customers", "top"],
-          "query": [{ "key": "limit", "value": "20" }]
+          "raw": "{{analyticsUrl}}/api/analytics/customers/top?limit=20",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "customers",
+            "top"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "20"
+            }
+          ]
         }
       }
     },
@@ -174,9 +334,16 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/customers/metrics",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "customers", "metrics"]
+          "raw": "{{analyticsUrl}}/api/analytics/customers/metrics",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "customers",
+            "metrics"
+          ]
         }
       }
     },
@@ -185,9 +352,15 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/benchmark",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "benchmark"]
+          "raw": "{{analyticsUrl}}/api/analytics/benchmark",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "benchmark"
+          ]
         }
       }
     },
@@ -196,9 +369,16 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "{{baseUrl}}/api/analytics/cache/clear",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "analytics", "cache", "clear"]
+          "raw": "{{analyticsUrl}}/api/analytics/cache/clear",
+          "host": [
+            "{{analyticsUrl}}"
+          ],
+          "path": [
+            "api",
+            "analytics",
+            "cache",
+            "clear"
+          ]
         }
       },
       "event": [
@@ -215,6 +395,27 @@
           }
         }
       ]
+    },
+    {
+      "name": "API without a token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('A token is required', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "url": "{{analyticsUrl}}/api/analytics/overview"
+      }
     }
   ]
 }

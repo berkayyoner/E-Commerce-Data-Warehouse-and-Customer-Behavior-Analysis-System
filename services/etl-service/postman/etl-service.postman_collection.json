@@ -4,12 +4,18 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8081" },
-    { "key": "runId", "value": "1" }
+    {
+      "key": "etlUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "runId",
+      "value": "1"
+    }
   ],
   "item": [
     {
-      "name": "Start full run",
+      "name": "Start incremental run",
       "event": [
         {
           "listen": "test",
@@ -28,9 +34,17 @@
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"FULL\"\n}" },
-        "url": "{{baseUrl}}/api/etl/runs"
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"runType\": \"INCREMENTAL\"\n}"
+        },
+        "url": "{{etlUrl}}/api/etl/runs"
       }
     },
     {
@@ -40,15 +54,25 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Second run is refused', function () { pm.response.to.have.status(409); });"]
+            "exec": [
+              "pm.test('Second run is refused', function () { pm.response.to.have.status(409); });"
+            ]
           }
         }
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"INCREMENTAL\"\n}" },
-        "url": "{{baseUrl}}/api/etl/runs"
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"runType\": \"INCREMENTAL\"\n}"
+        },
+        "url": "{{etlUrl}}/api/etl/runs"
       }
     },
     {
@@ -58,15 +82,25 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Unknown type is rejected', function () { pm.response.to.have.status(400); });"]
+            "exec": [
+              "pm.test('Unknown type is rejected', function () { pm.response.to.have.status(400); });"
+            ]
           }
         }
       ],
       "request": {
         "method": "POST",
-        "header": [{ "key": "Content-Type", "value": "application/json" }],
-        "body": { "mode": "raw", "raw": "{\n  \"runType\": \"PARTIAL\"\n}" },
-        "url": "{{baseUrl}}/api/etl/runs"
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"runType\": \"PARTIAL\"\n}"
+        },
+        "url": "{{etlUrl}}/api/etl/runs"
       }
     },
     {
@@ -88,10 +122,25 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "{{baseUrl}}/api/etl/runs?page=0&size=20",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "etl", "runs"],
-          "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "20" }]
+          "raw": "{{etlUrl}}/api/etl/runs?page=0&size=20",
+          "host": [
+            "{{etlUrl}}"
+          ],
+          "path": [
+            "api",
+            "etl",
+            "runs"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
         }
       }
     },
@@ -115,7 +164,7 @@
       ],
       "request": {
         "method": "GET",
-        "url": "{{baseUrl}}/api/etl/runs/{{runId}}"
+        "url": "{{etlUrl}}/api/etl/runs/{{runId}}"
       }
     },
     {
@@ -125,21 +174,99 @@
           "listen": "test",
           "script": {
             "type": "text/javascript",
-            "exec": ["pm.test('Unknown run is not found', function () { pm.response.to.have.status(404); });"]
+            "exec": [
+              "pm.test('Unknown run is not found', function () { pm.response.to.have.status(404); });"
+            ]
           }
         }
       ],
       "request": {
         "method": "GET",
-        "url": "{{baseUrl}}/api/etl/runs/999999"
+        "url": "{{etlUrl}}/api/etl/runs/999999"
       }
     },
     {
       "name": "Health",
       "request": {
         "method": "GET",
-        "url": "{{baseUrl}}/actuator/health"
+        "url": "{{etlUrl}}/actuator/health"
+      }
+    },
+    {
+      "name": "API without a token",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('A token is required', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "url": "{{etlUrl}}/api/etl/runs"
       }
     }
-  ]
+  ],
+  "auth": {
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "authorization_code_with_pkce",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{authUrl}}/oauth2/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{authUrl}}/oauth2/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{clientId}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "openid dwh.read dwh.write",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/callback",
+        "type": "string"
+      },
+      {
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "dwh-access-token",
+        "type": "string"
+      }
+    ]
+  }
 }

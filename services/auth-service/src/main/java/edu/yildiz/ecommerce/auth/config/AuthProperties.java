@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @param allowedOrigins     browser origins of the React applications (needed for CORS on the token endpoint)
  * @param analyticsRedirectUris redirect addresses of the public analytics portal
  * @param adminRedirectUris  redirect addresses of the personnel (admin) portal
+ * @param apiTestRedirectUris redirect addresses of the API test client (Postman); the client is not registered
+ *                           when the list is empty, which is the case in production
  * @param etlClientSecret    secret of the service client that triggers scheduled ETL runs
  * @param jwtPrivateKey      PKCS8 RSA private key, base64 encoded; a temporary key is generated when empty
  * @param jwtPublicKey       X509 RSA public key, base64 encoded
@@ -23,6 +25,7 @@ public record AuthProperties(
         List<String> allowedOrigins,
         List<String> analyticsRedirectUris,
         List<String> adminRedirectUris,
+        List<String> apiTestRedirectUris,
         String etlClientSecret,
         String jwtPrivateKey,
         String jwtPublicKey,
@@ -33,5 +36,6 @@ public record AuthProperties(
         allowedOrigins = allowedOrigins == null ? List.of() : List.copyOf(allowedOrigins);
         analyticsRedirectUris = analyticsRedirectUris == null ? List.of() : List.copyOf(analyticsRedirectUris);
         adminRedirectUris = adminRedirectUris == null ? List.of() : List.copyOf(adminRedirectUris);
+        apiTestRedirectUris = apiTestRedirectUris == null ? List.of() : List.copyOf(apiTestRedirectUris);
     }
 }

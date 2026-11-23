@@ -4,17 +4,85 @@
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
-    "type": "bearer",
-    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+    "type": "oauth2",
+    "oauth2": [
+      {
+        "key": "grant_type",
+        "value": "authorization_code_with_pkce",
+        "type": "string"
+      },
+      {
+        "key": "authUrl",
+        "value": "{{authUrl}}/oauth2/authorize",
+        "type": "string"
+      },
+      {
+        "key": "accessTokenUrl",
+        "value": "{{authUrl}}/oauth2/token",
+        "type": "string"
+      },
+      {
+        "key": "clientId",
+        "value": "{{clientId}}",
+        "type": "string"
+      },
+      {
+        "key": "scope",
+        "value": "openid dwh.read dwh.write",
+        "type": "string"
+      },
+      {
+        "key": "redirect_uri",
+        "value": "https://oauth.pstmn.io/v1/callback",
+        "type": "string"
+      },
+      {
+        "key": "challengeAlgorithm",
+        "value": "S256",
+        "type": "string"
+      },
+      {
+        "key": "client_authentication",
+        "value": "body",
+        "type": "string"
+      },
+      {
+        "key": "addTokenTo",
+        "value": "header",
+        "type": "string"
+      },
+      {
+        "key": "tokenName",
+        "value": "dwh-access-token",
+        "type": "string"
+      }
+    ]
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:8082" },
-    { "key": "token", "value": "" },
-    { "key": "productId", "value": "1" },
-    { "key": "warehouseId", "value": "1" },
-    { "key": "districtId", "value": "1" },
-    { "key": "customerId", "value": "1" },
-    { "key": "orderId", "value": "1" }
+    {
+      "key": "shopUrl",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "productId",
+      "value": "1"
+    },
+    {
+      "key": "warehouseId",
+      "value": "1"
+    },
+    {
+      "key": "districtId",
+      "value": "1"
+    },
+    {
+      "key": "customerId",
+      "value": "1"
+    },
+    {
+      "key": "orderId",
+      "value": "1"
+    }
   ],
   "item": [
     {
@@ -39,14 +107,32 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/shop/products?search=lamp&sort=price&direction=desc&size=10",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "shop", "products"],
+              "raw": "{{shopUrl}}/api/shop/products?search=lamp&sort=price&direction=desc&size=10",
+              "host": [
+                "{{shopUrl}}"
+              ],
+              "path": [
+                "api",
+                "shop",
+                "products"
+              ],
               "query": [
-                { "key": "search", "value": "lamp" },
-                { "key": "sort", "value": "price" },
-                { "key": "direction", "value": "desc" },
-                { "key": "size", "value": "10" }
+                {
+                  "key": "search",
+                  "value": "lamp"
+                },
+                {
+                  "key": "sort",
+                  "value": "price"
+                },
+                {
+                  "key": "direction",
+                  "value": "desc"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
               ]
             }
           }
@@ -68,12 +154,17 @@
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Desk Lamp\",\n  \"price\": 24.50,\n  \"category\": \"Home\",\n  \"brand\": \"Lumen\"\n}"
             },
-            "url": "{{baseUrl}}/api/shop/products"
+            "url": "{{shopUrl}}/api/shop/products"
           }
         },
         {
@@ -83,18 +174,25 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Price is rejected', function () { pm.response.to.have.status(400); });"]
+                "exec": [
+                  "pm.test('Price is rejected', function () { pm.response.to.have.status(400); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Gold Bar\",\n  \"price\": 1000,\n  \"category\": \"Metal\",\n  \"brand\": \"Mint\"\n}"
             },
-            "url": "{{baseUrl}}/api/shop/products"
+            "url": "{{shopUrl}}/api/shop/products"
           }
         },
         {
@@ -104,18 +202,25 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Product is updated', function () { pm.response.to.have.status(200); });"]
+                "exec": [
+                  "pm.test('Product is updated', function () { pm.response.to.have.status(200); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "PUT",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Desk Lamp\",\n  \"price\": 22.00,\n  \"category\": \"Home\",\n  \"brand\": \"Lumen\"\n}"
             },
-            "url": "{{baseUrl}}/api/shop/products/{{productId}}"
+            "url": "{{shopUrl}}/api/shop/products/{{productId}}"
           }
         },
         {
@@ -135,7 +240,7 @@
           ],
           "request": {
             "method": "DELETE",
-            "url": "{{baseUrl}}/api/shop/products/{{productId}}"
+            "url": "{{shopUrl}}/api/shop/products/{{productId}}"
           }
         }
       ]
@@ -150,19 +255,33 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Warehouses are listed', function () { pm.response.to.have.status(200); });"]
+                "exec": [
+                  "pm.test('Warehouses are listed', function () { pm.response.to.have.status(200); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/shop/warehouses?sort=city&direction=asc",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "shop", "warehouses"],
+              "raw": "{{shopUrl}}/api/shop/warehouses?sort=city&direction=asc",
+              "host": [
+                "{{shopUrl}}"
+              ],
+              "path": [
+                "api",
+                "shop",
+                "warehouses"
+              ],
               "query": [
-                { "key": "sort", "value": "city" },
-                { "key": "direction", "value": "asc" }
+                {
+                  "key": "sort",
+                  "value": "city"
+                },
+                {
+                  "key": "direction",
+                  "value": "asc"
+                }
               ]
             }
           }
@@ -174,18 +293,25 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Warehouse is created', function () { pm.response.to.have.status(201); });"]
+                "exec": [
+                  "pm.test('Warehouse is created', function () { pm.response.to.have.status(201); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"North\",\n  \"city\": \"Ankara\",\n  \"region\": \"Central\"\n}"
             },
-            "url": "{{baseUrl}}/api/shop/warehouses"
+            "url": "{{shopUrl}}/api/shop/warehouses"
           }
         }
       ]
@@ -200,20 +326,37 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Customers are listed', function () { pm.response.to.have.status(200); });"]
+                "exec": [
+                  "pm.test('Customers are listed', function () { pm.response.to.have.status(200); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/shop/customers?warehouseId={{warehouseId}}&search=an&sort=lastName",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "shop", "customers"],
+              "raw": "{{shopUrl}}/api/shop/customers?warehouseId={{warehouseId}}&search=an&sort=lastName",
+              "host": [
+                "{{shopUrl}}"
+              ],
+              "path": [
+                "api",
+                "shop",
+                "customers"
+              ],
               "query": [
-                { "key": "warehouseId", "value": "{{warehouseId}}" },
-                { "key": "search", "value": "an" },
-                { "key": "sort", "value": "lastName" }
+                {
+                  "key": "warehouseId",
+                  "value": "{{warehouseId}}"
+                },
+                {
+                  "key": "search",
+                  "value": "an"
+                },
+                {
+                  "key": "sort",
+                  "value": "lastName"
+                }
               ]
             }
           }
@@ -225,18 +368,25 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Customer is created', function () { pm.response.to.have.status(201); });"]
+                "exec": [
+                  "pm.test('Customer is created', function () { pm.response.to.have.status(201); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"warehouseId\": {{warehouseId}},\n  \"districtId\": {{districtId}},\n  \"firstName\": \"Ayse\",\n  \"lastName\": \"Demir\",\n  \"email\": \"ayse.demir@example.com\",\n  \"city\": \"Ankara\",\n  \"region\": \"Central\"\n}"
             },
-            "url": "{{baseUrl}}/api/shop/customers"
+            "url": "{{shopUrl}}/api/shop/customers"
           }
         },
         {
@@ -246,13 +396,15 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Customer is found', function () { pm.response.to.have.status(200); });"]
+                "exec": [
+                  "pm.test('Customer is found', function () { pm.response.to.have.status(200); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/customers/{{warehouseId}}/{{districtId}}/{{customerId}}"
+            "url": "{{shopUrl}}/api/shop/customers/{{warehouseId}}/{{districtId}}/{{customerId}}"
           }
         }
       ]
@@ -279,15 +431,36 @@
           "request": {
             "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/shop/orders?warehouseId={{warehouseId}}&from=2026-11-01&to=2026-11-30&sort=totalAmount&direction=desc",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "shop", "orders"],
+              "raw": "{{shopUrl}}/api/shop/orders?warehouseId={{warehouseId}}&from=2026-11-01&to=2026-11-30&sort=totalAmount&direction=desc",
+              "host": [
+                "{{shopUrl}}"
+              ],
+              "path": [
+                "api",
+                "shop",
+                "orders"
+              ],
               "query": [
-                { "key": "warehouseId", "value": "{{warehouseId}}" },
-                { "key": "from", "value": "2026-11-01" },
-                { "key": "to", "value": "2026-11-30" },
-                { "key": "sort", "value": "totalAmount" },
-                { "key": "direction", "value": "desc" }
+                {
+                  "key": "warehouseId",
+                  "value": "{{warehouseId}}"
+                },
+                {
+                  "key": "from",
+                  "value": "2026-11-01"
+                },
+                {
+                  "key": "to",
+                  "value": "2026-11-30"
+                },
+                {
+                  "key": "sort",
+                  "value": "totalAmount"
+                },
+                {
+                  "key": "direction",
+                  "value": "desc"
+                }
               ]
             }
           }
@@ -310,7 +483,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/orders/{{warehouseId}}/{{districtId}}/{{orderId}}"
+            "url": "{{shopUrl}}/api/shop/orders/{{warehouseId}}/{{districtId}}/{{orderId}}"
           }
         }
       ]
@@ -338,7 +511,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/products?q=lamp&lang=en&sort=relevance&size=10"
+            "url": "{{shopUrl}}/api/shop/search/products?q=lamp&lang=en&sort=relevance&size=10"
           }
         },
         {
@@ -359,7 +532,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/products?q=oyuncak&lang=tr&category=Toys and Games&size=10"
+            "url": "{{shopUrl}}/api/shop/search/products?q=oyuncak&lang=tr&category=Toys and Games&size=10"
           }
         },
         {
@@ -380,7 +553,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/products?minPrice=10&maxPrice=50&sort=priceAsc&size=10"
+            "url": "{{shopUrl}}/api/shop/search/products?minPrice=10&maxPrice=50&sort=priceAsc&size=10"
           }
         },
         {
@@ -390,13 +563,15 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Unknown sort is rejected', function () { pm.response.to.have.status(400); });"]
+                "exec": [
+                  "pm.test('Unknown sort is rejected', function () { pm.response.to.have.status(400); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/products?sort=password"
+            "url": "{{shopUrl}}/api/shop/search/products?sort=password"
           }
         },
         {
@@ -417,7 +592,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/suggest?q=la&lang=en&size=8"
+            "url": "{{shopUrl}}/api/shop/search/suggest?q=la&lang=en&size=8"
           }
         },
         {
@@ -427,13 +602,15 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Reindex is accepted', function () { pm.response.to.have.status(202); });"]
+                "exec": [
+                  "pm.test('Reindex is accepted', function () { pm.response.to.have.status(202); });"
+                ]
               }
             }
           ],
           "request": {
             "method": "POST",
-            "url": "{{baseUrl}}/api/shop/search/reindex"
+            "url": "{{shopUrl}}/api/shop/search/reindex"
           }
         },
         {
@@ -454,7 +631,7 @@
           ],
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/search/reindex"
+            "url": "{{shopUrl}}/api/shop/search/reindex"
           }
         }
       ]
@@ -469,14 +646,18 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Health is public', function () { pm.response.to.have.status(200); });"]
+                "exec": [
+                  "pm.test('Health is public', function () { pm.response.to.have.status(200); });"
+                ]
               }
             }
           ],
-          "auth": { "type": "noauth" },
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/actuator/health"
+            "url": "{{shopUrl}}/actuator/health",
+            "auth": {
+              "type": "noauth"
+            }
           }
         },
         {
@@ -486,14 +667,18 @@
               "listen": "test",
               "script": {
                 "type": "text/javascript",
-                "exec": ["pm.test('Token is required', function () { pm.expect([401, 403]).to.include(pm.response.code); });"]
+                "exec": [
+                  "pm.test('Token is required', function () { pm.expect([401, 403]).to.include(pm.response.code); });"
+                ]
               }
             }
           ],
-          "auth": { "type": "noauth" },
           "request": {
             "method": "GET",
-            "url": "{{baseUrl}}/api/shop/products"
+            "url": "{{shopUrl}}/api/shop/products",
+            "auth": {
+              "type": "noauth"
+            }
           }
         }
       ]
