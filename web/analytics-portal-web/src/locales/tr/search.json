@@ -1,0 +1,55 @@
+{
+  "title": "Ürün arama",
+  "subtitle": "Kataloğu ürün adı, kategori veya markaya göre arayın.",
+  "box": {
+    "label": "Ürün ara",
+    "placeholder": "Ürün, kategori veya marka ara",
+    "submit": "Ara",
+    "clear": "Aramayı temizle"
+  },
+  "suggestions": {
+    "label": "Öneriler",
+    "types": {
+      "product": "Ürün",
+      "category": "Kategori",
+      "brand": "Marka"
+    }
+  },
+  "facets": {
+    "label": "Filtreler",
+    "categories": "Kategoriler",
+    "brands": "Markalar",
+    "price": "Fiyat",
+    "min": "En düşük",
+    "max": "En yüksek",
+    "apply": "Fiyatı uygula",
+    "clear": "Filtreleri temizle",
+    "none": "Bu sonuçlar için seçenek yok.",
+    "priceHint": "Bu sonuçlardaki fiyatlar: {min} ile {max} arası.",
+    "priceInvalid": "En düşük fiyat, en yüksek fiyattan büyük olamaz."
+  },
+  "sort": {
+    "label": "Sıralama",
+    "options": {
+      "relevance": "Uygunluk",
+      "priceAsc": "Fiyat: artan",
+      "priceDesc": "Fiyat: azalan",
+      "nameAsc": "Ad: A'dan Z'ye"
+    }
+  },
+  "results": {
+    "label": "Ürünler",
+    "section": "Arama sonuçları",
+    "name": "Ürün",
+    "category": "Kategori",
+    "brand": "Marka",
+    "price": "Fiyat",
+    "count": "{total} ürün bulundu",
+    "empty": "Aramanıza uyan ürün yok. Başka kelimeler deneyin ya da filtreleri temizleyin.",
+    "error": "Ürünler yüklenemedi.",
+    "pagination": "Sonuç sayfaları",
+    "page": "Sayfa {page} / {pages}",
+    "previous": "Önceki",
+    "next": "Sonraki"
+  }
+}

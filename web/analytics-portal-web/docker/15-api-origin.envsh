@@ -1,0 +1,15 @@
+#!/bin/sh
+# Sourced by the nginx image before the templates are rendered.
+#
+# The Content-Security-Policy must allow the browser to call every configured service. CSP_CONNECT_ORIGINS
+# collects the origin (scheme, host and port) of each service address that is set; a gateway address covers
+# all services, so it is listed as well when it is set.
+
+CSP_CONNECT_ORIGINS=""
+for address in "${GATEWAY_URL:-}" "${AUTH_URL:-}" "${SHOP_URL:-}" "${ANALYTICS_URL:-}"; do
+  origin=$(printf '%s' "$address" | sed -nE 's#^(https?://[^/]+).*#\1#p')
+  if [ -n "$origin" ]; then
+    CSP_CONNECT_ORIGINS="$CSP_CONNECT_ORIGINS $origin"
+  fi
+done
+export CSP_CONNECT_ORIGINS

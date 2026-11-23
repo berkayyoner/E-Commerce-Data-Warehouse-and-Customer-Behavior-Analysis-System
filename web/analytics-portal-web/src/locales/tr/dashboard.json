@@ -1,0 +1,117 @@
+{
+  "title": "Satış genel bakışı",
+  "subtitle": "Seçtiğiniz dönem için ciro, sipariş ve müşteri verileri.",
+  "filters": {
+    "label": "Filtreler",
+    "toggle": "Filtreler",
+    "period": "Dönem",
+    "last30Days": "Son 30 gün",
+    "last12Months": "Son 12 ay",
+    "allTime": "Tüm zamanlar",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "category": "Kategori",
+    "allCategories": "Tüm kategoriler",
+    "categoryHint": "Kategori yalnızca en çok satan ürünler listesini filtreler. Diğer raporlar tüm kategorileri kapsar.",
+    "invalidRange": "Başlangıç tarihi bitiş tarihinden sonra olamaz.",
+    "idle": "Bu rapor için geçerli bir dönem seçin."
+  },
+  "kpi": {
+    "label": "Temel göstergeler",
+    "revenue": "Ciro",
+    "orders": "Sipariş",
+    "units": "Satılan adet",
+    "customers": "Müşteri",
+    "averageOrderValue": "Ortalama sipariş tutarı",
+    "deliveredShare": "Teslim edilen oran",
+    "averageDeliveryDays": "Ortalama teslim süresi",
+    "days": "gün"
+  },
+  "trend": {
+    "title": "Satış trendi",
+    "granularity": "Ayrıntı düzeyi",
+    "auto": "Otomatik",
+    "day": "Gün",
+    "week": "Hafta",
+    "month": "Ay",
+    "year": "Yıl",
+    "weekLabel": "{year} - {week}. hafta",
+    "summary": "{granularity} bazında ciro: {count} dönem, {first} ile {last} arası.",
+    "axisRevenue": "Ciro (TRY)",
+    "axisPeriod": "Dönem"
+  },
+  "products": {
+    "title": "En çok satan ürünler",
+    "by": "Sıralama ölçütü",
+    "revenue": "Ciro",
+    "units": "Adet",
+    "measure": {
+      "revenue": "ciro",
+      "units": "adet"
+    },
+    "summary": "{measure} sıralı en iyi {count} ürün. Birinci sırada {name} var.",
+    "name": "Ürün",
+    "categoryBrand": "Kategori ve marka"
+  },
+  "categories": {
+    "title": "Kategoriye göre ciro",
+    "summary": "{count} kategorinin ciro payı. En büyüğü {name}, payı {share}.",
+    "category": "Kategori",
+    "revenue": "Ciro",
+    "share": "Pay"
+  },
+  "regions": {
+    "title": "Bölge ve şehre göre ciro",
+    "summary": "{region} bölgesindeki {count} şehrin cirosu.",
+    "city": "Şehir",
+    "revenue": "Ciro",
+    "share": "Pay"
+  },
+  "payments": {
+    "title": "Ödeme yöntemleri",
+    "summary": "{count} ödeme yönteminin ciro payı. En büyüğü {name}, payı {share}.",
+    "online": "Online",
+    "offline": "Çevrimdışı",
+    "method": "Ödeme yöntemi",
+    "channel": "Kanal",
+    "revenue": "Ciro",
+    "share": "Pay"
+  },
+  "fulfillment": {
+    "title": "Teslimat",
+    "summary": "Verilen {placed} siparişin {delivered} tanesi teslim edildi, {pending} tanesi bekliyor.",
+    "placed": "Verilen",
+    "delivered": "Teslim edilen",
+    "pending": "Bekleyen",
+    "deliveredShare": "Teslim edilen oran",
+    "averageDeliveryDays": "Ortalama teslim süresi",
+    "byWarehouse": "Depoya göre",
+    "shareBar": "Siparişlerin %{percent} kadarı teslim edildi",
+    "city": "Şehir",
+    "region": "Bölge"
+  },
+  "customers": {
+    "sectionLabel": "Müşteri değeri",
+    "metricsTitle": "Müşteri değeri",
+    "repeatRate": "Tekrar satın alma oranı",
+    "repeatCount": "{total} müşteriden {repeat} tanesi birden fazla sipariş verdi.",
+    "ordersPerCustomer": "Müşteri başına sipariş",
+    "lifetimeValue": "Ortalama müşteri değeri",
+    "topTitle": "En değerli müşteriler",
+    "summary": "En yüksek cirolu {count} müşteri. İlk sıradaki {name}.",
+    "columns": {
+      "name": "Müşteri",
+      "region": "Bölge",
+      "orders": "Sipariş",
+      "revenue": "Ciro",
+      "firstOrderDate": "İlk sipariş",
+      "lastOrderDate": "Son sipariş"
+    }
+  },
+  "chart": {
+    "showTable": "Tablo olarak göster",
+    "hideTable": "Tabloyu gizle",
+    "keyboardHint": "Noktalar arasında gezinmek için ok tuşlarını kullanın.",
+    "empty": "Bu dönem için veri yok."
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "title": "Sales overview",
+  "subtitle": "Revenue, orders and customers for the period you select.",
+  "filters": {
+    "label": "Filters",
+    "toggle": "Filters",
+    "period": "Period",
+    "last30Days": "Last 30 days",
+    "last12Months": "Last 12 months",
+    "allTime": "All time",
+    "from": "From",
+    "to": "To",
+    "category": "Category",
+    "allCategories": "All categories",
+    "categoryHint": "The category applies to the top products list. The other reports cover every category.",
+    "invalidRange": "The start date must not be after the end date.",
+    "idle": "Choose a valid period to load this report."
+  },
+  "kpi": {
+    "label": "Key figures",
+    "revenue": "Revenue",
+    "orders": "Orders",
+    "units": "Units sold",
+    "customers": "Customers",
+    "averageOrderValue": "Average order value",
+    "deliveredShare": "Delivered share",
+    "averageDeliveryDays": "Average delivery time",
+    "days": "days"
+  },
+  "trend": {
+    "title": "Sales trend",
+    "granularity": "Granularity",
+    "auto": "Auto",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "weekLabel": "Week {week}, {year}",
+    "summary": "Revenue by {granularity} over {count} periods, from {first} to {last}.",
+    "axisRevenue": "Revenue (TRY)",
+    "axisPeriod": "Period"
+  },
+  "products": {
+    "title": "Top products",
+    "by": "Rank by",
+    "revenue": "Revenue",
+    "units": "Units",
+    "measure": {
+      "revenue": "revenue",
+      "units": "units"
+    },
+    "summary": "Top {count} products by {measure}. The first is {name}.",
+    "name": "Product",
+    "categoryBrand": "Category and brand"
+  },
+  "categories": {
+    "title": "Revenue by category",
+    "summary": "Revenue share of {count} categories. The largest is {name} with {share}.",
+    "category": "Category",
+    "revenue": "Revenue",
+    "share": "Share"
+  },
+  "regions": {
+    "title": "Revenue by region and city",
+    "summary": "Revenue of the {count} cities in {region}.",
+    "city": "City",
+    "revenue": "Revenue",
+    "share": "Share"
+  },
+  "payments": {
+    "title": "Payment methods",
+    "summary": "Revenue share of {count} payment methods. The largest is {name} with {share}.",
+    "online": "Online",
+    "offline": "Offline",
+    "method": "Payment method",
+    "channel": "Channel",
+    "revenue": "Revenue",
+    "share": "Share"
+  },
+  "fulfillment": {
+    "title": "Fulfillment",
+    "summary": "{delivered} of {placed} placed orders delivered, {pending} still pending.",
+    "placed": "Placed",
+    "delivered": "Delivered",
+    "pending": "Pending",
+    "deliveredShare": "Delivered share",
+    "averageDeliveryDays": "Average delivery time",
+    "byWarehouse": "By warehouse",
+    "shareBar": "{percent}% of orders delivered",
+    "city": "City",
+    "region": "Region"
+  },
+  "customers": {
+    "sectionLabel": "Customer value",
+    "metricsTitle": "Customer value",
+    "repeatRate": "Repeat purchase rate",
+    "repeatCount": "{repeat} of {total} customers ordered more than once.",
+    "ordersPerCustomer": "Orders per customer",
+    "lifetimeValue": "Average lifetime value",
+    "topTitle": "Top customers",
+    "summary": "The {count} customers with the highest revenue. The first is {name}.",
+    "columns": {
+      "name": "Customer",
+      "region": "Region",
+      "orders": "Orders",
+      "revenue": "Revenue",
+      "firstOrderDate": "First order",
+      "lastOrderDate": "Last order"
+    }
+  },
+  "chart": {
+    "showTable": "Show as table",
+    "hideTable": "Hide table",
+    "keyboardHint": "Use the arrow keys to move between the points.",
+    "empty": "There is no data for this period."
+  }
+}
