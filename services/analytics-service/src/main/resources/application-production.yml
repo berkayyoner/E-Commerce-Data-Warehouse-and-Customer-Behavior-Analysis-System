@@ -1,0 +1,29 @@
+# Production profile: every value comes from the environment, nothing has a fallback.
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST}:${DB_PORT}/${DB_SERVICE}
+    username: ${OLAP_USERNAME}
+    password: ${OLAP_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER}
+
+analytics:
+  oltp-schema: ${OLTP_SCHEMA}
+
+security:
+  allowed-origins: ${ANALYTICS_ALLOWED_ORIGINS}
+
+logging:
+  level:
+    edu.yildiz.ecommerce: WARN
+    root: WARN

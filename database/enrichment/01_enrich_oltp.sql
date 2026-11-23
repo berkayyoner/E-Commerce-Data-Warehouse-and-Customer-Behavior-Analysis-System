@@ -124,6 +124,14 @@ UPDATE order_line ol SET ol_delivery_d = (
        AND o.o_carrier_id IS NOT NULL
 );
 
+-- TPC-C gives delivered order lines an amount of zero. A shop has revenue on every line, so every line is
+-- priced with the product price times the quantity.
+MERGE INTO order_line ol
+USING item i
+   ON (i.i_id = ol.ol_i_id)
+ WHEN MATCHED THEN UPDATE SET ol.ol_amount = i.i_price * ol.ol_quantity
+ WHERE ol.ol_amount <> i.i_price * ol.ol_quantity;
+
 -- Customers register before their first order and payments are booked on the order date.
 UPDATE customer c SET c_since = NVL(
     (SELECT MIN(o.o_entry_d) - MOD(ORA_HASH(c.c_w_id || '-' || c.c_d_id || '-' || c.c_id, 90), 91)

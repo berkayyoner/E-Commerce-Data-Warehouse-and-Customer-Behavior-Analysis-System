@@ -1,0 +1,4 @@
+# Development profile: shared development database and Redis, values come from the environment.
+logging:
+  level:
+    edu.yildiz.ecommerce: INFO

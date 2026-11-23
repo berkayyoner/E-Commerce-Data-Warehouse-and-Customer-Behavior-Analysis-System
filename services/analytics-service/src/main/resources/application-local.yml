@@ -1,0 +1,4 @@
+# Local profile: database and Redis on localhost, SQL logging allowed.
+logging:
+  level:
+    edu.yildiz.ecommerce: DEBUG

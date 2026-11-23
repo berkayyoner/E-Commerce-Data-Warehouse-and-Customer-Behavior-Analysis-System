@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: analytics-service
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:FREEPDB1}
+    username: ${OLAP_USERNAME:dwh_olap}
+    password: ${OLAP_PASSWORD}
+    hikari:
+      maximum-pool-size: 6
+      minimum-idle: 1
+      connection-timeout: 30000
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      connect-timeout: 2s
+      timeout: 2s
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_ISSUER:http://localhost:9000}
+
+server:
+  port: 8083
+  shutdown: graceful
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+analytics:
+  oltp-schema: ${OLTP_SCHEMA:DWH_OLTP}
+
+security:
+  allowed-origins: ${ANALYTICS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}

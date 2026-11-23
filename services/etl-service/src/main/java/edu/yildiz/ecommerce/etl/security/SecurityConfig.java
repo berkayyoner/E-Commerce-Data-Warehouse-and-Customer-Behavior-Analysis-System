@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -43,7 +42,7 @@ public class SecurityConfig {
     /** Looks the signing keys up at the first request, so this service can start before the auth server. */
     @Bean
     JwtDecoder jwtDecoder(SecurityProperties properties) {
-        return NimbusJwtDecoder.withIssuerLocation(properties.issuer()).build();
+        return new LazyJwtDecoder(properties.issuer());
     }
 
     @Bean

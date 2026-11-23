@@ -1,0 +1,220 @@
+{
+  "info": {
+    "name": "Analytics Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8083" },
+    { "key": "token", "value": "" },
+    { "key": "from", "value": "2026-01-01" },
+    { "key": "to", "value": "2026-03-31" }
+  ],
+  "item": [
+    {
+      "name": "Overview",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/overview?from={{from}}&to={{to}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "overview"],
+          "query": [
+            { "key": "from", "value": "{{from}}" },
+            { "key": "to", "value": "{{to}}" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Overview answers with a cache header', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.headers.get('X-Cache')).to.be.oneOf(['HIT', 'MISS']);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales trend by month",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/sales/trend?granularity=month",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "sales", "trend"],
+          "query": [{ "key": "granularity", "value": "month" }]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Trend is a list of periods', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json()).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales trend with an invalid granularity",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/sales/trend?granularity=hour",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "sales", "trend"],
+          "query": [{ "key": "granularity", "value": "hour" }]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('Unknown granularity is rejected', function () {", "  pm.response.to.have.status(400);", "});"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Top products by units",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/products/top?by=units&limit=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "products", "top"],
+          "query": [
+            { "key": "by", "value": "units" },
+            { "key": "limit", "value": "10" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Categories",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/categories",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "categories"]
+        }
+      }
+    },
+    {
+      "name": "Regions",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/regions?from={{from}}&to={{to}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "regions"],
+          "query": [
+            { "key": "from", "value": "{{from}}" },
+            { "key": "to", "value": "{{to}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Payments",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/payments",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "payments"]
+        }
+      }
+    },
+    {
+      "name": "Fulfillment",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/fulfillment?from={{from}}&to={{to}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "fulfillment"],
+          "query": [
+            { "key": "from", "value": "{{from}}" },
+            { "key": "to", "value": "{{to}}" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Customers top 20",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/customers/top?limit=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "customers", "top"],
+          "query": [{ "key": "limit", "value": "20" }]
+        }
+      }
+    },
+    {
+      "name": "Customer metrics",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/customers/metrics",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "customers", "metrics"]
+        }
+      }
+    },
+    {
+      "name": "Benchmark (OLTP vs star vs view)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/benchmark",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "benchmark"]
+        }
+      }
+    },
+    {
+      "name": "Clear report cache",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/api/analytics/cache/clear",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "analytics", "cache", "clear"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cache clear reports the deleted count', function () {",
+              "  pm.response.to.have.status(200);",
+              "  pm.expect(pm.response.json().deleted).to.be.a('number');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
