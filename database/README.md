@@ -14,6 +14,7 @@ Oracle Free runs in Docker with two schemas in the `FREEPDB1` database:
 | `init/` | Scripts that Oracle runs once when the container is created (creates `dwh_olap`) |
 | `benchbase/` | BenchBase TPC-C configuration template |
 | `enrichment/` | SQL that turns the benchmark data into e-commerce data |
+| `olap/` | Star schema DDL (dimensions, facts, ETL bookkeeping, date dimension) |
 | `scripts/` | Helper scripts |
 
 ## Generating the OLTP data
@@ -47,3 +48,11 @@ TPC-C has no product categories, real dates or repeat customers, which a warehou
 - order dates from 2024-01-01 to 2026-11-01 and `OORDER.O_PAYMENT_METHOD`
 - delivery dates on order lines and payment dates in `HISTORY`
 - a skewed customer choice per order, so a few customers buy often and most buy rarely
+
+## Creating the warehouse tables
+
+```powershell
+.\database\scripts\create-olap.ps1
+```
+
+The script drops and recreates the `dwh_olap` tables. The schema is described in `docs/star-schema.md`.
