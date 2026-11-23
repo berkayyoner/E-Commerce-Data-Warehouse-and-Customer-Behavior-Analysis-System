@@ -4,6 +4,13 @@ import FormField from '../../components/ui/FormField'
 import useT from '../../hooks/useT'
 import { INITIAL_CRITERIA, toggleValue } from './smartSearch'
 
+/** Category name in the language of the console. A category without a translation keeps its own name. */
+function categoryName(value, t) {
+  const key = `products.smart.categoryNames.${value}`
+  const label = t(key)
+  return label === key ? value : label
+}
+
 /**
  * Facet filters of the smart search. The categories and brands come from the facets of the last answer; each choice
  * narrows the search on the server. The service takes one brand, so choosing a brand replaces the previous one.
@@ -38,7 +45,7 @@ export default function SearchFacets({ facets, criteria, onChange }) {
               checked={criteria.categories.includes(term.value)}
               onChange={() => onChange({ categories: toggleValue(criteria.categories, term.value), page: 0 })}
             />
-            <span>{term.value}</span>
+            <span>{categoryName(term.value, t)}</span>
             <span className="facet-count">{term.count}</span>
           </label>
         ))}

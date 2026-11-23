@@ -1,0 +1,35 @@
+# Settings shared by the services. Values that differ per environment are patched by the overlays.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dwh-config
+data:
+  SPRING_PROFILES_ACTIVE: production
+  DB_HOST: oracle.example.com
+  DB_PORT: "1521"
+  DB_SERVICE: FREEPDB1
+  APP_DB_USERNAME: dwh_app
+  OLAP_USERNAME: dwh_olap
+  OLTP_DB_USERNAME: dwh_oltp
+  ANALYTICS_DB_USERNAME: dwh_reader
+  ANALYTICS_DB_SCHEMA: DWH_OLAP
+  OLTP_SCHEMA: DWH_OLTP
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
+  ELASTICSEARCH_URIS: http://elasticsearch:9200
+  AUTH_ISSUER: https://api.dwh.example.com
+  AUTH_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
+  AUTH_ANALYTICS_REDIRECT_URIS: https://dwh.example.com/callback
+  AUTH_ADMIN_REDIRECT_URIS: https://admin.dwh.example.com/callback
+  ETL_ALLOWED_ORIGINS: https://admin.dwh.example.com
+  SHOP_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
+  ANALYTICS_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
+  SEGMENTATION_ALLOWED_ORIGINS: https://admin.dwh.example.com
+---
+# Settings of the two web apps: the address at which a visitor's browser reaches the API (the ingress below).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dwh-web-config
+data:
+  GATEWAY_URL: https://api.dwh.example.com

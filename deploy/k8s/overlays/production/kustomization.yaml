@@ -1,0 +1,58 @@
+# Production: two replicas of the auth, shop and report services and both web apps, the `production` Spring profile (no fallback values) and the real
+# host names (replace the example.com names before the first deployment).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: dwh-production
+resources:
+  - ../../base
+  - disruption-budget.yaml
+images:
+  - name: registry.example.com/dwh/auth-service
+    newTag: stable
+  - name: registry.example.com/dwh/etl-service
+    newTag: stable
+  - name: registry.example.com/dwh/shop-service
+    newTag: stable
+  - name: registry.example.com/dwh/analytics-service
+    newTag: stable
+  - name: registry.example.com/dwh/segmentation-service
+    newTag: stable
+  - name: registry.example.com/dwh/dwh-admin-web
+    newTag: stable
+  - name: registry.example.com/dwh/analytics-portal-web
+    newTag: stable
+patches:
+  - target:
+      kind: Deployment
+      name: auth-service|shop-service|analytics-service|dwh-admin-web|analytics-portal-web
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 2
+  # The ETL and segmentation services run one job at a time, so more replicas would only add idle pods.
+  # The auth service is spread over nodes and protected by a disruption budget (disruption-budget.yaml).
+  - target:
+      kind: Deployment
+      name: auth-service
+    patch: |-
+      - op: add
+        path: /spec/template/spec/affinity
+        value:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  topologyKey: kubernetes.io/hostname
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: auth-service
+  - target:
+      kind: Deployment
+      name: analytics-service|shop-service
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/cpu
+        value: 500m
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 2Gi

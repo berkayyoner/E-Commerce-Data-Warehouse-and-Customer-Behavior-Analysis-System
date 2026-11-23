@@ -1,0 +1,12 @@
+# Keep the build context of the service images small.
+.git
+.env
+logs/
+web/
+e2e-tests/
+docs/
+database/
+deploy/
+postman/
+**/target/
+**/node_modules/

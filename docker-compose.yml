@@ -103,16 +103,144 @@ services:
     volumes:
       - ./database/migrations/app:/flyway/sql:ro
 
-  # Started with `docker compose --profile apps up -d gateway` once the services run in containers.
+  # Optional single entry point (routes by path). Start with `docker compose --profile gateway up -d gateway`.
   gateway:
     image: nginx:1.27-alpine
     container_name: dwh-gateway
-    profiles: ["apps"]
+    profiles: ["gateway"]
     logging: *default-logging
     ports:
       - "${GATEWAY_PORT:-8080}:8080"
     volumes:
       - ./deploy/gateway/default.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: unless-stopped
+
+  # The whole system in containers: `docker compose --profile apps up -d --build`.
+  # host.docker.internal is the address of the auth server for both the browser and the containers, so the token
+  # issuer is the same everywhere. This is a local setup; real environments use their own host names.
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    image: dwh/auth-service
+    container_name: dwh-auth-service
+    profiles: ["apps"]
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+      AUTH_ISSUER: http://host.docker.internal:9000
+      AUTH_ADMIN_PASSWORD: ${AUTH_ADMIN_PASSWORD:-}
+      AUTH_ETL_CLIENT_SECRET: ${AUTH_ETL_CLIENT_SECRET:-}
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+
+  etl-service:
+    build:
+      context: .
+      dockerfile: services/etl-service/Dockerfile
+    image: dwh/etl-service
+    container_name: dwh-etl-service
+    profiles: ["apps"]
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      OLAP_PASSWORD: ${OLAP_PASSWORD}
+      AUTH_ISSUER: http://host.docker.internal:9000
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+
+  shop-service:
+    build:
+      context: .
+      dockerfile: services/shop-service/Dockerfile
+    image: dwh/shop-service
+    container_name: dwh-shop-service
+    profiles: ["apps"]
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      OLTP_DB_PASSWORD: ${OLTP_PASSWORD}
+      ELASTICSEARCH_URIS: http://elasticsearch:9200
+      AUTH_ISSUER: http://host.docker.internal:9000
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+
+  analytics-service:
+    build:
+      context: .
+      dockerfile: services/analytics-service/Dockerfile
+    image: dwh/analytics-service
+    container_name: dwh-analytics-service
+    profiles: ["apps"]
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      REDIS_HOST: redis
+      ANALYTICS_DB_PASSWORD: ${READER_PASSWORD}
+      AUTH_ISSUER: http://host.docker.internal:9000
+    ports:
+      - "8083:8083"
+    restart: unless-stopped
+
+  segmentation-service:
+    build:
+      context: .
+      dockerfile: services/segmentation-service/Dockerfile
+    image: dwh/segmentation-service
+    container_name: dwh-segmentation-service
+    profiles: ["apps"]
+    logging: *default-logging
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      DB_HOST: oracle-db
+      OLAP_PASSWORD: ${OLAP_PASSWORD}
+      AUTH_ISSUER: http://host.docker.internal:9000
+    ports:
+      - "8084:8084"
+    restart: unless-stopped
+
+  dwh-admin-web:
+    build:
+      context: web/dwh-admin-web
+    image: dwh/dwh-admin-web
+    container_name: dwh-admin-web
+    profiles: ["apps"]
+    logging: *default-logging
+    ports:
+      - "3001:80"
+    restart: unless-stopped
+
+  analytics-portal-web:
+    build:
+      context: web/analytics-portal-web
+    image: dwh/analytics-portal-web
+    container_name: dwh-analytics-portal-web
+    profiles: ["apps"]
+    logging: *default-logging
+    ports:
+      - "3000:80"
     restart: unless-stopped
 
 volumes:

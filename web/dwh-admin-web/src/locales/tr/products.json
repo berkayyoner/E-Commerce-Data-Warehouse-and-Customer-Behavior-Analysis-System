@@ -35,6 +35,16 @@
     "priceRange": "En düşük fiyat en yüksek fiyattan büyük olamaz."
   },
   "smart": {
+    "categoryNames": {
+      "Electronics": "Elektronik",
+      "Clothing": "Giyim",
+      "Home and Kitchen": "Ev ve Mutfak",
+      "Books": "Kitap",
+      "Sports and Outdoor": "Spor ve Outdoor",
+      "Beauty and Care": "Kozmetik ve Bakım",
+      "Toys and Games": "Oyuncak ve Oyun",
+      "Grocery": "Market"
+    },
     "placeholder": "Ürün, kategori veya marka ara",
     "submit": "Ara",
     "suggestions": "Öneriler",

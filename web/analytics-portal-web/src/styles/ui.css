@@ -368,6 +368,10 @@
 }
 
 @media (max-width: 599px) {
+  .segmented-compact .segmented-option {
+    min-height: 44px;
+  }
+
   .data-table thead {
     display: none;
   }

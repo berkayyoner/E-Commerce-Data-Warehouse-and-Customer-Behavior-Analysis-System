@@ -1,0 +1,48 @@
+# Starts an incremental ETL run every night. The segmentation service notices the new run by itself and
+# recalculates the segments afterwards.
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: etl-nightly
+spec:
+  schedule: "0 2 * * *"
+  timeZone: Europe/Istanbul
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+          containers:
+            - name: start-run
+              image: curlimages/curl:8.10.1
+              envFrom:
+                - configMapRef:
+                    name: dwh-config
+              env:
+                - name: CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: dwh-secrets
+                      key: AUTH_ETL_CLIENT_SECRET
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -eu
+                  token=$(curl -sf -u "etl-scheduler:${CLIENT_SECRET}" \
+                      -d grant_type=client_credentials -d scope=etl.run \
+                      "http://auth-service:9000/oauth2/token" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')
+                  test -n "$token"
+                  curl -sf -X POST -H "Authorization: Bearer ${token}" -H "Content-Type: application/json" \
+                      -d '{"runType":"INCREMENTAL"}' "http://etl-service:8081/api/etl/runs"
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]

@@ -36,6 +36,16 @@
   },
   "smart": {
     "placeholder": "Search products, categories or brands",
+    "categoryNames": {
+      "Electronics": "Electronics",
+      "Clothing": "Clothing",
+      "Home and Kitchen": "Home and Kitchen",
+      "Books": "Books",
+      "Sports and Outdoor": "Sports and Outdoor",
+      "Beauty and Care": "Beauty and Care",
+      "Toys and Games": "Toys and Games",
+      "Grocery": "Grocery"
+    },
     "submit": "Search",
     "suggestions": "Suggestions",
     "suggestionTypes": {

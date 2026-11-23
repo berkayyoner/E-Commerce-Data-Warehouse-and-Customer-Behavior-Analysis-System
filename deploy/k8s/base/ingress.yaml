@@ -1,0 +1,118 @@
+# Three host names: the public portal, the personnel console and the API that both of them call.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dwh
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 1m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - dwh.example.com
+        - admin.dwh.example.com
+        - api.dwh.example.com
+      secretName: dwh-tls
+  rules:
+    - host: dwh.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: analytics-portal-web
+                port:
+                  number: 80
+    - host: admin.dwh.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dwh-admin-web
+                port:
+                  number: 80
+    - host: api.dwh.example.com
+      http:
+        paths:
+          # Sign in page, OAuth 2.0 and OpenID Connect endpoints and the user API belong to the auth service.
+          - path: /oauth2
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /logout
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /connect
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /.well-known
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /userinfo
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 9000
+          - path: /api/etl
+            pathType: Prefix
+            backend:
+              service:
+                name: etl-service
+                port:
+                  number: 8081
+          - path: /api/shop
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-service
+                port:
+                  number: 8082
+          - path: /api/analytics
+            pathType: Prefix
+            backend:
+              service:
+                name: analytics-service
+                port:
+                  number: 8083
+          - path: /api/segmentation
+            pathType: Prefix
+            backend:
+              service:
+                name: segmentation-service
+                port:
+                  number: 8084
