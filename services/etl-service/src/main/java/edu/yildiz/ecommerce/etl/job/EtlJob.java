@@ -83,6 +83,10 @@ public class EtlJob {
             step(runId, totals, "Refresh order delivery", () -> StepCounts.of(jdbc.update(sql.refreshOrderDelivery())));
             step(runId, totals, "Refresh line delivery", () -> StepCounts.of(jdbc.update(sql.refreshLineDelivery())));
         }
+        step(runId, totals, "Refresh monthly sales view", () -> {
+            jdbc.execute(sql.refreshMonthlySales());
+            return StepCounts.of(0);
+        });
         step(runId, totals, "Load inventory snapshot", this::loadInventorySnapshot);
 
         saveWatermark();

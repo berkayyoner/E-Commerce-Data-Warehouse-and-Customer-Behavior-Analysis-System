@@ -186,6 +186,11 @@ public class EtlStatements {
                 """.formatted(oltp, oltp);
     }
 
+    /** Rebuilds the pre-aggregated monthly sales that the report API reads. */
+    public String refreshMonthlySales() {
+        return "BEGIN DBMS_MVIEW.REFRESH('MV_SALES_MONTHLY', 'C'); END;";
+    }
+
     /** The only bind value is the snapshot date key. */
     public String deleteInventorySnapshot() {
         return "DELETE FROM fact_inventory_snapshot WHERE snapshot_date_key = ?";

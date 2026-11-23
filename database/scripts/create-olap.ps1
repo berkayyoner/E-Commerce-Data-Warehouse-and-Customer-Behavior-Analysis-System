@@ -26,6 +26,11 @@ function Invoke-Sql([string]$script) {
 $dropAll = @'
 WHENEVER SQLERROR EXIT FAILURE ROLLBACK;
 BEGIN
+    BEGIN
+        EXECUTE IMMEDIATE 'DROP MATERIALIZED VIEW mv_sales_monthly';
+    EXCEPTION WHEN OTHERS THEN
+        IF SQLCODE != -12003 THEN RAISE; END IF;
+    END;
     FOR t IN (SELECT column_value AS name FROM TABLE(sys.odcivarchar2list(
         'FACT_INVENTORY_SNAPSHOT', 'FACT_SALES', 'FACT_ORDERS', 'ETL_QUALITY_RESULT', 'ETL_STEP', 'ETL_RUN',
         'ETL_WATERMARK', 'DIM_PAYMENT_METHOD', 'DIM_WAREHOUSE', 'DIM_PRODUCT', 'DIM_CUSTOMER', 'DIM_DATE'))) LOOP
@@ -41,7 +46,7 @@ EXIT;
 '@
 Invoke-Sql $dropAll
 
-foreach ($file in '01_dimensions.sql', '02_facts.sql', '03_etl_support.sql', '04_load_dim_date.sql') {
+foreach ($file in '01_dimensions.sql', '02_facts.sql', '03_etl_support.sql', '04_load_dim_date.sql', '05_materialized_views.sql') {
     Write-Host "Running $file"
     Invoke-Sql ((Get-Content (Join-Path $projectRoot "database\olap\$file") -Raw) + "`nEXIT;`n")
 }
