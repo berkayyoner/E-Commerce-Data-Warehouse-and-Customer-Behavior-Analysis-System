@@ -33,16 +33,27 @@ describe('Console: personnel accounts (ADMIN)', function () {
   })
 
   it('sorts by username in both directions', async function () {
-    await table.sort('Username')
-    await waitFor(browser.driver, async () => (await table.ariaSort('Username')) === 'descending', 'descending sort')
-    const descending = await table.columnValues('Username')
+    // A second account guarantees that the two directions show different first rows, whatever else exists.
+    const extra = uniqueName('e2e-sort')
+    await users.openCreateModal()
+    await users.fillForm({ username: extra, displayName: 'E2E Sort User', role: 'VIEWER', password: GOOD_PASSWORD })
+    await users.submitModal('Create')
+    await users.waitForModalClosed()
+    try {
+      await table.sort('Username')
+      await waitFor(browser.driver, async () => (await table.ariaSort('Username')) === 'descending', 'descending sort')
+      const descending = await table.columnValues('Username')
 
-    await table.sort('Username')
-    await waitFor(browser.driver, async () => (await table.ariaSort('Username')) === 'ascending', 'ascending sort')
-    const ascending = await table.columnValues('Username')
+      await table.sort('Username')
+      await waitFor(browser.driver, async () => (await table.ariaSort('Username')) === 'ascending', 'ascending sort')
+      const ascending = await table.columnValues('Username')
 
-    assert.notEqual(ascending[0], descending[0], 'the first row changes with the direction')
-    assert.equal(ascending[0].toLowerCase() <= descending[0].toLowerCase(), true)
+      assert.notEqual(ascending[0], descending[0], 'the first row changes with the direction')
+      assert.equal(ascending[0].toLowerCase() <= descending[0].toLowerCase(), true)
+    } finally {
+      await users.deleteUserIfPresent(extra)
+      await table.search('')
+    }
   })
 
   it('filters the table with the search box above the table on the left', async function () {
