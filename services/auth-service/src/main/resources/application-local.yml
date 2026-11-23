@@ -1,0 +1,4 @@
+# Local profile: localhost addresses. A temporary signing key is generated when none is configured.
+logging:
+  level:
+    edu.yildiz.ecommerce: DEBUG

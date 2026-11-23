@@ -1,0 +1,4 @@
+# Development profile: addresses and secrets come from the environment.
+logging:
+  level:
+    edu.yildiz.ecommerce: INFO

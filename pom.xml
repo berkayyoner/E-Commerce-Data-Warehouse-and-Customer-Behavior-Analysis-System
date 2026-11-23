@@ -25,5 +25,6 @@
     <!-- Services are added here as they are created under services/. -->
     <modules>
         <module>services/etl-service</module>
+        <module>services/auth-service</module>
     </modules>
 </project>

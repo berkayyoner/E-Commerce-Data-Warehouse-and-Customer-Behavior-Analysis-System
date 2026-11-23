@@ -1,0 +1,20 @@
+# Production profile: nothing has a fallback, a missing value stops the service from starting.
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST}:${DB_PORT}/${DB_SERVICE}
+    username: ${APP_DB_USERNAME}
+    password: ${APP_DB_PASSWORD}
+
+auth:
+  issuer: ${AUTH_ISSUER}
+  allowed-origins: ${AUTH_ALLOWED_ORIGINS}
+  analytics-redirect-uris: ${AUTH_ANALYTICS_REDIRECT_URIS}
+  admin-redirect-uris: ${AUTH_ADMIN_REDIRECT_URIS}
+  etl-client-secret: ${AUTH_ETL_CLIENT_SECRET}
+  jwt-private-key: ${AUTH_JWT_PRIVATE_KEY}
+  jwt-public-key: ${AUTH_JWT_PUBLIC_KEY}
+
+logging:
+  level:
+    root: WARN
+    edu.yildiz.ecommerce: WARN

@@ -17,6 +17,7 @@ services:
       APP_USER: dwh_oltp
       APP_USER_PASSWORD: ${OLTP_PASSWORD:?set OLTP_PASSWORD in .env}
       OLAP_PASSWORD: ${OLAP_PASSWORD:?set OLAP_PASSWORD in .env}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
     ports:
       - "${DB_PORT:-1521}:1521"
     volumes:

@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: auth-service
+  profiles:
+    default: local
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:FREEPDB1}
+    username: ${APP_DB_USERNAME:dwh_app}
+    password: ${APP_DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 8
+      minimum-idle: 2
+
+server:
+  port: 9000
+  shutdown: graceful
+  forward-headers-strategy: framework
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+auth:
+  issuer: ${AUTH_ISSUER:http://localhost:9000}
+  allowed-origins: ${AUTH_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+  analytics-redirect-uris: ${AUTH_ANALYTICS_REDIRECT_URIS:http://localhost:3000/callback}
+  admin-redirect-uris: ${AUTH_ADMIN_REDIRECT_URIS:http://localhost:3001/callback}
+  etl-client-secret: ${AUTH_ETL_CLIENT_SECRET:}
+  jwt-private-key: ${AUTH_JWT_PRIVATE_KEY:}
+  jwt-public-key: ${AUTH_JWT_PUBLIC_KEY:}
+  admin-username: ${AUTH_ADMIN_USERNAME:admin}
+  admin-password: ${AUTH_ADMIN_PASSWORD:}
