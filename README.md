@@ -2,6 +2,9 @@
 
 This project is being developed as a term project for the Information Technologies track within the Computer Engineering department at Yıldız Technical University for the year 2026.
 
+<img width="2541" height="1265" alt="image" src="https://github.com/user-attachments/assets/c8547d1e-7a18-44ca-a6f0-3568fa1f5265" />
+<img width="2546" height="1266" alt="image" src="https://github.com/user-attachments/assets/82c12b19-a623-4ab5-afaf-18d75f7c59c0" />
+
 ## Technologies
 * **Front-end:** React.Js
 * **Front-end CRUD:** Axios
