@@ -18,15 +18,13 @@ data:
   REDIS_PORT: "6379"
   ELASTICSEARCH_URIS: http://elasticsearch:9200
   AUTH_ISSUER: https://api.dwh.example.com
-  AUTH_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
-  AUTH_ANALYTICS_REDIRECT_URIS: https://dwh.example.com/callback
-  AUTH_ADMIN_REDIRECT_URIS: https://admin.dwh.example.com/callback
-  ETL_ALLOWED_ORIGINS: https://admin.dwh.example.com
-  SHOP_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
-  ANALYTICS_ALLOWED_ORIGINS: https://dwh.example.com,https://admin.dwh.example.com
-  SEGMENTATION_ALLOWED_ORIGINS: https://admin.dwh.example.com
+  AUTH_ALLOWED_ORIGINS: https://dwh.example.com
+  ETL_ALLOWED_ORIGINS: https://dwh.example.com
+  SHOP_ALLOWED_ORIGINS: https://dwh.example.com
+  ANALYTICS_ALLOWED_ORIGINS: https://dwh.example.com
+  SEGMENTATION_ALLOWED_ORIGINS: https://dwh.example.com
 ---
-# Settings of the two web apps: the address at which a visitor's browser reaches the API (the ingress below).
+# Settings of the web app: the address at which a visitor's browser reaches the API (the ingress below).
 apiVersion: v1
 kind: ConfigMap
 metadata:

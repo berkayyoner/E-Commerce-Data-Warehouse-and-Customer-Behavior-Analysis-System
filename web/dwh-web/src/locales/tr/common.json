@@ -1,0 +1,73 @@
+{
+  "appName": "Mağaza Veri Ambarı - Personel Konsolu",
+  "skipToContent": "İçeriğe geç",
+  "actions": {
+    "create": "Oluştur",
+    "save": "Kaydet",
+    "cancel": "Vazgeç",
+    "close": "Kapat",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "retry": "Yeniden dene",
+    "signOut": "Çıkış yap"
+  },
+  "search": {
+    "placeholder": "Ara...",
+    "label": "Ara"
+  },
+  "table": {
+    "empty": "Kayıt bulunamadı.",
+    "loading": "Yükleniyor...",
+    "showing": "{total} kayıttan {from}-{to} arası gösteriliyor",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "page": "Sayfa {page} / {pages}",
+    "actions": "İşlemler",
+    "sortBy": "{column} sütununa göre sırala"
+  },
+  "validation": {
+    "required": "Bu alan zorunludur.",
+    "email": "Geçerli bir e-posta adresi girin.",
+    "minLength": "En az {min} karakter kullanın.",
+    "maxLength": "En fazla {max} karakter kullanın."
+  },
+  "language": {
+    "label": "Dil",
+    "names": {
+      "en": "English",
+      "tr": "Türkçe"
+    }
+  },
+  "roles": {
+    "ADMIN": "Yönetici",
+    "ANALYST": "Analist",
+    "VIEWER": "Görüntüleyici"
+  },
+  "user": {
+    "signedInAs": "{name} olarak giriş yapıldı"
+  },
+  "status": {
+    "enabled": "Aktif",
+    "disabled": "Pasif"
+  },
+  "toast": {
+    "saved": "Başarıyla kaydedildi.",
+    "deleted": "Başarıyla silindi.",
+    "failed": "İşlem başarısız oldu. Lütfen tekrar deneyin.",
+    "forbidden": "Bu işlem için yetkiniz yok.",
+    "conflict": "Bu işlem mevcut verilerle çakışıyor."
+  },
+  "confirmDelete": {
+    "title": "Kaydı sil",
+    "message": "\"{name}\" kaydını silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+  },
+  "error": {
+    "widget": "Bu bölüm yüklenemedi.",
+    "page": "Veriler yüklenemedi."
+  },
+  "sidebar": {
+    "label": "Ana gezinme",
+    "open": "Menüyü aç",
+    "close": "Menüyü kapat"
+  }
+}

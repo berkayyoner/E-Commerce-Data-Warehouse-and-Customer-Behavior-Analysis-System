@@ -1,4 +1,4 @@
-# Production: two replicas of the auth, shop and report services and both web apps, the `production` Spring profile (no fallback values) and the real
+# Production: two replicas of the auth, shop and report services and the web app, the `production` Spring profile (no fallback values) and the real
 # host names (replace the example.com names before the first deployment).
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
@@ -17,14 +17,12 @@ images:
     newTag: stable
   - name: ghcr.io/your-github-user/dwh/segmentation-service
     newTag: stable
-  - name: ghcr.io/your-github-user/dwh/dwh-admin-web
-    newTag: stable
-  - name: ghcr.io/your-github-user/dwh/analytics-portal-web
+  - name: ghcr.io/your-github-user/dwh/dwh-web
     newTag: stable
 patches:
   - target:
       kind: Deployment
-      name: auth-service|shop-service|analytics-service|dwh-admin-web|analytics-portal-web
+      name: auth-service|shop-service|analytics-service|dwh-web
     patch: |-
       - op: replace
         path: /spec/replicas

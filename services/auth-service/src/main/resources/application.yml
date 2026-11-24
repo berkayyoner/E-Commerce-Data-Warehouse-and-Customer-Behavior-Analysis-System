@@ -32,10 +32,7 @@ management:
 
 auth:
   issuer: ${AUTH_ISSUER:http://localhost:9000}
-  allowed-origins: ${AUTH_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
-  analytics-redirect-uris: ${AUTH_ANALYTICS_REDIRECT_URIS:http://localhost:3000/callback}
-  admin-redirect-uris: ${AUTH_ADMIN_REDIRECT_URIS:http://localhost:3001/callback}
-  api-test-redirect-uris: ${AUTH_API_TEST_REDIRECT_URIS:}
+  allowed-origins: ${AUTH_ALLOWED_ORIGINS:http://localhost:3000}
   etl-client-secret: ${AUTH_ETL_CLIENT_SECRET:}
   jwt-private-key: ${AUTH_JWT_PRIVATE_KEY:}
   jwt-public-key: ${AUTH_JWT_PUBLIC_KEY:}

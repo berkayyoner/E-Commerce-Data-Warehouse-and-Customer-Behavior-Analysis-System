@@ -2,12 +2,12 @@
   "name": "e2e-tests",
   "version": "1.0.0",
   "private": true,
-  "description": "Selenium end-to-end tests of the personnel console and the analytics portal.",
+  "description": "Selenium end-to-end tests of the data warehouse web application.",
   "type": "commonjs",
   "scripts": {
     "test": "mocha --timeout 180000 --recursive \"test/**/*.test.js\"",
     "test:console": "mocha --timeout 180000 --recursive \"test/console/**/*.test.js\"",
-    "test:portal": "mocha --timeout 180000 --recursive \"test/portal/**/*.test.js\""
+    "test:analytics": "mocha --timeout 180000 --recursive \"test/analytics/**/*.test.js\""
   },
   "devDependencies": {
     "mocha": "^10.8.2",

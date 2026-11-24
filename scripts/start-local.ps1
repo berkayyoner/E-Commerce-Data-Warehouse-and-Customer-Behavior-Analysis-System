@@ -1,10 +1,10 @@
 <#
 .SYNOPSIS
-    Starts the whole system on this machine: infrastructure containers, the five services and both React apps.
+    Starts the whole system on this machine: infrastructure containers, the five services and the React app.
 
 .DESCRIPTION
     Reads the passwords from .env, starts Oracle, Redis and Elasticsearch with Docker Compose, then every service
-    from its jar (built first when -Build is given or a jar is missing) and both web apps with their dev servers.
+    from its jar (built first when -Build is given or a jar is missing) and the web app with its dev server on port 3000.
     Logs are written to the logs folder. Stop everything with stop-local.ps1.
 
 .PARAMETER Build
@@ -71,18 +71,17 @@ foreach ($service in $services) {
         -RedirectStandardError (Join-Path $logs "$service-service.err.log") -WindowStyle Hidden
 }
 
-foreach ($app in 'dwh-admin-web', 'analytics-portal-web') {
-    $folder = Join-Path $root "web\$app"
-    if (-not (Test-Path (Join-Path $folder 'node_modules'))) {
-        Write-Host "Installing the packages of $app..."
-        Push-Location $folder
-        npm ci
-        if ($LASTEXITCODE -ne 0) { throw "npm ci failed in $app" }
-        Pop-Location
-    }
-    Write-Host "Starting $app..."
-    Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', "cd /d `"$folder`" && npm start > `"$(Join-Path $logs "$app.log")`" 2>&1" -WindowStyle Hidden
+$folder = Join-Path $root 'web\dwh-web'
+if (-not (Test-Path (Join-Path $folder 'node_modules'))) {
+    Write-Host 'Installing the packages of the web app...'
+    Push-Location $folder
+    npm ci
+    if ($LASTEXITCODE -ne 0) { throw 'npm ci failed in dwh-web' }
+    Pop-Location
 }
+Write-Host 'Starting the web app...'
+# The dev server port is set here so a PORT in .env.development cannot override it.
+Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', "cd /d `"$folder`" && set PORT=3000&& npm start > `"$(Join-Path $logs 'dwh-web.log')`" 2>&1" -WindowStyle Hidden
 
 $ports = @{ 'auth-service' = 9000; 'etl-service' = 8081; 'shop-service' = 8082; 'analytics-service' = 8083; 'segmentation-service' = 8084 }
 Write-Host 'Waiting for the services to report healthy...'
@@ -102,7 +101,6 @@ if ($down.Count -gt 0) { throw "These services are not healthy: $($down -join ',
 
 Write-Host ''
 Write-Host 'Everything is up:'
-Write-Host '  Personnel console   http://localhost:3001'
-Write-Host '  Analytics portal    http://localhost:3000'
+Write-Host '  Web app             http://localhost:3000'
 Write-Host '  Auth server         http://localhost:9000'
 Write-Host "  First administrator admin / $AdminPassword (created only when the user table is empty)"

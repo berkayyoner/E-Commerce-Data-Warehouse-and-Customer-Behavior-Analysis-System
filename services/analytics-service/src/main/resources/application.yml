@@ -48,4 +48,4 @@ analytics:
   oltp-schema: ${OLTP_SCHEMA:DWH_OLTP}
 
 security:
-  allowed-origins: ${ANALYTICS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+  allowed-origins: ${ANALYTICS_ALLOWED_ORIGINS:http://localhost:3000}

@@ -11,13 +11,13 @@ describe('Console: deep link after sign-in', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
   })
 
   it('opens /orders directly and stays on it after the silent sign-in', async function () {
     const driver = browser.driver
     // A direct load of the page: the tab keeps its refresh token, so the app restores the session silently.
-    await driver.get(`${config.consoleUrl}/orders`)
+    await driver.get(`${config.baseUrl}/orders`)
 
     await waitForUrl(driver, /\/orders$/)
     await waitFor(
@@ -27,6 +27,6 @@ describe('Console: deep link after sign-in', function () {
       config.timeouts.login,
     )
     assert.equal(await textOf(driver, By.css('main h1')), 'Orders')
-    assert.equal(await driver.getCurrentUrl(), `${config.consoleUrl}/orders`)
+    assert.equal(await driver.getCurrentUrl(), `${config.baseUrl}/orders`)
   })
 })

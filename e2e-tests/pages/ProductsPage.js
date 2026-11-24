@@ -1,5 +1,5 @@
 const { By, Key } = require('selenium-webdriver')
-const { AppShell } = require('./ConsoleShell')
+const { AppShell } = require('./AppShell')
 const { DataTable } = require('./DataTable')
 const { buttonByText, fieldByLabel, literal } = require('../support/finders')
 const { waitForVisible, waitForAbsent, waitFor, clearField } = require('../support/waits')

@@ -4,10 +4,10 @@ const { By } = require('selenium-webdriver')
 const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { waitFor, waitForUrl, textOf } = require('../../support/waits')
 
-/** Every sidebar entry of the console with the title its page shows. */
+/** Every sidebar entry of the application (console pages, then the analytics group) with the title its page shows. */
 const PAGES = [
   { label: 'Dashboard', path: '/dashboard', title: 'Dashboard' },
   { label: 'Customers', path: '/customers', title: 'Customers' },
@@ -17,6 +17,8 @@ const PAGES = [
   { label: 'ETL Runs', path: '/etl', title: 'ETL Runs' },
   { label: 'Segments', path: '/segments', title: 'Customer segments' },
   { label: 'Users', path: '/users', title: 'Personnel accounts' },
+  { label: 'Sales overview', path: '/analytics/sales', title: 'Sales overview' },
+  { label: 'Product search', path: '/analytics/search', title: 'Product search' },
 ]
 
 /**
@@ -39,7 +41,7 @@ describe('Console: navigation and page titles (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
     await waitForUrl(browser.driver, /\/dashboard$/)
   })
 

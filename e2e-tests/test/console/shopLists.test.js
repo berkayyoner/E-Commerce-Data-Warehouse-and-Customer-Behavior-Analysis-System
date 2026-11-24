@@ -5,7 +5,7 @@ const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
 const { DataTable } = require('../../pages/DataTable')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { CustomersPage, OrdersPage, WarehousesPage } = require('../../pages/ListPages')
 const { waitFor, waitForVisible } = require('../../support/waits')
 
@@ -14,7 +14,7 @@ describe('Console: customers, orders and warehouses (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
   })
 
   describe('Customers', function () {

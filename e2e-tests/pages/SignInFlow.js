@@ -1,35 +1,16 @@
 const { By } = require('selenium-webdriver')
 const config = require('../config')
-const { AuthServerLoginPage } = require('./AuthServerLoginPage')
-const { buttonByText } = require('../support/finders')
-const { waitFor, waitForVisible } = require('../support/waits')
+const { LoginPage } = require('./LoginPage')
+const { waitFor } = require('../support/waits')
 
 /**
- * Signs in to one of the two web apps through the authorization server. A browser profile that already has an
- * authorization session skips the login form, so the form is filled only when it is shown.
+ * Signs in through the sign-in page of the web application and waits until the navigation bar shows the signed-in
+ * person. The default credentials are the administrator of the local stack.
  */
-async function signIn(driver, appUrl, credentials = config.admin) {
-  await driver.get(`${appUrl}/`)
-  const startButton = await waitForVisible(driver, buttonByText('Sign in'))
-  await startButton.click()
-
-  const loginPage = new AuthServerLoginPage(driver)
-  const reached = await waitFor(
-    driver,
-    async (d) => {
-      if (await loginPage.isShown()) {
-        return 'login'
-      }
-      const signedIn = (await d.findElements(By.css('.navbar-username'))).length > 0
-      return signedIn ? 'app' : false
-    },
-    'the authorization server login form or the signed-in application',
-    config.timeouts.login,
-  )
-  if (reached === 'login') {
-    await loginPage.logIn(credentials)
-  }
-
+async function signIn(driver, credentials = config.admin) {
+  const loginPage = new LoginPage(driver)
+  await loginPage.open()
+  await loginPage.fillAndSubmit(credentials)
   await waitFor(
     driver,
     async (d) => (await d.findElements(By.css('.navbar-username'))).length > 0,

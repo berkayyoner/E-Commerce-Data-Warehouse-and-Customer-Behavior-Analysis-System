@@ -7,7 +7,7 @@ const { signIn } = require('../../pages/SignInFlow')
 const { DataTable } = require('../../pages/DataTable')
 const { EtlRunsPage } = require('../../pages/EtlRunsPage')
 const { SegmentsPage } = require('../../pages/ListPages')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { waitFor, waitForVisible } = require('../../support/waits')
 
 describe('Console: ETL runs and segments (ADMIN)', function () {
@@ -15,7 +15,7 @@ describe('Console: ETL runs and segments (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
   })
 
   describe('ETL runs', function () {
@@ -25,7 +25,7 @@ describe('Console: ETL runs and segments (ADMIN)', function () {
     before(async function () {
       etl = new EtlRunsPage(browser.driver)
       table = new DataTable(browser.driver)
-      await browser.driver.get(`${config.consoleUrl}/etl`)
+      await browser.driver.get(`${config.baseUrl}/etl`)
       await waitForVisible(browser.driver, By.xpath("//h1[normalize-space(.)='ETL Runs']"))
       await table.waitForRowWith('Succeeded')
     })

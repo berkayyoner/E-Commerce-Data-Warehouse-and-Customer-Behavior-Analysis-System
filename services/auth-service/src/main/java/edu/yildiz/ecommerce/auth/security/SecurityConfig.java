@@ -1,5 +1,6 @@
 package edu.yildiz.ecommerce.auth.security;
 
+import java.time.Clock;
 import java.util.List;
 
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -9,8 +10,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,15 +20,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -37,25 +36,36 @@ public class SecurityConfig {
 
     private static final String ROLES_CLAIM = "roles";
 
-    /** OAuth 2.0 and OpenID Connect endpoints: authorize, token, JWKS, discovery. */
+    /** Only the paths of the token endpoint, the signing keys and the discovery document are served. */
+    private static final String[] AUTHORIZATION_SERVER_PATHS = {"/oauth2/token", "/oauth2/jwks", "/.well-known/**"};
+
+    /** The OAuth 2.0 token endpoint for the scheduler, the signing keys and the discovery documents. */
     @Bean
     @Order(1)
     SecurityFilterChain authorizationServerChain(HttpSecurity http) throws Exception {
-        http.oauth2AuthorizationServer(server -> {
-            http.securityMatcher(server.getEndpointsMatcher());
-            server.oidc(Customizer.withDefaults());
-        });
-        http.authorizeHttpRequests(requests -> requests.anyRequest().authenticated())
+        http.securityMatcher(AUTHORIZATION_SERVER_PATHS);
+        http.oauth2AuthorizationServer(server -> server.oidc(Customizer.withDefaults()));
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/oauth2/jwks", "/.well-known/**").permitAll()
+                .anyRequest().authenticated());
+        return http.build();
+    }
+
+    /** The JSON token API used by the React applications: sign in, refresh and sign out. */
+    @Bean
+    @Order(2)
+    SecurityFilterChain tokenApiChain(HttpSecurity http) throws Exception {
+        http.securityMatcher("/auth/**")
+                .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
                 .cors(Customizer.withDefaults())
-                .exceptionHandling(exceptions -> exceptions.defaultAuthenticationEntryPointFor(
-                        new LoginUrlAuthenticationEntryPoint("/login"),
-                        new MediaTypeRequestMatcher(MediaType.TEXT_HTML)));
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 
     /** The user and role API. It accepts the access tokens issued by this server. */
     @Bean
-    @Order(2)
+    @Order(3)
     SecurityFilterChain apiChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/api/**")
                 .authorizeHttpRequests(requests -> requests
@@ -71,20 +81,25 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /** The sign in page and the health check. */
+    /** The health checks. Everything else is refused. */
     @Bean
-    @Order(3)
+    @Order(4)
     SecurityFilterChain defaultChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
-                        .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults());
+                .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
+                .anyRequest().denyAll());
         return http.build();
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+    /** Checks the user name and password of the token API against the app_user table. */
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
@@ -97,32 +112,23 @@ public class SecurityConfig {
         return JwkSourceFactory.create(properties);
     }
 
+    /** Signs the access tokens, both the user tokens of the token API and the scheduler's tokens. */
+    @Bean
+    JwtEncoder jwtEncoder(JWKSource<SecurityContext> jwkSource) {
+        return new NimbusJwtEncoder(jwkSource);
+    }
+
     @Bean
     AuthorizationServerSettings authorizationServerSettings(AuthProperties properties) {
         return AuthorizationServerSettings.builder().issuer(properties.issuer()).build();
     }
 
-    /** Writes the user's role into the access token and the ID token, where the other services read it. */
     @Bean
-    OAuth2TokenCustomizer<JwtEncodingContext> roleClaimCustomizer() {
-        return context -> {
-            boolean accessToken = OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType());
-            boolean idToken = "id_token".equals(context.getTokenType().getValue());
-            if (!(accessToken || idToken) || context.getPrincipal() == null) {
-                return;
-            }
-            List<String> roles = context.getPrincipal().getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .filter(authority -> authority.startsWith("ROLE_"))
-                    .map(authority -> authority.substring("ROLE_".length()))
-                    .sorted()
-                    .toList();
-            if (!roles.isEmpty()) {
-                context.getClaims().claim(ROLES_CLAIM, roles);
-            }
-        };
+    Clock clock() {
+        return Clock.systemUTC();
     }
 
+    /** Reads the role from the access token, where the resource services expect it. */
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
@@ -136,7 +142,7 @@ public class SecurityConfig {
         return converter;
     }
 
-    /** Browsers of the React applications call the token endpoint directly, so their origins must be allowed. */
+    /** The React applications call the token API from the browser, so their origins are allowed. */
     @Bean
     CorsConfigurationSource corsConfigurationSource(AuthProperties properties) {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -145,7 +151,8 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept-Language"));
         configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/auth/**", configuration);
+        source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
 }

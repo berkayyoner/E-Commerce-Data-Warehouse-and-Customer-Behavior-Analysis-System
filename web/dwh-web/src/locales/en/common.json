@@ -1,0 +1,73 @@
+{
+  "appName": "Shop Data Warehouse - Personnel Console",
+  "skipToContent": "Skip to content",
+  "actions": {
+    "create": "Create",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "retry": "Retry",
+    "signOut": "Sign out"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "label": "Search"
+  },
+  "table": {
+    "empty": "No records found.",
+    "loading": "Loading...",
+    "showing": "Showing {from}-{to} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {page} of {pages}",
+    "actions": "Actions",
+    "sortBy": "Sort by {column}"
+  },
+  "validation": {
+    "required": "This field is required.",
+    "email": "Enter a valid e-mail address.",
+    "minLength": "Use at least {min} characters.",
+    "maxLength": "Use at most {max} characters."
+  },
+  "language": {
+    "label": "Language",
+    "names": {
+      "en": "English",
+      "tr": "Türkçe"
+    }
+  },
+  "roles": {
+    "ADMIN": "Administrator",
+    "ANALYST": "Analyst",
+    "VIEWER": "Viewer"
+  },
+  "user": {
+    "signedInAs": "Signed in as {name}"
+  },
+  "status": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "toast": {
+    "saved": "Saved successfully.",
+    "deleted": "Deleted successfully.",
+    "failed": "The operation failed. Please try again.",
+    "forbidden": "You do not have permission to do this.",
+    "conflict": "This conflicts with the current data."
+  },
+  "confirmDelete": {
+    "title": "Delete record",
+    "message": "Are you sure you want to delete \"{name}\"? This cannot be undone."
+  },
+  "error": {
+    "widget": "This section could not be loaded.",
+    "page": "The data could not be loaded."
+  },
+  "sidebar": {
+    "label": "Main navigation",
+    "open": "Open menu",
+    "close": "Close menu"
+  }
+}

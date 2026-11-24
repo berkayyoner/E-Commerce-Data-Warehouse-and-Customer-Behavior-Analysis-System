@@ -133,7 +133,7 @@ services:
       - ./deploy/gateway/default.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
 
-  # The services and the React applications.
+  # The services and the React application.
   # host.docker.internal is the address of the auth server for both the browser and the containers, so the token
   # issuer is the same everywhere. This is a local setup; real environments use their own host names.
   auth-service:
@@ -254,21 +254,11 @@ services:
       - "8084:8084"
     restart: unless-stopped
 
-  dwh-admin-web:
+  dwh-web:
     build:
-      context: web/dwh-admin-web
-    image: dwh/dwh-admin-web
-    container_name: dwh-admin-web
-    logging: *default-logging
-    ports:
-      - "3001:80"
-    restart: unless-stopped
-
-  analytics-portal-web:
-    build:
-      context: web/analytics-portal-web
-    image: dwh/analytics-portal-web
-    container_name: dwh-analytics-portal-web
+      context: web/dwh-web
+    image: dwh/dwh-web
+    container_name: dwh-web
     logging: *default-logging
     ports:
       - "3000:80"

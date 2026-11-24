@@ -4,7 +4,7 @@ const { By } = require('selenium-webdriver')
 const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { DataTable } = require('../../pages/DataTable')
 const { UsersPage } = require('../../pages/UsersPage')
 const { uniqueName } = require('../../support/testData')
@@ -19,7 +19,7 @@ describe('Console: personnel accounts (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
     users = new UsersPage(browser.driver)
     table = new DataTable(browser.driver)
     await users.openFromSidebar()

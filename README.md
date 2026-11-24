@@ -22,14 +22,14 @@ This project is being developed as a term project for the Information Technologi
 
 ## What the system does
 Shop orders are generated as an OLTP database (TPC-C through BenchBase) and turned into e-commerce data. An ETL process
-loads them into a star schema, reports and customer segments (RFM and K-Means) are served by microservices, and two React
-applications show the results: a public analytics portal and a personnel console.
+loads them into a star schema, reports and customer segments (RFM and K-Means) are served by microservices, and one React
+web application shows the results and gives access to the personnel tools.
 
 ## Project structure
 | Folder | Content |
 |---|---|
 | `services/` | Spring Boot services: `auth-service` (OAuth 2.0), `etl-service`, `shop-service`, `analytics-service`, `segmentation-service` |
-| `web/` | React applications: `dwh-admin-web` (personnel console), `analytics-portal-web` (public portal) |
+| `web/` | React web application `dwh-web` |
 | `database/` | Oracle accounts, BenchBase load, data enrichment, Flyway migrations, reconciliation test |
 | `deploy/` | API gateway configuration and Kubernetes manifests |
 | `e2e-tests/` | Selenium browser tests |
@@ -50,14 +50,13 @@ container ends (follow it with `docker logs -f dwh-bootstrap`). Later starts tak
 
 | Address | What |
 |---|---|
-| http://localhost:3000 | Analytics portal |
-| http://localhost:3001 | Personnel console |
+| http://localhost:3000 | Web app |
 | http://localhost:9000 | Auth server |
 
 Sign in with `admin` / `Admin-Local-2026`. The default passwords are for local use only; copy `.env.example` to `.env`
 to choose others. `docker compose down -v` removes all data.
 
-Tests: `mvn verify` (services), `npm test` in each web app, `npm test` in `e2e-tests` (needs the running system),
+Tests: `mvn verify` (services), `npm test` in `web/dwh-web`, `npm test` in `e2e-tests` (needs the running system),
 `newman` with the collections in `services/*/postman`.
 
 ## Oracle Container Backup & Migration (Docker -> Windows VDS)

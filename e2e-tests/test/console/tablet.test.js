@@ -4,7 +4,7 @@ const { By } = require('selenium-webdriver')
 const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { UsersPage } = require('../../pages/UsersPage')
 const { waitFor } = require('../../support/waits')
 
@@ -14,7 +14,7 @@ describe('Console: tablet layout (768 x 1024)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
   })
 
   it('collapses the sidebar behind the menu button and opens it again', async function () {

@@ -21,10 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [dwh-admin-web, analytics-portal-web]
     defaults:
       run:
-        working-directory: web/${{ matrix.app }}
+        working-directory: web/dwh-web
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -53,8 +52,7 @@ jobs:
           - { name: shop-service, context: ., file: services/shop-service/Dockerfile }
           - { name: analytics-service, context: ., file: services/analytics-service/Dockerfile }
           - { name: segmentation-service, context: ., file: services/segmentation-service/Dockerfile }
-          - { name: dwh-admin-web, context: web/dwh-admin-web, file: web/dwh-admin-web/Dockerfile }
-          - { name: analytics-portal-web, context: web/analytics-portal-web, file: web/analytics-portal-web/Dockerfile }
+          - { name: dwh-web, context: web/dwh-web, file: web/dwh-web/Dockerfile }
     steps:
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
@@ -98,6 +96,6 @@ jobs:
           kubectl kustomize deploy/k8s/overlays/${{ matrix.environment }} \
             | sed "s#ghcr.io/your-github-user/dwh/\([a-z-]*\):[a-z]*#ghcr.io/${{ github.repository_owner }}/dwh/\1:${{ github.sha }}#" \
             | kubectl apply -f -
-          for name in auth-service etl-service shop-service analytics-service segmentation-service dwh-admin-web analytics-portal-web; do
+          for name in auth-service etl-service shop-service analytics-service segmentation-service dwh-web; do
             kubectl -n "dwh-${{ matrix.environment }}" rollout status deployment/$name --timeout=300s
           done

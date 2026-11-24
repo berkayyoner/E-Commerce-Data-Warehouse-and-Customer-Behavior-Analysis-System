@@ -47,4 +47,4 @@ management:
         enabled: true
 
 security:
-  allowed-origins: ${SHOP_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+  allowed-origins: ${SHOP_ALLOWED_ORIGINS:http://localhost:3000}

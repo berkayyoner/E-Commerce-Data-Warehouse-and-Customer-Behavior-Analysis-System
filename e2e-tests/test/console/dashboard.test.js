@@ -4,7 +4,7 @@ const { By } = require('selenium-webdriver')
 const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { ConsoleDashboardPage } = require('../../pages/ConsoleDashboardPage')
 const { waitForUrl } = require('../../support/waits')
 
@@ -13,13 +13,13 @@ describe('Console: sign-in and dashboard (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
   })
 
   it('signs in and lands on the dashboard with the signed-in name and role', async function () {
     await waitForUrl(browser.driver, /\/dashboard$/)
     const shell = new AppShell(browser.driver)
-    assert.equal(await shell.signedInUsername(), config.admin.username)
+    assert.equal(await shell.signedInUsername(), config.admin.displayName)
     assert.deepEqual(await shell.roleBadges(), ['Administrator'])
     assert.equal(await shell.pageTitle(), 'Dashboard')
   })

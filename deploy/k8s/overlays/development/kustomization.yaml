@@ -16,9 +16,7 @@ images:
     newTag: development
   - name: ghcr.io/your-github-user/dwh/segmentation-service
     newTag: development
-  - name: ghcr.io/your-github-user/dwh/dwh-admin-web
-    newTag: development
-  - name: ghcr.io/your-github-user/dwh/analytics-portal-web
+  - name: ghcr.io/your-github-user/dwh/dwh-web
     newTag: development
 patches:
   - target:
@@ -36,25 +34,19 @@ patches:
         value: https://api.dev.dwh.example.com
       - op: replace
         path: /data/AUTH_ALLOWED_ORIGINS
-        value: https://dwh.dev.example.com,https://admin.dev.dwh.example.com
-      - op: replace
-        path: /data/AUTH_ANALYTICS_REDIRECT_URIS
-        value: https://dwh.dev.example.com/callback
-      - op: replace
-        path: /data/AUTH_ADMIN_REDIRECT_URIS
-        value: https://admin.dev.dwh.example.com/callback
+        value: https://dwh.dev.example.com
       - op: replace
         path: /data/ETL_ALLOWED_ORIGINS
-        value: https://admin.dev.dwh.example.com
+        value: https://dwh.dev.example.com
       - op: replace
         path: /data/SHOP_ALLOWED_ORIGINS
-        value: https://dwh.dev.example.com,https://admin.dev.dwh.example.com
+        value: https://dwh.dev.example.com
       - op: replace
         path: /data/ANALYTICS_ALLOWED_ORIGINS
-        value: https://dwh.dev.example.com,https://admin.dev.dwh.example.com
+        value: https://dwh.dev.example.com
       - op: replace
         path: /data/SEGMENTATION_ALLOWED_ORIGINS
-        value: https://admin.dev.dwh.example.com
+        value: https://dwh.dev.example.com
   - target:
       kind: ConfigMap
       name: dwh-web-config
@@ -68,15 +60,12 @@ patches:
     patch: |-
       - op: replace
         path: /spec/tls/0/hosts
-        value: [dwh.dev.example.com, admin.dev.dwh.example.com, api.dev.dwh.example.com]
+        value: [dwh.dev.example.com, api.dev.dwh.example.com]
       - op: replace
         path: /spec/rules/0/host
         value: dwh.dev.example.com
       - op: replace
         path: /spec/rules/1/host
-        value: admin.dev.dwh.example.com
-      - op: replace
-        path: /spec/rules/2/host
         value: api.dev.dwh.example.com
   # One replica is enough while developing, so the autoscalers keep to a single pod.
   - target:

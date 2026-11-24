@@ -2,11 +2,10 @@ const assert = require('node:assert/strict')
 const { By } = require('selenium-webdriver')
 
 const config = require('../../config')
-const { useBrowser } = require('../../support/browserSuite')
 const { createDriver, closeDriver } = require('../../support/driver')
+const { createUser, deleteUserIfPresent } = require('../../support/authApi')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
-const { UsersPage } = require('../../pages/UsersPage')
+const { AppShell } = require('../../pages/AppShell')
 const { DataTable } = require('../../pages/DataTable')
 const { ProductsPage } = require('../../pages/ProductsPage')
 const { CustomersPage, WarehousesPage } = require('../../pages/ListPages')
@@ -15,35 +14,25 @@ const { uniqueName } = require('../../support/testData')
 const { textOf, waitForVisible, waitForUrl } = require('../../support/waits')
 
 const PASSWORD = 'E2e-Pass-2026'
+const ANALYTICS_LABELS = ['Sales overview', 'Product search']
 
-describe('Console: role restrictions', function () {
+describe('Role restrictions', function () {
   const accounts = {
     analyst: { username: uniqueName('e2e-analyst'), role: 'ANALYST', displayName: 'E2E Analyst' },
     viewer: { username: uniqueName('e2e-viewer'), role: 'VIEWER', displayName: 'E2E Viewer' },
   }
 
-  // Registered before the browser hooks so that the accounts are removed while the administrator session is open.
-  after(async function () {
+  before(async function () {
     this.timeout(120000)
-    const users = new UsersPage(admin.driver)
-    await users.openFromSidebar()
     for (const account of Object.values(accounts)) {
-      await users.deleteUserIfPresent(account.username)
+      await createUser({ ...account, password: PASSWORD })
     }
   })
 
-  const admin = useBrowser()
-
-  before(async function () {
+  after(async function () {
     this.timeout(120000)
-    await signIn(admin.driver, config.consoleUrl)
-    const users = new UsersPage(admin.driver)
-    await users.openFromSidebar()
     for (const account of Object.values(accounts)) {
-      await users.openCreateModal()
-      await users.fillForm({ username: account.username, displayName: account.displayName, role: account.role, password: PASSWORD })
-      await users.submitModal('Create')
-      await users.waitForModalClosed()
+      await deleteUserIfPresent(account.username)
     }
   })
 
@@ -53,7 +42,7 @@ describe('Console: role restrictions', function () {
     before(async function () {
       this.timeout(120000)
       driver = await createDriver()
-      await signIn(driver, config.consoleUrl, { username: accounts.analyst.username, password: PASSWORD })
+      await signIn(driver, { username: accounts.analyst.username, password: PASSWORD })
     })
 
     after(async function () {
@@ -64,10 +53,11 @@ describe('Console: role restrictions', function () {
       const labels = await new AppShell(driver).sidebarLabels()
       assert.ok(!labels.includes('Users'), `sidebar: ${labels.join(', ')}`)
       assert.ok(labels.includes('Customers') && labels.includes('ETL Runs'), 'analyst pages are listed')
+      assert.ok(labels.includes('Sales overview') && labels.includes('Product search'), 'analytics pages are listed')
     })
 
     it('does not open the Users page by its address', async function () {
-      await driver.get(`${config.consoleUrl}/users`)
+      await driver.get(`${config.baseUrl}/users`)
       await waitForVisible(driver, By.css('.access-denied'))
       const heading = await textOf(driver, By.css('main h1'))
       assert.notEqual(heading, 'Personnel accounts')
@@ -102,19 +92,24 @@ describe('Console: role restrictions', function () {
     before(async function () {
       this.timeout(120000)
       driver = await createDriver()
-      await signIn(driver, config.consoleUrl, { username: accounts.viewer.username, password: PASSWORD })
+      await signIn(driver, { username: accounts.viewer.username, password: PASSWORD })
     })
 
     after(async function () {
       await closeDriver(driver)
     })
 
-    it('sees the no access page with a sign-out button and no navigation', async function () {
+    it('lands on the sales overview and lists only the analytics pages', async function () {
+      await waitForUrl(driver, /\/analytics\/sales$/)
+      assert.deepEqual(await new AppShell(driver).sidebarLabels(), ANALYTICS_LABELS)
+    })
+
+    it('sees the access denied page with a sign-out button on a console page', async function () {
+      await driver.get(`${config.baseUrl}/dashboard`)
       await waitForVisible(driver, By.css('.access-denied'))
-      assert.equal(await textOf(driver, By.css('main h1')), 'No console access')
+      assert.equal(await textOf(driver, By.css('main h1')), 'Access denied')
       const signOut = await waitForVisible(driver, By.xpath("//section[contains(@class,'access-denied')]//button[normalize-space(.)='Sign out']"))
       assert.ok(signOut, 'sign-out button')
-      assert.deepEqual(await new AppShell(driver).sidebarLabels(), [])
     })
   })
 })

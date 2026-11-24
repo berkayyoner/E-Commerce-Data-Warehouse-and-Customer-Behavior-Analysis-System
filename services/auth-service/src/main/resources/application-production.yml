@@ -8,8 +8,6 @@ spring:
 auth:
   issuer: ${AUTH_ISSUER}
   allowed-origins: ${AUTH_ALLOWED_ORIGINS}
-  analytics-redirect-uris: ${AUTH_ANALYTICS_REDIRECT_URIS}
-  admin-redirect-uris: ${AUTH_ADMIN_REDIRECT_URIS}
   etl-client-secret: ${AUTH_ETL_CLIENT_SECRET}
   jwt-private-key: ${AUTH_JWT_PRIVATE_KEY}
   jwt-public-key: ${AUTH_JWT_PUBLIC_KEY}

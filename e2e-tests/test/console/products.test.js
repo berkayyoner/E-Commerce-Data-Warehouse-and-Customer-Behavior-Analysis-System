@@ -5,7 +5,7 @@ const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
 const { ProductsPage } = require('../../pages/ProductsPage')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { DataTable } = require('../../pages/DataTable')
 const { uniqueName } = require('../../support/testData')
 const { waitFor, waitForVisible, textOf, clearField } = require('../../support/waits')
@@ -26,7 +26,7 @@ describe('Console: products (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
     products = new ProductsPage(browser.driver)
     table = new DataTable(browser.driver)
     await products.openFromSidebar()

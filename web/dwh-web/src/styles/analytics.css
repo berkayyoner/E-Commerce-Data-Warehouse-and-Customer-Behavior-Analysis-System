@@ -1,0 +1,858 @@
+/*
+ * Sales overview and product search. Every rule sits under .analytics-scope, so these classes never change the
+ * operational pages that share the same names.
+ */
+
+.analytics-scope .filter-bar {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.analytics-scope .filter-toggle {
+  justify-self: start;
+  min-height: 44px;
+}
+
+.analytics-scope .filter-fields {
+  display: none;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+}
+
+.analytics-scope .filter-fields.is-open {
+  display: grid;
+}
+
+.analytics-scope .filter-fields .segmented {
+  justify-self: start;
+}
+
+.analytics-scope .kpi-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 480px) {
+  .analytics-scope .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.analytics-scope .kpi-grid-message {
+  display: block;
+}
+
+.analytics-scope .kpi-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 2px var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+.analytics-scope .kpi-icon {
+  grid-row: span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  background: var(--color-info-soft);
+  color: var(--color-primary);
+}
+
+.analytics-scope .kpi-label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .kpi-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.analytics-scope .widget-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.analytics-scope .widget {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+}
+
+.analytics-scope .widget-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+}
+
+.analytics-scope .widget-title {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+}
+
+.analytics-scope .customer-section {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.analytics-scope .chart,
+.analytics-scope .bar-list-figure {
+  margin: 0;
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.analytics-scope .chart-axis-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .chart-plot {
+  position: relative;
+  width: 100%;
+}
+
+.analytics-scope .line-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.analytics-scope .chart-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.analytics-scope .chart-axis {
+  font-size: 12px;
+  fill: var(--color-text-muted);
+}
+
+.analytics-scope .line-chart-line {
+  fill: none;
+  stroke: var(--color-button);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.analytics-scope .line-chart-area {
+  fill: var(--color-secondary);
+  fill-opacity: 0.16;
+}
+
+.analytics-scope .line-chart-point {
+  fill: var(--color-surface);
+  stroke: var(--color-button);
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+.analytics-scope .line-chart-point.is-active,
+.analytics-scope .line-chart-point:focus-visible {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+  outline: none;
+}
+
+.analytics-scope .line-chart-point:focus-visible {
+  stroke-width: 3;
+}
+
+.analytics-scope .chart-tooltip {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 14px));
+  display: grid;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  background: var(--color-text);
+  color: var(--color-surface);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: var(--shadow);
+}
+
+.analytics-scope .chart-alternative {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.analytics-scope .chart-table-toggle {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 4px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analytics-scope .chart-table-wrap {
+  overflow-x: auto;
+}
+
+.analytics-scope .bar-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.analytics-scope .bar-row {
+  display: grid;
+  gap: 4px var(--space-3);
+  align-items: center;
+}
+
+.analytics-scope .bar-label {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.analytics-scope .bar-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.analytics-scope .bar-detail {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .bar-track {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--color-surface-muted);
+  overflow: hidden;
+}
+
+.analytics-scope .bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  background: var(--color-bar);
+}
+
+.analytics-scope .bar-value {
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.analytics-scope .bar-share {
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .region-group {
+  display: grid;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.analytics-scope .region-group:last-child {
+  border-bottom: 0;
+}
+
+.analytics-scope .region-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+  font-size: 0.95rem;
+  color: var(--color-primary);
+}
+
+.analytics-scope .region-total {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.analytics-scope .fulfillment {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.analytics-scope .fulfillment-summary {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .fulfillment-stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.analytics-scope .fulfillment-stats div {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+.analytics-scope .fulfillment-stats dt {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .fulfillment-stats dd {
+  margin: 2px 0 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.analytics-scope .share-meter {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.analytics-scope .share-meter-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.analytics-scope .share-meter-track {
+  height: 16px;
+  border-radius: 8px;
+  background: var(--color-surface-muted);
+  overflow: hidden;
+}
+
+.analytics-scope .share-meter-fill {
+  height: 100%;
+  background: var(--color-bar);
+}
+
+.analytics-scope .metric-grid {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+
+.analytics-scope .metric {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.analytics-scope .metric dt {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .metric dd {
+  margin: 2px 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.analytics-scope .metric-note {
+  font-size: 0.8rem !important;
+  font-weight: 400 !important;
+  color: var(--color-text-muted) !important;
+}
+
+.analytics-scope .search-page {
+  gap: var(--space-4);
+}
+
+.analytics-scope .search-form {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.analytics-scope .search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .search-field input {
+  flex: 1;
+  min-width: 0;
+  padding-left: 44px;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.analytics-scope .search-field input:focus {
+  outline: none;
+}
+
+.analytics-scope .search-field-icon {
+  position: absolute;
+  left: 14px;
+  pointer-events: none;
+}
+
+.analytics-scope .search-field .icon-button {
+  margin-right: 4px;
+}
+
+.analytics-scope .search-submit {
+  justify-self: stretch;
+}
+
+.analytics-scope .suggestions {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% - 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: var(--space-1);
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+.analytics-scope .suggestion {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding: 8px var(--space-3);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.analytics-scope .suggestion.is-active,
+.analytics-scope .suggestion:hover {
+  background: var(--color-info-soft);
+}
+
+.analytics-scope .suggestion-type {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.analytics-scope .search-layout {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.analytics-scope .facets {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.analytics-scope .facets-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.analytics-scope .facets-header h2 {
+  font-size: 1.05rem;
+  color: var(--color-primary);
+}
+
+.analytics-scope .facet-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.analytics-scope .facet-count {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.analytics-scope .price-fields {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.analytics-scope .results-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.analytics-scope .results-toolbar .form-field {
+  min-width: 200px;
+}
+
+.analytics-scope .results-count {
+  margin: 0;
+  font-weight: 600;
+}
+
+.analytics-scope .results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.analytics-scope .result {
+  display: grid;
+  gap: 4px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.analytics-scope .result-name {
+  font-weight: 700;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.analytics-scope .result-category,
+.analytics-scope .result-brand {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .result-price {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-primary);
+}
+
+.analytics-scope .results-head {
+  display: none;
+}
+
+.analytics-scope .search-results-panel .search-pagination {
+  margin-top: var(--space-4);
+}
+
+.analytics-scope .search-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+}
+
+@media (min-width: 600px) {
+  .analytics-scope .filter-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: end;
+  }
+
+  .analytics-scope .filter-fields .segmented {
+    grid-column: 1 / -1;
+  }
+
+  .analytics-scope .filter-toggle {
+    display: none;
+  }
+
+  .analytics-scope .filter-fields.is-open,
+  .analytics-scope .filter-fields {
+    display: grid;
+  }
+
+  .analytics-scope .kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .analytics-scope .metric-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .analytics-scope .fulfillment-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .analytics-scope .bar-row {
+    grid-template-columns: minmax(120px, 0.9fr) minmax(0, 2fr) minmax(90px, auto);
+  }
+}
+
+@media (min-width: 768px) {
+  .analytics-scope .widget-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .analytics-scope .widget-wide {
+    grid-column: 1 / -1;
+  }
+
+  .analytics-scope .search-form {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .analytics-scope .search-submit {
+    justify-self: auto;
+  }
+}
+
+@media (min-width: 900px) {
+  .analytics-scope .search-layout {
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .analytics-scope .results {
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    overflow: hidden;
+  }
+
+  .analytics-scope .results-head,
+  .analytics-scope .result {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr) minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: center;
+    padding: 10px var(--space-4);
+    border: 0;
+    border-bottom: 1px solid var(--color-border);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .analytics-scope .results-head {
+    display: grid;
+    background: var(--color-surface-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+  }
+
+  .analytics-scope .result:hover {
+    background: var(--color-tint);
+  }
+
+  .analytics-scope .result-price {
+    text-align: right;
+  }
+}
+
+@media (min-width: 1024px) {
+  .analytics-scope .widget-grid {
+    gap: var(--space-5);
+  }
+}
+
+@media (max-width: 599px) {
+  .analytics-scope .results-head {
+    display: none;
+  }
+
+  .analytics-scope .result span {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .analytics-scope .result span::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .analytics-scope .result-name {
+    display: block;
+  }
+
+  .analytics-scope .result-name::before {
+    content: none;
+  }
+
+  .analytics-scope .price-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .analytics-scope .chart-tooltip,
+  .analytics-scope .line-chart-point {
+    transition: none;
+  }
+}
+
+/* Shared controls used by the analytics pages. */
+
+.analytics-scope .button-compact {
+  min-height: 36px;
+  padding: 4px var(--space-3);
+  font-size: 0.85rem;
+}
+
+.analytics-scope .segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.analytics-scope .segmented-option {
+  min-height: 44px;
+  padding: 6px var(--space-3);
+  border: 0;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.analytics-scope .segmented-option:last-child {
+  border-right: 0;
+}
+
+.analytics-scope .segmented-option[aria-pressed='true'] {
+  background: var(--color-button);
+  color: var(--color-on-button);
+}
+
+.analytics-scope .segmented-option:hover:not([aria-pressed='true']) {
+  background: var(--color-info-soft);
+}
+
+.analytics-scope .segmented-compact .segmented-option {
+  min-height: 36px;
+  padding: 4px var(--space-2);
+  font-size: 0.8rem;
+}
+
+.analytics-scope .chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.analytics-scope .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 4px var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.analytics-scope .chip[aria-pressed='true'] {
+  border-color: var(--color-button);
+  background: var(--color-button);
+  color: var(--color-on-button);
+}
+
+.analytics-scope .form-field label,
+.analytics-scope .facet-group legend {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.analytics-scope .form-field input,
+.analytics-scope .form-field select,
+.analytics-scope .search-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.analytics-scope .form-field input:focus,
+.analytics-scope .form-field select:focus,
+.analytics-scope .search-field:focus-within {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.25);
+}
+
+.analytics-scope .empty-note,
+.analytics-scope .chart-empty,
+.analytics-scope .empty-state {
+  margin: var(--space-3) 0;
+  color: var(--color-text-muted);
+}
+
+.analytics-scope .empty-state {
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.analytics-scope .table-scroll {
+  overflow-x: auto;
+}
+
+.analytics-scope .table-summary {
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 599px) {
+  .analytics-scope .segmented-compact .segmented-option {
+    min-height: 44px;
+  }
+}

@@ -215,58 +215,46 @@
     }
   ],
   "auth": {
-    "type": "oauth2",
-    "oauth2": [
+    "type": "bearer",
+    "bearer": [
       {
-        "key": "grant_type",
-        "value": "authorization_code_with_pkce",
-        "type": "string"
-      },
-      {
-        "key": "authUrl",
-        "value": "{{authUrl}}/oauth2/authorize",
-        "type": "string"
-      },
-      {
-        "key": "accessTokenUrl",
-        "value": "{{authUrl}}/oauth2/token",
-        "type": "string"
-      },
-      {
-        "key": "clientId",
-        "value": "{{clientId}}",
-        "type": "string"
-      },
-      {
-        "key": "scope",
-        "value": "openid dwh.read dwh.write",
-        "type": "string"
-      },
-      {
-        "key": "redirect_uri",
-        "value": "https://oauth.pstmn.io/v1/callback",
-        "type": "string"
-      },
-      {
-        "key": "challengeAlgorithm",
-        "value": "S256",
-        "type": "string"
-      },
-      {
-        "key": "client_authentication",
-        "value": "body",
-        "type": "string"
-      },
-      {
-        "key": "addTokenTo",
-        "value": "header",
-        "type": "string"
-      },
-      {
-        "key": "tokenName",
-        "value": "dwh-access-token",
+        "key": "token",
+        "value": "{{accessToken}}",
         "type": "string"
       }
     ]
-  }
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const expiresAt = Number(pm.environment.get('accessTokenExpiresAt') || 0);",
+          "const tokenValid = Boolean(pm.environment.get('accessToken')) && Date.now() < expiresAt - 30000;",
+          "if (!tokenValid) {",
+          "  pm.sendRequest({",
+          "    url: pm.environment.get('authUrl') + '/auth/login',",
+          "    method: 'POST',",
+          "    header: { 'Content-Type': 'application/json' },",
+          "    body: {",
+          "      mode: 'raw',",
+          "      raw: JSON.stringify({",
+          "        username: pm.environment.get('username'),",
+          "        password: pm.environment.get('password')",
+          "      })",
+          "    }",
+          "  }, function (error, response) {",
+          "    if (error || response.code !== 200) {",
+          "      throw new Error('Sign-in at ' + pm.environment.get('authUrl') + ' failed' + (response ? ' with status ' + response.code : ''));",
+          "    }",
+          "    const body = response.json();",
+          "    pm.environment.set('accessToken', body.access_token);",
+          "    pm.environment.set('accessTokenExpiresAt', String(Date.now() + body.expires_in * 1000));",
+          "  });",
+          "}"
+        ]
+      }
+    }
+  ]
 }

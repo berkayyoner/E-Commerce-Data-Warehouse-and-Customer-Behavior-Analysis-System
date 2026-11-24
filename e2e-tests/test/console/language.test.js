@@ -4,7 +4,7 @@ const { By } = require('selenium-webdriver')
 const config = require('../../config')
 const { useBrowser } = require('../../support/browserSuite')
 const { signIn } = require('../../pages/SignInFlow')
-const { AppShell } = require('../../pages/ConsoleShell')
+const { AppShell } = require('../../pages/AppShell')
 const { waitFor, textOf } = require('../../support/waits')
 
 describe('Console: language switch (ADMIN)', function () {
@@ -13,7 +13,7 @@ describe('Console: language switch (ADMIN)', function () {
 
   before(async function () {
     this.timeout(120000)
-    await signIn(browser.driver, config.consoleUrl)
+    await signIn(browser.driver)
     shell = new AppShell(browser.driver)
   })
 
